@@ -1,7 +1,11 @@
 {
   "name": "resonara",
   "version": "0.1.0",
+  "description": "Interactive RLC circuit simulator with Bode, phasor, and time-domain analysis",
   "private": true,
+  "engines": {
+    "node": ">=24.15.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Resonara
 
-## Getting Started
+Interactive RLC circuit simulator with real-time phasor, Bode, and time-domain analysis.
 
-First, run the development server:
+Built with Next.js 16, React 19, TypeScript 5 strict, Tailwind CSS v4, and Canvas 2D — no runtime chart dependencies.
+
+## Features
+
+- **Series and parallel RLC circuits** with live schematic rendering
+- **Optional L/C components** — toggle inductors and capacitors independently via checkboxes
+- **Real-time metrics**: impedance, phase angle, current, XL, XC, resonant frequency, Q factor, active power, power factor
+- **Resonance detection badge** with inductive/capacitive/resistive classification
+- **Bode chart** (impedance vs frequency) with current operating point marker
+- **Time-domain chart** — u(t) and i(t) with analytic waveform equations
+- **Phasor diagram** with voltage and current component arrows
+- **Dark mode** (system-aware with manual toggle, no FOUC)
+- **EN / ES language toggle** — full bilingual UI including canvas axis labels
+
+## Tech stack
+
+| Layer | Choice |
+|-------|--------|
+| Framework | Next.js 16 App Router |
+| UI | React 19, `'use client'` components |
+| Styling | Tailwind CSS v4 (CSS-first config) |
+| State | React Context + `useReducer` |
+| Charts | Canvas 2D (no external library) |
+| Testing | Jest 30 + `jest-environment-jsdom` |
+| Language | TypeScript 5 strict |
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev       # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+npm test          # run engine unit tests
+npm run build     # production build
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── layout.tsx         # RLCProvider, dark-mode FOUC script
+│   ├── page.tsx           # top-level layout
+│   └── globals.css        # Tailwind v4 + dark-mode variant
+├── lib/
+│   ├── types.ts           # shared TypeScript types
+│   ├── rlc-engine.ts      # pure math: calcSerie, calcParalelo, calc
+│   ├── bode.ts            # Bode curve data
+│   ├── time-domain.ts     # time-domain sample data
+│   ├── i18n.ts            # ES/EN translations
+│   ├── utils.ts           # fmt, cn helpers
+│   └── __tests__/
+│       └── rlc-engine.test.ts
+├── store/
+│   └── rlc-store.tsx      # RLCContext, RLCProvider, useRLC
+└── components/
+    ├── simulator/         # CircuitTypeToggle, ParameterPanel, MetricsGrid,
+    │                      # ResonanceBadge, ChartTabs, WaveformEquations
+    ├── charts/            # BodeChart, TimeDomainChart, PhasorDiagram
+    ├── schematic/         # CircuitSchematic (Canvas 2D)
+    └── ui/                # ThemeToggle, LangToggle, HeaderSubtitle
+```
 
-## Learn More
+## Engine
 
-To learn more about Next.js, take a look at the following resources:
+The RLC engine (`src/lib/rlc-engine.ts`) is pure TypeScript with no React dependency — safe to test in Node.js.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```ts
+import { calc } from '@/lib/rlc-engine'
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+const result = calc('serie', { Vs: 10, R: 100, L: 0.01, C: 1e-6, f: 1000 })
+// → { Z, phi, I, XL, XC, fr, Q, P, pf }
+```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`ComponentFlags { hasL, hasC }` controls which reactive components are active. When a component is disabled its reactance is treated as zero (XL=0 for series, BL=0 for parallel).
