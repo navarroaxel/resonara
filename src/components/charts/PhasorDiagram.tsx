@@ -53,10 +53,11 @@ export function PhasorDiagram() {
     ctx.fillText('Im', cx + 4, 12)
 
     const phiRad = (phiDeg * Math.PI) / 180
+    const iLen = SIZE * 0.32
     drawArrow(ctx, cx, cy, cx + Vs * scale, cy, '#378ADD', 'V')
     drawArrow(ctx, cx, cy,
-      cx + I * scale * 3 * Math.cos(-phiRad),
-      cy + I * scale * 3 * Math.sin(-phiRad),
+      cx + iLen * Math.cos(-phiRad),
+      cy + iLen * Math.sin(-phiRad),
       '#1D9E75', 'I'
     )
 
