@@ -39,7 +39,7 @@ export function WaveformEquations() {
           </span>
           <span className="text-neutral-400 text-xs">A</span>
         </div>
-        {circuitType === 'serie' && (
+        {circuitType === 'series' && (
           <div className="flex items-baseline gap-1.5 flex-wrap">
             <span className="text-orange-500 font-semibold">v&#8336;(t)</span>
             <span className="text-neutral-400">=</span>

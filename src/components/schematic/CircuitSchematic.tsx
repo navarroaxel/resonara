@@ -63,7 +63,7 @@ function dot(ctx: CanvasRenderingContext2D, x: number, y: number, c: string) {
   ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2 * Math.PI); ctx.fill(); ctx.restore()
 }
 
-function drawSerie(
+function drawSeries(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   XL: number, XC: number, fr: number,
   hasL: boolean, hasC: boolean,
@@ -91,7 +91,7 @@ function drawSerie(
   ctx.fillText(`XL = ${fmt(XL, 1)} Ω   XC = ${fmt(XC, 1)} Ω   ${frStr}`, W / 2, bot + 24)
 }
 
-function drawParalelo(
+function drawParallel(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   XL: number, XC: number, fr: number,
   hasL: boolean, hasC: boolean,
@@ -162,10 +162,10 @@ export function CircuitSchematic() {
     if (!ctx) return
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     ctx.clearRect(0, 0, W, H)
-    if (circuitType === 'serie') {
-      drawSerie(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
+    if (circuitType === 'series') {
+      drawSeries(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
     } else {
-      drawParalelo(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
+      drawParallel(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
     }
   }, [circuitType, results, flags])
 

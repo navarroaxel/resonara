@@ -1,4 +1,4 @@
-export type CircuitType = 'serie' | 'paralelo'
+export type CircuitType = 'series' | 'parallel'
 
 export type ActiveTab = 'bode' | 'phasor' | 'time' | 'power'
 
