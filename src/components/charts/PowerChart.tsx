@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRLC } from '@/store/rlc-store'
+import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
 const W = 360
@@ -31,7 +32,7 @@ function drawArrow(
 
 export function PowerChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results } } = useRLC()
+  const { state: { results, lang } } = useRLC()
   const { P, Qp, S, fp } = results
 
   useEffect(() => {
@@ -127,9 +128,9 @@ export function PowerChart() {
 
     // legend
     const legend: [string, string][] = [
-      ['#1D9E75', 'P — activa'],
-      ['#D85A30', 'Q — reactiva'],
-      ['#378ADD', 'S — aparente'],
+      ['#1D9E75', t(lang, 'legendActive')],
+      ['#D85A30', t(lang, 'legendReactive')],
+      ['#378ADD', t(lang, 'legendApparent')],
     ]
     ctx.font = '11px sans-serif'
     legend.forEach(([c, l], i) => {
@@ -143,7 +144,7 @@ export function PowerChart() {
     ctx.fillStyle = textColor
     ctx.font = '12px sans-serif'
     ctx.fillText(`fp = ${fmt(fp, 3)}`, ox, MT + 16)
-  }, [results])
+  }, [results, lang])
 
   return (
     <canvas
@@ -151,7 +152,7 @@ export function PowerChart() {
       width={W}
       height={H}
       className="mx-auto block"
-      aria-label="Triángulo de potencias"
+      aria-label={t(lang, 'powerTriangle')}
     />
   )
 }
