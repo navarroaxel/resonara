@@ -17,10 +17,10 @@ export function ResonanceBadge() {
     text  = t(lang, 'nearResonance')
     style = 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800'
   } else if (XL > XC) {
-    text  = t(lang, circuitType === 'serie' ? 'inductive_serie' : 'inductive_para')
+    text  = t(lang, circuitType === 'series' ? 'inductive_series' : 'inductive_parallel')
     style = 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800'
   } else {
-    text  = t(lang, circuitType === 'serie' ? 'capacitive_serie' : 'capacitive_para')
+    text  = t(lang, circuitType === 'series' ? 'capacitive_series' : 'capacitive_parallel')
     style = 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800'
   }
 

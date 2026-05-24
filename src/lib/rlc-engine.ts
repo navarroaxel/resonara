@@ -10,8 +10,8 @@ function resonantFreq(L_H: number, C_F: number): number {
   return 1 / (TWO_PI * Math.sqrt(L_H * C_F))
 }
 
-/** Serie RLC: Z = R + j(XL - XC) */
-export function calcSerie(params: RLCParams, flags: ComponentFlags = DEFAULT_FLAGS): RLCResult {
+/** Series RLC: Z = R + j(XL - XC) */
+export function calcSeries(params: RLCParams, flags: ComponentFlags = DEFAULT_FLAGS): RLCResult {
   const { Vs, R, f } = params
   const L  = toH(params.L)
   const C  = toF(params.C)
@@ -29,13 +29,14 @@ export function calcSerie(params: RLCParams, flags: ComponentFlags = DEFAULT_FLA
   const phiRad = (phi * Math.PI) / 180
   const P  = Vs * I * Math.cos(phiRad)
   const Qp = Vs * I * Math.abs(Math.sin(phiRad))
+  const S  = Vs * I
   const fp = Math.cos(phiRad)
 
-  return { Z, phi, I, XL, XC, fr, Q, P, Qp, fp }
+  return { Z, phi, I, XL, XC, fr, Q, P, Qp, S, fp }
 }
 
-/** Paralelo RLC: Y = 1/R + 1/jXL + jBC */
-export function calcParalelo(params: RLCParams, flags: ComponentFlags = DEFAULT_FLAGS): RLCResult {
+/** Parallel RLC: Y = G + j(BC − BL),  G = 1/R, BL = 1/XL, BC = ωC */
+export function calcParallel(params: RLCParams, flags: ComponentFlags = DEFAULT_FLAGS): RLCResult {
   const { Vs, R, f } = params
   const L  = toH(params.L)
   const C  = toF(params.C)
@@ -57,11 +58,12 @@ export function calcParalelo(params: RLCParams, flags: ComponentFlags = DEFAULT_
   const phiRad = (phi * Math.PI) / 180
   const P  = Vs * I * Math.cos(phiRad)
   const Qp = Vs * I * Math.abs(Math.sin(phiRad))
+  const S  = Vs * I
   const fp = Math.cos(phiRad)
 
-  return { Z, phi, I, XL, XC, fr, Q, P, Qp, fp }
+  return { Z, phi, I, XL, XC, fr, Q, P, Qp, S, fp }
 }
 
 export function calc(type: CircuitType, params: RLCParams, flags: ComponentFlags = DEFAULT_FLAGS): RLCResult {
-  return type === 'serie' ? calcSerie(params, flags) : calcParalelo(params, flags)
+  return type === 'series' ? calcSeries(params, flags) : calcParallel(params, flags)
 }

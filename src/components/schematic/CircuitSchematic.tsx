@@ -37,12 +37,12 @@ function inductor(ctx: CanvasRenderingContext2D, x: number, y: number, w: number
 
 function capacitor(ctx: CanvasRenderingContext2D, x: number, y: number, h: number, c: string, lbl: string) {
   const cy = y + h / 2
-  wire(ctx, x, cy, x + 14, cy, c)
+  wire(ctx, x, cy, x + 12, cy, c)
   ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 2.2; ctx.lineCap = 'round'
-  ctx.beginPath(); ctx.moveTo(x + 14, y); ctx.lineTo(x + 14, y + h); ctx.stroke()
-  ctx.beginPath(); ctx.moveTo(x + 18, y); ctx.lineTo(x + 18, y + h); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(x + 12, y); ctx.lineTo(x + 12, y + h); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(x + 20, y); ctx.lineTo(x + 20, y + h); ctx.stroke()
   ctx.restore()
-  wire(ctx, x + 18, cy, x + 32, cy, c)
+  wire(ctx, x + 20, cy, x + 32, cy, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'
   ctx.fillText(lbl, x + 16, y - 5); ctx.restore()
 }
@@ -63,7 +63,7 @@ function dot(ctx: CanvasRenderingContext2D, x: number, y: number, c: string) {
   ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2 * Math.PI); ctx.fill(); ctx.restore()
 }
 
-function drawSerie(
+function drawSeries(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   XL: number, XC: number, fr: number,
   hasL: boolean, hasC: boolean,
@@ -76,13 +76,14 @@ function drawSerie(
   const top = 60, bot = 220, left = 50, right = 590
   const srcX = left + 36, srcY = (top + bot) / 2
   wire(ctx, srcX, top, right, top, wC); wire(ctx, left, bot, right, bot, wC)
+  wire(ctx, right, top, right, bot, wC)
   wire(ctx, srcX, bot, srcX, srcY + 22, wC); wire(ctx, srcX, top, srcX, srcY - 22, wC)
   sourceAC(ctx, srcX, srcY, 22, mC)
   const rw = 72, lw = 80, cw = 34
   const spacing = (right - left - 80 - rw - lw - cw) / 2
   const rStart = left + 80, lStart = rStart + rw + spacing, cStart = lStart + lw + spacing
   resistor(ctx, rStart, top - 10, rw, 20, rC, 'R')
-  inductor(ctx, lStart, top - 15, lw, lC, 'L')
+  inductor(ctx, lStart, top - 10, lw, lC, 'L')
   capacitor(ctx, cStart, top - 14, 28, cC, 'C')
   dot(ctx, rStart + rw, top, nC); dot(ctx, lStart + lw, top, nC)
   const frStr = Number.isFinite(fr) ? `fr = ${fmt(fr, 1)} Hz` : 'fr = —'
@@ -90,7 +91,7 @@ function drawSerie(
   ctx.fillText(`XL = ${fmt(XL, 1)} Ω   XC = ${fmt(XC, 1)} Ω   ${frStr}`, W / 2, bot + 24)
 }
 
-function drawParalelo(
+function drawParallel(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   XL: number, XC: number, fr: number,
   hasL: boolean, hasC: boolean,
@@ -161,10 +162,10 @@ export function CircuitSchematic() {
     if (!ctx) return
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     ctx.clearRect(0, 0, W, H)
-    if (circuitType === 'serie') {
-      drawSerie(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
+    if (circuitType === 'series') {
+      drawSeries(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
     } else {
-      drawParalelo(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
+      drawParallel(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
     }
   }, [circuitType, results, flags])
 

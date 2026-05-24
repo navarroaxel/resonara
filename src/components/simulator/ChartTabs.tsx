@@ -5,13 +5,15 @@ import { cn } from '@/lib/utils'
 import { BodeChart }          from '@/components/charts/BodeChart'
 import { PhasorDiagram }      from '@/components/charts/PhasorDiagram'
 import { TimeDomainChart }    from '@/components/charts/TimeDomainChart'
+import { PowerChart }         from '@/components/charts/PowerChart'
 import { WaveformEquations }  from '@/components/simulator/WaveformEquations'
 import type { ActiveTab }     from '@/lib/types'
 
-const TABS: { value: ActiveTab; labelKey: 'freqResponseTab' | 'phasorTab' | 'timeDomainTab' }[] = [
+const TABS: { value: ActiveTab; labelKey: 'freqResponseTab' | 'phasorTab' | 'timeDomainTab' | 'powerTab' }[] = [
   { value: 'bode',   labelKey: 'freqResponseTab' },
   { value: 'phasor', labelKey: 'phasorTab'        },
   { value: 'time',   labelKey: 'timeDomainTab'    },
+  { value: 'power',  labelKey: 'powerTab'         },
 ]
 
 export function ChartTabs() {
@@ -43,6 +45,7 @@ export function ChartTabs() {
           <TimeDomainChart />
         </>
       )}
+      {activeTab === 'power'  && <PowerChart />}
     </div>
   )
 }

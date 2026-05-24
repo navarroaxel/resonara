@@ -59,13 +59,13 @@ export function PhasorDiagram() {
       '#1D9E75', 'I'
     )
 
-    if (circuitType === 'serie') {
+    if (circuitType === 'series') {
       drawArrow(ctx, cx, cy, cx + I * R  * scale,  cy,              '#185FA5', 'VR')
       if (flags.hasL) drawArrow(ctx, cx, cy, cx, cy - I * XL * scale, '#7F77DD', 'VL')
       if (flags.hasC) drawArrow(ctx, cx, cy, cx, cy + I * XC * scale, '#D85A30', 'VC')
     }
 
-    const legend: [string, string][] = circuitType === 'serie'
+    const legend: [string, string][] = circuitType === 'series'
       ? [
           ['#378ADD', 'V fuente'],
           ['#1D9E75', 'I'],

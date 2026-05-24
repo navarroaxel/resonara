@@ -48,9 +48,9 @@ const RLCContext = createContext<{ state: State; dispatch: React.Dispatch<Action
 export function RLCProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, {
     params:      DEFAULT_PARAMS,
-    circuitType: 'serie',
+    circuitType: 'series',
     activeTab:   'bode',
-    results:     calc('serie', DEFAULT_PARAMS, DEFAULT_FLAGS),
+    results:     calc('series', DEFAULT_PARAMS, DEFAULT_FLAGS),
     flags:       DEFAULT_FLAGS,
     lang:        'es',
   })

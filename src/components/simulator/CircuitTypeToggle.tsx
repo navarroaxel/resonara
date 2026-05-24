@@ -4,9 +4,9 @@ import { t } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import type { CircuitType } from '@/lib/types'
 
-const OPTIONS: { value: CircuitType; labelKey: 'serieName' | 'paraleloName' }[] = [
-  { value: 'serie',    labelKey: 'serieName'    },
-  { value: 'paralelo', labelKey: 'paraleloName' },
+const OPTIONS: { value: CircuitType; labelKey: 'seriesName' | 'parallelName' }[] = [
+  { value: 'series',   labelKey: 'seriesName'   },
+  { value: 'parallel', labelKey: 'parallelName' },
 ]
 
 export function CircuitTypeToggle() {
