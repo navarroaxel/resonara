@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react'
 import { useRLC } from '@/store/rlc-store'
 import { fmt } from '@/lib/utils'
+import { t } from '@/lib/i18n'
 
 const W = 640, H = 280
 
@@ -153,7 +154,7 @@ function drawParallel(
 
 export function CircuitSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { circuitType, results, flags } } = useRLC()
+  const { state: { circuitType, results, flags, lang } } = useRLC()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -175,7 +176,7 @@ export function CircuitSchematic() {
       width={W}
       height={H}
       className="w-full"
-      aria-label={`Esquemático del circuito RLC ${circuitType}`}
+      aria-label={t(lang, circuitType === 'series' ? 'schematicAriaSeriesLabel' : 'schematicAriaParallelLabel')}
     />
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRLC } from '@/store/rlc-store'
+import { t } from '@/lib/i18n'
 
 const SIZE = 280
 
@@ -25,7 +26,7 @@ function drawArrow(
 
 export function PhasorDiagram() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, results, circuitType, flags } } = useRLC()
+  const { state: { params, results, circuitType, flags, lang } } = useRLC()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -67,13 +68,13 @@ export function PhasorDiagram() {
 
     const legend: [string, string][] = circuitType === 'series'
       ? [
-          ['#378ADD', 'V fuente'],
+          ['#378ADD', t(lang, 'vSource')],
           ['#1D9E75', 'I'],
           ['#185FA5', 'VR'],
           ...(flags.hasL ? [['#7F77DD', 'VL'] as [string, string]] : []),
           ...(flags.hasC ? [['#D85A30', 'VC'] as [string, string]] : []),
         ]
-      : [['#378ADD', 'V fuente'], ['#1D9E75', 'I total']]
+      : [['#378ADD', t(lang, 'vSource')], ['#1D9E75', t(lang, 'iTotal')]]
 
     ctx.font = '11px sans-serif'
     legend.forEach(([c, l], i) => {
@@ -82,7 +83,7 @@ export function PhasorDiagram() {
       ctx.fillStyle = isDark ? '#9FA0A0' : '#888'
       ctx.fillText(l, 22, 18 + i * 16)
     })
-  }, [params, results, circuitType, flags])
+  }, [params, results, circuitType, flags, lang])
 
   return (
     <canvas
@@ -90,7 +91,7 @@ export function PhasorDiagram() {
       width={SIZE}
       height={SIZE}
       className="mx-auto block"
-      aria-label="Diagrama fasorial de voltaje y corriente"
+      aria-label={t(lang, 'phasorAriaLabel')}
     />
   )
 }
