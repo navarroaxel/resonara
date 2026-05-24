@@ -1,6 +1,6 @@
 export type CircuitType = 'serie' | 'paralelo'
 
-export type ActiveTab = 'bode' | 'phasor' | 'time'
+export type ActiveTab = 'bode' | 'phasor' | 'time' | 'power'
 
 export interface ComponentFlags {
   hasL: boolean
@@ -27,6 +27,7 @@ export interface RLCResult {
   Q:    number  // Quality factor
   P:    number  // Active power (W)
   Qp:   number  // Reactive power (VAR)
+  S:    number  // Apparent power (VA)
   fp:   number  // Power factor (cosφ)
 }
 

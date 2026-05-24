@@ -19,19 +19,21 @@ function MetricCard({ label, value, unit, color }: {
 
 export function MetricsGrid() {
   const { state: { results, lang } } = useRLC()
-  const { Z, phi, I, XL, XC, fr, Q, P, fp } = results
+  const { Z, phi, I, XL, XC, fr, Q, P, Qp, S, fp } = results
 
   return (
     <div className="grid grid-cols-3 gap-2">
-      <MetricCard label={t(lang, 'impedance')}  value={fmt(Z)}      unit="Ω"  color="text-blue-600 dark:text-blue-400"   />
-      <MetricCard label={t(lang, 'phaseAngle')} value={fmt(phi, 1)} unit="°"  color="text-violet-600 dark:text-violet-400" />
-      <MetricCard label={t(lang, 'current')}    value={fmt(I, 3)}   unit="A"  color="text-teal-600 dark:text-teal-400"   />
-      <MetricCard label={t(lang, 'xl')}         value={fmt(XL)}     unit="Ω"  />
-      <MetricCard label={t(lang, 'xc')}         value={fmt(XC)}     unit="Ω"  />
-      <MetricCard label={t(lang, 'resFreq')}    value={fmt(fr, 1)}  unit="Hz" />
-      <MetricCard label={t(lang, 'qFactor')}    value={fmt(Q)}                />
-      <MetricCard label={t(lang, 'activePower')} value={fmt(P)}     unit="W"  />
-      <MetricCard label={t(lang, 'powerFactor')} value={fmt(fp, 3)}           />
+      <MetricCard label={t(lang, 'phaseAngle')}    value={fmt(phi, 1)} unit="°"   color="text-violet-600 dark:text-violet-400" />
+      <MetricCard label={t(lang, 'current')}       value={fmt(I, 3)}   unit="A"   color="text-teal-600 dark:text-teal-400"    />
+      <MetricCard label={t(lang, 'resFreq')}       value={fmt(fr, 1)}  unit="Hz"  />
+      <MetricCard label={t(lang, 'impedance')}     value={fmt(Z)}      unit="Ω"   color="text-blue-600 dark:text-blue-400"    />
+      <MetricCard label={t(lang, 'xl')}            value={fmt(XL)}     unit="Ω"   />
+      <MetricCard label={t(lang, 'xc')}            value={fmt(XC)}     unit="Ω"   />
+      <MetricCard label={t(lang, 'activePower')}   value={fmt(P)}      unit="W"   color="text-green-600 dark:text-green-400"  />
+      <MetricCard label={t(lang, 'reactivePower')} value={fmt(Qp)}     unit="VAR" color="text-orange-500 dark:text-orange-400" />
+      <MetricCard label={t(lang, 'apparentPower')} value={fmt(S)}      unit="VA"  color="text-blue-600 dark:text-blue-400"    />
+      <MetricCard label={t(lang, 'qFactor')}       value={fmt(Q)}                 />
+      <MetricCard label={t(lang, 'powerFactor')}   value={fmt(fp, 3)}             />
     </div>
   )
 }

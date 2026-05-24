@@ -29,12 +29,13 @@ export function calcSerie(params: RLCParams, flags: ComponentFlags = DEFAULT_FLA
   const phiRad = (phi * Math.PI) / 180
   const P  = Vs * I * Math.cos(phiRad)
   const Qp = Vs * I * Math.abs(Math.sin(phiRad))
+  const S  = Vs * I
   const fp = Math.cos(phiRad)
 
-  return { Z, phi, I, XL, XC, fr, Q, P, Qp, fp }
+  return { Z, phi, I, XL, XC, fr, Q, P, Qp, S, fp }
 }
 
-/** Paralelo RLC: Y = 1/R + 1/jXL + jBC */
+/** Paralelo RLC: Y = G + j(BC − BL),  G = 1/R, BL = 1/XL, BC = ωC */
 export function calcParalelo(params: RLCParams, flags: ComponentFlags = DEFAULT_FLAGS): RLCResult {
   const { Vs, R, f } = params
   const L  = toH(params.L)
@@ -57,9 +58,10 @@ export function calcParalelo(params: RLCParams, flags: ComponentFlags = DEFAULT_
   const phiRad = (phi * Math.PI) / 180
   const P  = Vs * I * Math.cos(phiRad)
   const Qp = Vs * I * Math.abs(Math.sin(phiRad))
+  const S  = Vs * I
   const fp = Math.cos(phiRad)
 
-  return { Z, phi, I, XL, XC, fr, Q, P, Qp, fp }
+  return { Z, phi, I, XL, XC, fr, Q, P, Qp, S, fp }
 }
 
 export function calc(type: CircuitType, params: RLCParams, flags: ComponentFlags = DEFAULT_FLAGS): RLCResult {
