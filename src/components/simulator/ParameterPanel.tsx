@@ -2,7 +2,7 @@
 import { useRLC } from '@/store/rlc-store'
 import { t, type TKey } from '@/lib/i18n'
 import type { RLCParams } from '@/lib/types'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 interface ParamConfig {
   key:      keyof RLCParams
@@ -38,9 +38,8 @@ function ParamRow({ config, value, enabled, lang, dispatch, isL, isC }: ParamRow
   const [inputText, setInputText] = useState(String(value))
   const [focused,   setFocused]   = useState(false)
 
-  useEffect(() => {
-    if (!focused) setInputText(String(value))
-  }, [value, focused])
+  // When not focused the number input mirrors the store value directly,
+  // so no effect is needed to keep inputText in sync.
 
   function commitInput(text: string) {
     const v = Number(text)
@@ -82,9 +81,9 @@ function ParamRow({ config, value, enabled, lang, dispatch, isL, isC }: ParamRow
             min={min}
             max={max}
             step={step}
-            value={inputText}
+            value={focused ? inputText : String(value)}
             disabled={!enabled}
-            onFocus={() => setFocused(true)}
+            onFocus={() => { setFocused(true); setInputText(String(value)) }}
             onBlur={() => {
               setFocused(false)
               commitInput(inputText)
