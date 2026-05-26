@@ -28,6 +28,7 @@ export function HarmonicSpectrum() {
     const plotW = W - pad.left - pad.right
     const plotH = H - pad.top - pad.bottom
 
+    const bottom = pad.top + plotH
     const toYv = (v: number) => pad.top + (1 - v / vMax) * plotH
     const toYi = (i: number) => pad.top + (1 - i / iMax) * plotH
 
@@ -66,19 +67,17 @@ export function HarmonicSpectrum() {
     const gap    = barW * 0.4
 
     hs.forEach((h, idx) => {
-      const cx = pad.left + (idx + 0.5) * groupW
+      const cx   = pad.left + (idx + 0.5) * groupW
+      const vTop = toYv(h.Vn)
+      const iTop = toYi(h.In)
 
       // Voltage bar (blue)
-      const vH   = (h.Vn / vMax) * plotH
-      const vTop = pad.top + plotH - vH
       ctx.fillStyle = '#378ADD'
-      ctx.fillRect(cx - gap / 2 - barW, vTop, barW, vH)
+      ctx.fillRect(cx - gap / 2 - barW, vTop, barW, bottom - vTop)
 
       // Current bar (green)
-      const iH   = (h.In / iMax) * plotH
-      const iTop = pad.top + plotH - iH
       ctx.fillStyle = '#1D9E75'
-      ctx.fillRect(cx + gap / 2, iTop, barW, iH)
+      ctx.fillRect(cx + gap / 2, iTop, barW, bottom - iTop)
 
       // Bar value labels
       ctx.font = '9px sans-serif'; ctx.textAlign = 'center'
