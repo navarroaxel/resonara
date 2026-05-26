@@ -6,10 +6,11 @@ import { BodeChart }          from '@/components/charts/BodeChart'
 import { PhasorDiagram }      from '@/components/charts/PhasorDiagram'
 import { TimeDomainChart }    from '@/components/charts/TimeDomainChart'
 import { PowerChart }         from '@/components/charts/PowerChart'
+import { HarmonicSpectrum }   from '@/components/charts/HarmonicSpectrum'
 import { WaveformEquations }  from '@/components/simulator/WaveformEquations'
 import type { ActiveTab }     from '@/lib/types'
 
-const TABS: { value: ActiveTab; labelKey: 'freqResponseTab' | 'phasorTab' | 'timeDomainTab' | 'powerTab' }[] = [
+const BASE_TABS: { value: ActiveTab; labelKey: 'freqResponseTab' | 'phasorTab' | 'timeDomainTab' | 'powerTab' | 'spectrumTab' }[] = [
   { value: 'bode',   labelKey: 'freqResponseTab' },
   { value: 'phasor', labelKey: 'phasorTab'        },
   { value: 'time',   labelKey: 'timeDomainTab'    },
@@ -17,12 +18,16 @@ const TABS: { value: ActiveTab; labelKey: 'freqResponseTab' | 'phasorTab' | 'tim
 ]
 
 export function ChartTabs() {
-  const { state: { activeTab, lang }, dispatch } = useRLC()
+  const { state: { activeTab, lang, polyMode }, dispatch } = useRLC()
+
+  const tabs = polyMode
+    ? [...BASE_TABS, { value: 'spectrum' as ActiveTab, labelKey: 'spectrumTab' as const }]
+    : BASE_TABS
 
   return (
     <div>
       <div className="flex gap-1 mb-4 border-b border-neutral-200 dark:border-neutral-700">
-        {TABS.map(({ value, labelKey }) => (
+        {tabs.map(({ value, labelKey }) => (
           <button
             key={value}
             onClick={() => dispatch({ type: 'SET_TAB', activeTab: value })}
@@ -30,22 +35,23 @@ export function ChartTabs() {
               'px-3 py-2 text-xs font-medium border-b-2 -mb-px transition-colors',
               activeTab === value
                 ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
+                : 'border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300',
             )}
           >
             {t(lang, labelKey)}
           </button>
         ))}
       </div>
-      {activeTab === 'bode'   && <BodeChart />}
-      {activeTab === 'phasor' && <PhasorDiagram />}
-      {activeTab === 'time'   && (
+      {activeTab === 'bode'     && <BodeChart />}
+      {activeTab === 'phasor'   && <PhasorDiagram />}
+      {activeTab === 'time'     && (
         <>
-          <WaveformEquations />
+          {!polyMode && <WaveformEquations />}
           <TimeDomainChart />
         </>
       )}
-      {activeTab === 'power'  && <PowerChart />}
+      {activeTab === 'power'    && <PowerChart />}
+      {activeTab === 'spectrum' && <HarmonicSpectrum />}
     </div>
   )
 }

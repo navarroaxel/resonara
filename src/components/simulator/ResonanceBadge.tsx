@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 export function ResonanceBadge() {
   const { state: { params, results, circuitType, flags, lang } } = useRLC()
-  const { XL, XC, fr, phi } = results
+  const { fr, phi } = results
 
   let text: string
   let style: string

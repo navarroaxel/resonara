@@ -1,6 +1,34 @@
 export type CircuitType = 'series' | 'parallel'
 
-export type ActiveTab = 'bode' | 'phasor' | 'time' | 'power'
+export type ActiveTab = 'bode' | 'phasor' | 'time' | 'power' | 'spectrum'
+
+export type PolyPreset = 'square' | 'triangle' | 'sawtooth' | 'custom'
+
+export interface HarmonicInput {
+  n:    number  // harmonic number (1 = fundamental)
+  An:   number  // relative amplitude (0–2, where 1 = same as Vs)
+  phin: number  // source phase of this harmonic (degrees)
+}
+
+export interface HarmonicResult {
+  n:            number
+  fn:           number   // = n * params.f
+  Vn:           number   // peak voltage = An * Vs * √2
+  Zn:           number   // |Z| at fn
+  phin_source:  number   // source phase (from HarmonicInput)
+  phin_circuit: number   // circuit phase angle at fn (degrees)
+  In:           number   // peak current = Vn / Zn
+}
+
+export interface PolyResult {
+  harmonics: HarmonicResult[]
+  I_rms:     number   // √(Σ In_peak²/2)
+  V_rms:     number   // √(Σ Vn_peak²/2)
+  THD_I:     number   // √(Σ_{n>1} (In_peak/√2)²) / (I1_peak/√2) × 100 (%) — In_peak from HarmonicResult.In
+  P_total:   number   // Σ Vn_peak·In_peak/2·cos(φn_circuit)  (W)
+  Qp_total:  number   // VAR
+  S_total:   number   // V_rms · I_rms  (VA)
+}
 
 export interface ComponentFlags {
   hasL: boolean

@@ -2,12 +2,18 @@
 import { useEffect, useRef, useMemo } from 'react'
 import { useRLC } from '@/store/rlc-store'
 import { calcTimeDomain } from '@/lib/time-domain'
+import { calcPolyTimeDomain } from '@/lib/poly-engine'
 import { t } from '@/lib/i18n'
 
 export function TimeDomainChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, circuitType, flags, lang } } = useRLC()
-  const data = useMemo(() => calcTimeDomain(circuitType, params, flags), [circuitType, params, flags])
+  const { state: { params, circuitType, flags, lang, polyMode, harmonics } } = useRLC()
+  const data = useMemo(
+    () => polyMode
+      ? calcPolyTimeDomain(circuitType, params, harmonics, flags)
+      : calcTimeDomain(circuitType, params, flags),
+    [circuitType, params, flags, polyMode, harmonics],
+  )
 
   useEffect(() => {
     const canvas = canvasRef.current
