@@ -65,11 +65,11 @@ export function BodeChart() {
         '#1D9E75','#D85A30','#7F77DD','#C0392B','#F39C12',
         '#16A085','#8E44AD','#2ECC71','#E74C3C','#3498DB',
       ]
-      polyResults.harmonics.forEach((h, idx) => {
+      polyResults.harmonics.forEach(h => {
         if (h.fn < fMin || h.fn > fMax) return
         ctx.beginPath()
         ctx.arc(toX(h.fn), toY(h.Zn), 5, 0, 2 * Math.PI)
-        ctx.fillStyle = HARMONIC_COLORS[idx % HARMONIC_COLORS.length]
+        ctx.fillStyle = HARMONIC_COLORS[(h.n - 1) % HARMONIC_COLORS.length]
         ctx.fill()
         ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.stroke()
       })

@@ -76,8 +76,8 @@ export function PhasorDiagram() {
 
       const legend: [string, string][] = [['#378ADD', 'V₁']]
 
-      polyResults.harmonics.forEach((h, idx) => {
-        const color  = HARMONIC_COLORS[idx % HARMONIC_COLORS.length]
+      polyResults.harmonics.forEach(h => {
+        const color  = HARMONIC_COLORS[(h.n - 1) % HARMONIC_COLORS.length]
         const netRad = (h.phin_source - h.phin_circuit) * Math.PI / 180
         const len    = h.In * scale_I
         drawArrow(
