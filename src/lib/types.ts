@@ -59,6 +59,30 @@ export interface RLCResult {
   fp:   number  // Power factor (cosφ)
 }
 
+export interface DCParams {
+  V1: number  // Source 1 voltage (V), range 0.1–100
+  V2: number  // Source 2 voltage (V), range 0.1–100
+  R1: number  // Resistance 1 (Ω), range 1–1000
+  R2: number  // Resistance 2 (Ω), range 1–1000
+  R3: number  // Resistance 3 (Ω), range 1–1000
+}
+
+export interface DCResult {
+  I1:   number  // Mesh 1 current (A), may be negative
+  I2:   number  // Mesh 2 current (A), may be negative
+  IR1:  number  // Branch current through R1 = I1
+  IR2:  number  // Branch current through R2 = I1 - I2
+  IR3:  number  // Branch current through R3 = I2
+  VR1:  number  // Voltage across R1
+  VR2:  number  // Voltage across R2
+  VR3:  number  // Voltage across R3
+  VA:   number  // Node A voltage (V), relative to GND
+  kvl1: number  // KVL residual loop 1 ≈ 0
+  kvl2: number  // KVL residual loop 2 ≈ 0
+  kclA: number  // KCL residual node A ≈ 0
+  D:    number  // Determinant (0 = degenerate circuit)
+}
+
 export interface BodePoint {
   f:   number  // Frequency (Hz)
   Z:   number  // Impedance magnitude (Ω)
