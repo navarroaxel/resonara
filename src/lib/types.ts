@@ -24,7 +24,7 @@ export interface PolyResult {
   harmonics: HarmonicResult[]
   I_rms:     number   // √(Σ In_peak²/2)
   V_rms:     number   // √(Σ Vn_peak²/2)
-  THD_I:     number   // √(Σ_{n>1} In_rms²) / I1_rms × 100 (%)
+  THD_I:     number   // √(Σ_{n>1} (In_peak/√2)²) / (I1_peak/√2) × 100 (%) — In_peak from HarmonicResult.In
   P_total:   number   // Σ Vn_peak·In_peak/2·cos(φn_circuit)  (W)
   Qp_total:  number   // VAR
   S_total:   number   // V_rms · I_rms  (VA)
