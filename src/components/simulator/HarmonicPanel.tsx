@@ -22,10 +22,12 @@ export function HarmonicPanel() {
         <button
           onClick={() => dispatch({ type: 'TOGGLE_POLY_MODE' })}
           className={cn(
-            'relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none',
+            'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
+            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500',
             polyMode ? 'bg-blue-500' : 'bg-neutral-300 dark:bg-neutral-600',
           )}
           aria-pressed={polyMode}
+          aria-label={t(lang, 'polyModeLabel')}
         >
           <span className={cn(
             'inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform',
