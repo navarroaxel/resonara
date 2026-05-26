@@ -8,6 +8,7 @@ import { ThemeToggle }       from '@/components/ui/ThemeToggle'
 import { LangToggle }        from '@/components/ui/LangToggle'
 import { HeaderSubtitle }    from '@/components/ui/HeaderSubtitle'
 import { GitHubLink }        from '@/components/ui/GitHubLink'
+import { Footer }            from '@/components/ui/Footer'
 
 export default function Home() {
   return (
@@ -48,37 +49,7 @@ export default function Home() {
 
       </div>
 
-      <footer className="border-t border-neutral-200 dark:border-neutral-800 px-6 py-6 mt-4 text-sm text-neutral-500 dark:text-neutral-400">
-        <p className="mb-3">
-          Interactive simulator developed as a teaching aid for the{' '}
-          <span className="font-medium text-neutral-700 dark:text-neutral-300">Electrotécnica I</span>{' '}
-          course at UTN – FRBA.
-        </p>
-        <ul className="space-y-1">
-          <li>
-            Want to explore the electric field and the relaxation method? Visit{' '}
-            <a
-              href="https://relax-method-viz.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-            >
-              relax-method-viz.vercel.app
-            </a>
-          </li>
-          <li>
-            Want to explore the kinematics and dynamics of circular motion? Visit{' '}
-            <a
-              href="https://kinelab-theta.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-            >
-              kinelab-theta.vercel.app
-            </a>
-          </li>
-        </ul>
-      </footer>
+      <Footer />
     </main>
   )
 }

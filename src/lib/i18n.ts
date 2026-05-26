@@ -50,6 +50,9 @@ const T = {
     schematicAriaParallelLabel: 'Esquemático del circuito RLC paralelo',
     githubAria:             'Ver código fuente en GitHub',
     themeLabel:             'Tema',
+    footerCredit:           'Simulador interactivo desarrollado como apoyo didáctico en el marco de la cátedra de',
+    footerRelaxPrompt:      '¿Querés ver también el campo eléctrico y el método de relajación? Pasá por',
+    footerKinelabPrompt:    '¿Querés explorar la cinemática y dinámica de la trayectoria circular? Pasá por',
   },
   en: {
     seriesName:         'Series RLC',
@@ -100,6 +103,9 @@ const T = {
     schematicAriaParallelLabel: 'Parallel RLC circuit schematic',
     githubAria:             'View source code on GitHub',
     themeLabel:             'Theme',
+    footerCredit:           'Interactive simulator developed as a teaching aid for the',
+    footerRelaxPrompt:      'Want to explore the electric field and the relaxation method? Visit',
+    footerKinelabPrompt:    'Want to explore the kinematics and dynamics of circular motion? Visit',
   },
 }
 
