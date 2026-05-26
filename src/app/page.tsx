@@ -50,13 +50,13 @@ export default function Home() {
 
       <footer className="border-t border-neutral-200 dark:border-neutral-800 px-6 py-6 mt-4 text-sm text-neutral-500 dark:text-neutral-400">
         <p className="mb-3">
-          Simulador interactivo desarrollado como apoyo didáctico en el marco de la cátedra de{' '}
+          Interactive simulator developed as a teaching aid for the{' '}
           <span className="font-medium text-neutral-700 dark:text-neutral-300">Electrotécnica I</span>{' '}
-          de la UTN – FRBA.
+          course at UTN – FRBA.
         </p>
         <ul className="space-y-1">
           <li>
-            ¿Querés ver también el campo eléctrico y el método de relajación? Pasá por{' '}
+            Want to explore the electric field and the relaxation method? Visit{' '}
             <a
               href="https://relax-method-viz.vercel.app"
               target="_blank"
@@ -67,7 +67,7 @@ export default function Home() {
             </a>
           </li>
           <li>
-            ¿Querés explorar la cinemática y dinámica de la trayectoria circular? Pasá por{' '}
+            Want to explore the kinematics and dynamics of circular motion? Visit{' '}
             <a
               href="https://kinelab-theta.vercel.app"
               target="_blank"
