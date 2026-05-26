@@ -3,9 +3,16 @@ import { useDC } from '@/store/dc-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
+const TOL = 1e-6
+
+function valid(r: number) {
+  return Number.isFinite(r) && Math.abs(r) < TOL
+}
+
 export function KCLCard() {
   const { state: { results, lang } } = useDC()
   const { IR1, IR2, IR3, kclA } = results
+  const ok = valid(kclA)
 
   return (
     <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
@@ -30,8 +37,12 @@ export function KCLCard() {
             {t(lang, 'kclBalance')}: IR₁ − IR₂ − IR₃
           </p>
           <p className="font-mono text-sm">
-            <span className="text-green-600 dark:text-green-400">{fmt(kclA, 9)}</span>
-            {' A ✓'}
+            <span className={ok ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}>
+              {fmt(kclA, 9)}
+            </span>
+            <span className={ok ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}>
+              {ok ? ' A ✓' : ' A ✗'}
+            </span>
           </p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 'use client'
-import { createContext, useContext, useReducer, useMemo } from 'react'
+import { createContext, useContext, useReducer, useMemo, useEffect } from 'react'
 import { calcDC } from '@/lib/dc-engine'
+import { readLang, writeLang } from '@/lib/lang-storage'
 import type { DCParams, DCResult, Lang } from '@/lib/types'
 
 const DEFAULT_PARAMS: DCParams = { V1: 12, V2: 6, R1: 100, R2: 200, R3: 150 }
@@ -23,6 +24,7 @@ function reducer(state: State, action: Action): State {
       return { ...state, params, results }
     }
     case 'SET_LANG':
+      writeLang(action.lang)
       return { ...state, lang: action.lang }
   }
 }
@@ -35,6 +37,13 @@ export function DCProvider({ children }: { children: React.ReactNode }) {
     results: calcDC(DEFAULT_PARAMS),
     lang:    'es',
   })
+
+  useEffect(() => {
+    const saved = readLang()
+    if (saved !== state.lang) dispatch({ type: 'SET_LANG', lang: saved })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const value = useMemo(() => ({ state, dispatch }), [state])
   return <DCContext.Provider value={value}>{children}</DCContext.Provider>
 }

@@ -1,7 +1,8 @@
 'use client'
-import { createContext, useContext, useReducer, useMemo } from 'react'
+import { createContext, useContext, useReducer, useMemo, useEffect } from 'react'
 import { calc } from '@/lib/rlc-engine'
 import { calcPolyResult, PRESETS } from '@/lib/poly-engine'
+import { readLang, writeLang } from '@/lib/lang-storage'
 import type {
   RLCParams, RLCResult, CircuitType, ActiveTab, ComponentFlags, Lang,
   PolyPreset, HarmonicInput, PolyResult,
@@ -68,6 +69,7 @@ function reducer(state: State, action: Action): State {
       return { ...state, flags, results, polyResults }
     }
     case 'SET_LANG':
+      writeLang(action.lang)
       return { ...state, lang: action.lang }
 
     case 'TOGGLE_POLY_MODE': {
@@ -120,6 +122,13 @@ export function RLCProvider({ children }: { children: React.ReactNode }) {
     harmonics:   DEFAULT_HARMONICS,
     polyResults: null,
   })
+
+  useEffect(() => {
+    const saved = readLang()
+    if (saved !== state.lang) dispatch({ type: 'SET_LANG', lang: saved })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const value = useMemo(() => ({ state, dispatch }), [state])
   return <RLCContext.Provider value={value}>{children}</RLCContext.Provider>
 }
