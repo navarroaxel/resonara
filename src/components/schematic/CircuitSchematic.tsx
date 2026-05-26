@@ -76,13 +76,17 @@ function drawSeries(
   const cC = hasC ? (isDark ? '#5DCAA5' : '#1D9E75') : grayC
   const top = 60, bot = 220, left = 50, right = 590
   const srcX = left + 36, srcY = (top + bot) / 2
-  wire(ctx, srcX, top, right, top, wC); wire(ctx, left, bot, right, bot, wC)
+  wire(ctx, left, bot, right, bot, wC)
   wire(ctx, right, top, right, bot, wC)
   wire(ctx, srcX, bot, srcX, srcY + 22, wC); wire(ctx, srcX, top, srcX, srcY - 22, wC)
   sourceAC(ctx, srcX, srcY, 22, mC)
   const rw = 72, lw = 80, cw = 34
   const spacing = (right - left - 80 - rw - lw - cw) / 2
   const rStart = left + 80, lStart = rStart + rw + spacing, cStart = lStart + lw + spacing
+  wire(ctx, srcX, top, rStart, top, wC)
+  wire(ctx, rStart + rw, top, lStart, top, wC)
+  wire(ctx, lStart + lw, top, cStart, top, wC)
+  wire(ctx, cStart + 32, top, right, top, wC)
   resistor(ctx, rStart, top - 10, rw, 20, rC, 'R')
   inductor(ctx, lStart, top - 10, lw, lC, 'L')
   capacitor(ctx, cStart, top - 14, 28, cC, 'C')

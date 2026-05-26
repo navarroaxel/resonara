@@ -7,6 +7,7 @@ import { CircuitSchematic }  from '@/components/schematic/CircuitSchematic'
 import { ThemeToggle }       from '@/components/ui/ThemeToggle'
 import { LangToggle }        from '@/components/ui/LangToggle'
 import { HeaderSubtitle }    from '@/components/ui/HeaderSubtitle'
+import { GitHubLink }        from '@/components/ui/GitHubLink'
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
           <HeaderSubtitle />
         </div>
         <div className="flex items-center gap-2">
+          <GitHubLink />
           <LangToggle />
           <ThemeToggle />
         </div>

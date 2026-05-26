@@ -9,6 +9,7 @@ function drawArrow(
   ctx: CanvasRenderingContext2D,
   ox: number, oy: number, ex: number, ey: number,
   color: string, label: string,
+  labelDx = 6,
 ) {
   ctx.save()
   ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2
@@ -20,7 +21,7 @@ function drawArrow(
   ctx.lineTo(ex - 10 * Math.cos(angle + 0.4), ey - 10 * Math.sin(angle + 0.4))
   ctx.closePath(); ctx.fill()
   ctx.font = 'bold 12px sans-serif'
-  ctx.fillText(label, ex + 6, ey - 4)
+  ctx.fillText(label, ex + labelDx, ey - 4)
   ctx.restore()
 }
 
@@ -53,26 +54,27 @@ export function PhasorDiagram() {
     ctx.fillText('Im', cx + 4, 12)
 
     const phiRad = (phiDeg * Math.PI) / 180
+    const iLen = SIZE * 0.32
     drawArrow(ctx, cx, cy, cx + Vs * scale, cy, '#378ADD', 'V')
     drawArrow(ctx, cx, cy,
-      cx + I * scale * 3 * Math.cos(-phiRad),
-      cy + I * scale * 3 * Math.sin(-phiRad),
+      cx + iLen * Math.cos(-phiRad),
+      cy + iLen * Math.sin(-phiRad),
       '#1D9E75', 'I'
     )
 
     if (circuitType === 'series') {
-      drawArrow(ctx, cx, cy, cx + I * R  * scale,  cy,              '#185FA5', 'VR')
+      drawArrow(ctx, cx, cy, cx + I * R  * scale,  cy,              '#D85A30', 'VR')
       if (flags.hasL) drawArrow(ctx, cx, cy, cx, cy - I * XL * scale, '#7F77DD', 'VL')
-      if (flags.hasC) drawArrow(ctx, cx, cy, cx, cy + I * XC * scale, '#D85A30', 'VC')
+      if (flags.hasC) drawArrow(ctx, cx, cy, cx, cy + I * XC * scale, '#C0392B', 'VC')
     }
 
     const legend: [string, string][] = circuitType === 'series'
       ? [
           ['#378ADD', t(lang, 'vSource')],
           ['#1D9E75', 'I'],
-          ['#185FA5', 'VR'],
+          ['#D85A30', 'VR'],
           ...(flags.hasL ? [['#7F77DD', 'VL'] as [string, string]] : []),
-          ...(flags.hasC ? [['#D85A30', 'VC'] as [string, string]] : []),
+          ...(flags.hasC ? [['#C0392B', 'VC'] as [string, string]] : []),
         ]
       : [['#378ADD', t(lang, 'vSource')], ['#1D9E75', t(lang, 'iTotal')]]
 
