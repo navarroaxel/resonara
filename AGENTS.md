@@ -12,9 +12,10 @@ RLC circuit simulator. Fully client-side Next.js 16 App Router app. No server-si
 
 - **State**: single React Context + `useReducer` in `src/store/rlc-store.tsx`. One `dispatch` call recalculates all derived results immediately — no async state.
 - **Engine**: `src/lib/rlc-engine.ts` is pure TypeScript (no React). All circuit math lives here. Test it directly with Jest.
-- **Charts**: all four charts (Bode, time-domain, phasor, schematic) use Canvas 2D only. No charting library. Each chart is a `useEffect` that redraws on state change.
+- **Charts**: all five charts (Bode, time-domain, phasor, power triangle, schematic) use Canvas 2D only. No charting library. Each chart is a `useEffect` that redraws on state change.
 - **Dark mode**: class-based (`.dark` on `<html>`). Tailwind v4 needs `@custom-variant dark (&:where(.dark, .dark *))` in `globals.css` — already present. Do not use `dark:` classes without this.
-- **i18n**: flat `T[lang][key]` object in `src/lib/i18n.ts`. `t(lang, key)` helper. Lang stored in RLC store, not in a separate context.
+- **i18n**: flat `T[lang][key]` object in `src/lib/i18n.ts`. `t(lang, key)` helper. Lang stored in RLC store, not in a separate context. All user-visible strings must have keys in both `es` and `en`.
+- **Footer**: `src/components/ui/Footer.tsx` is a `'use client'` component that reads `lang` from the RLC store and renders the academic credit and related-project links. Add footer strings to `i18n.ts`, not hardcoded.
 
 ## Key invariants
 

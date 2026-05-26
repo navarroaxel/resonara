@@ -13,8 +13,9 @@ Built with Next.js 16, React 19, TypeScript 5 strict, Tailwind CSS v4, and Canva
 - **Bode chart** (impedance vs frequency) with current operating point marker
 - **Time-domain chart** — u(t) and i(t) with analytic waveform equations
 - **Phasor diagram** with voltage and current component arrows
+- **Power triangle** — visual P/Q/S triangle with power-factor readout
 - **Dark mode** (system-aware with manual toggle, no FOUC)
-- **EN / ES language toggle** — full bilingual UI including canvas axis labels
+- **EN / ES language toggle** — full bilingual UI including canvas axis labels and footer
 
 ## Tech stack
 
@@ -62,9 +63,9 @@ src/
 └── components/
     ├── simulator/         # CircuitTypeToggle, ParameterPanel, MetricsGrid,
     │                      # ResonanceBadge, ChartTabs, WaveformEquations
-    ├── charts/            # BodeChart, TimeDomainChart, PhasorDiagram
+    ├── charts/            # BodeChart, TimeDomainChart, PhasorDiagram, PowerChart
     ├── schematic/         # CircuitSchematic (Canvas 2D)
-    └── ui/                # ThemeToggle, LangToggle, HeaderSubtitle
+    └── ui/                # ThemeToggle, LangToggle, HeaderSubtitle, GitHubLink, Footer
 ```
 
 ## Engine
