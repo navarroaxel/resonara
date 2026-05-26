@@ -1,36 +1,82 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
+import { useRLC } from '@/store/rlc-store'
+import { t } from '@/lib/i18n'
+
+// useLayoutEffect warns during SSR; fall back to useEffect there.
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect
+
+type ThemeMode = 'auto' | 'light' | 'dark'
+
+const STORAGE_KEY = 'theme'
+
+function readStoredMode(): ThemeMode {
+  if (typeof window === 'undefined') return 'auto'
+  const v = window.localStorage.getItem(STORAGE_KEY)
+  return v === 'light' || v === 'dark' ? v : 'auto'
+}
+
+function applyMode(mode: ThemeMode): void {
+  if (typeof window === 'undefined') return
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  const useDark = mode === 'dark' || (mode === 'auto' && systemDark)
+  document.documentElement.classList.toggle('dark', useDark)
+  if (mode === 'auto') {
+    window.localStorage.removeItem(STORAGE_KEY)
+  } else {
+    window.localStorage.setItem(STORAGE_KEY, mode)
+  }
+}
+
+const ORDER: ThemeMode[] = ['auto', 'light', 'dark']
+const ICONS: Record<ThemeMode, string> = { auto: '◑', light: '☀️', dark: '🌙' }
 
 export function ThemeToggle() {
-  const [dark, setDark] = useState(false)
+  const [mode, setMode] = useState<ThemeMode>('auto')
+  const [mounted, setMounted] = useState(false)
+  const { state: { lang } } = useRLC()
+  const prefix = t(lang, 'themeLabel')
+  const labels: Record<ThemeMode, string> = {
+    auto:  `${prefix} Auto`,
+    light: `${prefix} Light`,
+    dark:  `${prefix} Dark`,
+  }
 
-  useEffect(() => {
-    setDark(document.documentElement.classList.contains('dark'))
+  useIsomorphicLayoutEffect(() => {
+    const stored = readStoredMode()
+    setMode(stored)
+    applyMode(stored)
+    setMounted(true)
   }, [])
 
-  function toggle() {
-    const next = !dark
-    setDark(next)
-    document.documentElement.classList.toggle('dark', next)
-    localStorage.setItem('theme', next ? 'dark' : 'light')
+  useEffect(() => {
+    if (mode !== 'auto') return
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = () => applyMode('auto')
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [mode])
+
+  const cycle = () => {
+    setMode(prev => {
+      const next = ORDER[(ORDER.indexOf(prev) + 1) % ORDER.length] as ThemeMode
+      applyMode(next)
+      return next
+    })
   }
 
   return (
     <button
-      onClick={toggle}
-      aria-label="Cambiar tema"
-      className="p-2 rounded-lg text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+      type="button"
+      onClick={cycle}
+      aria-label={labels[mode]}
+      title={labels[mode]}
+      suppressHydrationWarning
+      className="inline-flex items-center gap-1.5 rounded-md border border-zinc-300 bg-white px-2.5 py-1 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <circle cx="12" cy="12" r="5"/>
-        <line x1="12" y1="1"  x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-      </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
+      <span aria-hidden>{mounted ? ICONS[mode] : ICONS.auto}</span>
+      <span>{mounted ? labels[mode].replace(`${prefix} `, '') : 'Auto'}</span>
     </button>
   )
 }

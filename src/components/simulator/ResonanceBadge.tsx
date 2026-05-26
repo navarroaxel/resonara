@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 export function ResonanceBadge() {
   const { state: { params, results, circuitType, flags, lang } } = useRLC()
-  const { XL, XC, fr } = results
+  const { XL, XC, fr, phi } = results
 
   let text: string
   let style: string
@@ -16,7 +16,7 @@ export function ResonanceBadge() {
   } else if (flags.hasL && flags.hasC && Number.isFinite(fr) && Math.abs(params.f - fr) < fr * 0.05) {
     text  = t(lang, 'nearResonance')
     style = 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800'
-  } else if (circuitType === 'series' ? XL > XC : XL < XC) {
+  } else if (phi > 0) {
     text  = t(lang, circuitType === 'series' ? 'inductive_series' : 'inductive_parallel')
     style = 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800'
   } else {

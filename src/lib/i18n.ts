@@ -48,6 +48,8 @@ const T = {
     phasorAriaLabel:        'Diagrama fasorial de voltaje y corriente',
     schematicAriaSeriesLabel:   'Esquemático del circuito RLC serie',
     schematicAriaParallelLabel: 'Esquemático del circuito RLC paralelo',
+    githubAria:             'Ver código fuente en GitHub',
+    themeLabel:             'Tema',
   },
   en: {
     seriesName:         'Series RLC',
@@ -96,6 +98,8 @@ const T = {
     phasorAriaLabel:        'Voltage and current phasor diagram',
     schematicAriaSeriesLabel:   'Series RLC circuit schematic',
     schematicAriaParallelLabel: 'Parallel RLC circuit schematic',
+    githubAria:             'View source code on GitHub',
+    themeLabel:             'Theme',
   },
 }
 
