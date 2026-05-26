@@ -1,5 +1,6 @@
 import { CircuitTypeToggle } from '@/components/simulator/CircuitTypeToggle'
 import { ParameterPanel }    from '@/components/simulator/ParameterPanel'
+import { HarmonicPanel }     from '@/components/simulator/HarmonicPanel'
 import { MetricsGrid }       from '@/components/simulator/MetricsGrid'
 import { ResonanceBadge }    from '@/components/simulator/ResonanceBadge'
 import { ChartTabs }         from '@/components/simulator/ChartTabs'
@@ -35,6 +36,7 @@ export default function Home() {
           <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
             <ParameterPanel />
           </div>
+          <HarmonicPanel />
         </div>
 
         <div className="space-y-4">

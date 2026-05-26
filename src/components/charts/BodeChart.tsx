@@ -6,7 +6,7 @@ import { t } from '@/lib/i18n'
 
 export function BodeChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, circuitType, results, flags, lang } } = useRLC()
+  const { state: { params, circuitType, results, flags, lang, polyMode, polyResults } } = useRLC()
   const data = useMemo(() => calcBodeCurve(circuitType, params, flags), [circuitType, params, flags])
 
   useEffect(() => {
@@ -60,11 +60,26 @@ export function BodeChart() {
     data.forEach((p, i) => i === 0 ? ctx.moveTo(toX(p.f), toY(p.Z)) : ctx.lineTo(toX(p.f), toY(p.Z)))
     ctx.stroke()
 
-    ctx.beginPath()
-    ctx.arc(toX(params.f), toY(results.Z), 5, 0, 2 * Math.PI)
-    ctx.fillStyle = '#D85A30'; ctx.fill()
-    ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.stroke()
-  }, [data, params.f, results.Z, lang])
+    if (polyMode && polyResults) {
+      const HARMONIC_COLORS = [
+        '#1D9E75','#D85A30','#7F77DD','#C0392B','#F39C12',
+        '#16A085','#8E44AD','#2ECC71','#E74C3C','#3498DB',
+      ]
+      polyResults.harmonics.forEach((h, idx) => {
+        if (h.fn < fMin || h.fn > fMax) return
+        ctx.beginPath()
+        ctx.arc(toX(h.fn), toY(h.Zn), 5, 0, 2 * Math.PI)
+        ctx.fillStyle = HARMONIC_COLORS[idx % HARMONIC_COLORS.length]
+        ctx.fill()
+        ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.stroke()
+      })
+    } else {
+      ctx.beginPath()
+      ctx.arc(toX(params.f), toY(results.Z), 5, 0, 2 * Math.PI)
+      ctx.fillStyle = '#D85A30'; ctx.fill()
+      ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.stroke()
+    }
+  }, [data, params.f, results.Z, lang, polyMode, polyResults])
 
   return (
     <canvas
