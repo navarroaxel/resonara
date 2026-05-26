@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { CircuitTypeToggle } from '@/components/simulator/CircuitTypeToggle'
 import { ParameterPanel }    from '@/components/simulator/ParameterPanel'
 import { HarmonicPanel }     from '@/components/simulator/HarmonicPanel'
@@ -10,6 +9,7 @@ import { ThemeToggle }       from '@/components/ui/ThemeToggle'
 import { LangToggle }        from '@/components/ui/LangToggle'
 import { HeaderSubtitle }    from '@/components/ui/HeaderSubtitle'
 import { GitHubLink }        from '@/components/ui/GitHubLink'
+import { DCNavLink }         from '@/components/ui/DCNavLink'
 import { Footer }            from '@/components/ui/Footer'
 
 export default function Home() {
@@ -21,12 +21,7 @@ export default function Home() {
           <HeaderSubtitle />
         </div>
         <div className="flex items-center gap-2">
-          <Link
-            href="/dc"
-            className="inline-flex items-center rounded-md border border-zinc-300 bg-white px-2.5 py-1 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
-          >
-            Kirchhoff DC →
-          </Link>
+          <DCNavLink />
           <GitHubLink />
           <LangToggle />
           <ThemeToggle />

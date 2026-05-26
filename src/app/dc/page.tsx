@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { DCSchematic }      from '@/components/dc/DCSchematic'
 import { DCParameterPanel } from '@/components/dc/DCParameterPanel'
 import { DCMetricsGrid }    from '@/components/dc/DCMetricsGrid'
@@ -10,6 +9,7 @@ import { DCLangToggle }     from '@/components/dc/DCLangToggle'
 import { DCHeaderSubtitle } from '@/components/dc/DCHeaderSubtitle'
 import { DCGitHubLink }     from '@/components/dc/DCGitHubLink'
 import { DCFooter }         from '@/components/dc/DCFooter'
+import { RLCNavLink }       from '@/components/dc/RLCNavLink'
 
 export default function DCPage() {
   return (
@@ -20,12 +20,7 @@ export default function DCPage() {
           <DCHeaderSubtitle />
         </div>
         <div className="flex items-center gap-2">
-          <Link
-            href="/"
-            className="inline-flex items-center rounded-md border border-zinc-300 bg-white px-2.5 py-1 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
-          >
-            RLC CA →
-          </Link>
+          <RLCNavLink />
           <DCGitHubLink />
           <DCLangToggle />
           <DCThemeToggle />

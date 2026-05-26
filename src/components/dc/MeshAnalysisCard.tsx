@@ -7,7 +7,6 @@ export function MeshAnalysisCard() {
   const { state: { params, results, lang } } = useDC()
   const { V1, V2, R1, R2, R3 } = params
   const { I1, I2, D } = results
-  const isDegenerate = Math.abs(D) < 0.01
 
   const a11 = R1 + R2
   const a22 = R2 + R3
@@ -41,14 +40,9 @@ export function MeshAnalysisCard() {
 
       <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
         <span>{t(lang, 'meshDeterminant')}: </span>
-        <span className={`font-mono font-medium ${isDegenerate ? 'text-amber-600 dark:text-amber-400' : 'text-neutral-700 dark:text-neutral-300'}`}>
+        <span className="font-mono font-medium text-neutral-700 dark:text-neutral-300">
           {fmt(D, 2)} Ω²
         </span>
-        {isDegenerate && (
-          <span className="ml-2 text-amber-600 dark:text-amber-400">
-            ⚠ {t(lang, 'meshDegenerate')}
-          </span>
-        )}
       </div>
 
       <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
