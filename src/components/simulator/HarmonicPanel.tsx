@@ -87,69 +87,82 @@ export function HarmonicPanel() {
           {polyPreset === 'custom' && (
             <div className="space-y-2">
               <div className="grid grid-cols-[2.5rem_1fr_2.5rem_1fr_2.5rem_1.5rem] gap-x-1.5 text-xs text-neutral-400 dark:text-neutral-500 px-0.5">
-                <span>n</span>
-                <span>An</span>
+                <span>{t(lang, 'harmonicOrder')}</span>
+                <span>{t(lang, 'amplitude')}</span>
                 <span></span>
-                <span>φ (°)</span>
+                <span>{t(lang, 'phaseOffset')}</span>
                 <span></span>
                 <span></span>
               </div>
-              {harmonics.map((h, idx) => (
-                <div key={idx} className="grid grid-cols-[2.5rem_1fr_2.5rem_1fr_2.5rem_1.5rem] gap-x-1.5 items-center">
-                  <input
-                    type="number"
-                    value={h.n}
-                    min={1}
-                    max={20}
-                    onChange={e => dispatch({
-                      type: 'SET_HARMONIC',
-                      index: idx,
-                      harmonic: { n: Math.max(1, parseInt(e.target.value) || 1) },
-                    })}
-                    className="w-full text-center text-xs border border-neutral-200 dark:border-neutral-700 rounded bg-transparent px-1 py-0.5"
-                  />
-                  <input
-                    type="range"
-                    min={0}
-                    max={2}
-                    step={0.1}
-                    value={h.An}
-                    onChange={e => dispatch({
-                      type: 'SET_HARMONIC',
-                      index: idx,
-                      harmonic: { An: parseFloat(e.target.value) },
-                    })}
-                    className="w-full accent-blue-500"
-                  />
-                  <span className="text-xs text-right font-mono text-neutral-600 dark:text-neutral-300">
-                    {h.An.toFixed(1)}
-                  </span>
-                  <input
-                    type="range"
-                    min={0}
-                    max={360}
-                    step={5}
-                    value={h.phin}
-                    onChange={e => dispatch({
-                      type: 'SET_HARMONIC',
-                      index: idx,
-                      harmonic: { phin: parseInt(e.target.value) },
-                    })}
-                    className="w-full accent-blue-500"
-                  />
-                  <span className="text-xs text-right font-mono text-neutral-600 dark:text-neutral-300">
-                    {h.phin}°
-                  </span>
-                  <button
-                    onClick={() => dispatch({ type: 'REMOVE_HARMONIC', index: idx })}
-                    disabled={harmonics.length <= 1}
-                    className="text-neutral-400 hover:text-red-500 disabled:opacity-20 text-sm leading-none"
-                    aria-label="Remove harmonic"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
+              {harmonics.map((h, idx) => {
+                const isDuplicate = harmonics.some((o, i) => i !== idx && o.n === h.n)
+                return (
+                  <div key={idx} className="grid grid-cols-[2.5rem_1fr_2.5rem_1fr_2.5rem_1.5rem] gap-x-1.5 items-center">
+                    <input
+                      type="number"
+                      value={h.n}
+                      min={1}
+                      max={20}
+                      onChange={e => dispatch({
+                        type: 'SET_HARMONIC',
+                        index: idx,
+                        harmonic: { n: Math.max(1, parseInt(e.target.value) || 1) },
+                      })}
+                      className={cn(
+                        'w-full text-center text-xs border rounded bg-transparent px-1 py-0.5',
+                        isDuplicate
+                          ? 'border-amber-400 dark:border-amber-500'
+                          : 'border-neutral-200 dark:border-neutral-700',
+                      )}
+                    />
+                    <input
+                      type="range"
+                      min={0}
+                      max={2}
+                      step={0.1}
+                      value={h.An}
+                      onChange={e => dispatch({
+                        type: 'SET_HARMONIC',
+                        index: idx,
+                        harmonic: { An: parseFloat(e.target.value) },
+                      })}
+                      className="w-full accent-blue-500"
+                    />
+                    <span className="text-xs text-right font-mono text-neutral-600 dark:text-neutral-300">
+                      {h.An.toFixed(1)}
+                    </span>
+                    <input
+                      type="range"
+                      min={0}
+                      max={360}
+                      step={5}
+                      value={h.phin}
+                      onChange={e => dispatch({
+                        type: 'SET_HARMONIC',
+                        index: idx,
+                        harmonic: { phin: parseInt(e.target.value) },
+                      })}
+                      className="w-full accent-blue-500"
+                    />
+                    <span className="text-xs text-right font-mono text-neutral-600 dark:text-neutral-300">
+                      {h.phin}°
+                    </span>
+                    <button
+                      onClick={() => dispatch({ type: 'REMOVE_HARMONIC', index: idx })}
+                      disabled={harmonics.length <= 1}
+                      className="text-neutral-400 hover:text-red-500 disabled:opacity-20 text-sm leading-none"
+                      aria-label={t(lang, 'removeHarmonic')}
+                    >
+                      ×
+                    </button>
+                  </div>
+                )
+              })}
+              {harmonics.some((h, i) => harmonics.findIndex(o => o.n === h.n) !== i) && (
+                <p className="text-xs text-amber-600 dark:text-amber-400">
+                  ⚠ {t(lang, 'duplicateNCombined')}
+                </p>
+              )}
               <button
                 onClick={() => dispatch({ type: 'ADD_HARMONIC' })}
                 disabled={harmonics.length >= 10}

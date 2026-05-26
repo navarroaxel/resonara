@@ -78,7 +78,6 @@ export function PhasorDiagram() {
 
       polyResults.harmonics.forEach((h, idx) => {
         const color  = HARMONIC_COLORS[idx % HARMONIC_COLORS.length]
-        const srcRad = h.phin_source * Math.PI / 180
         const netRad = (h.phin_source - h.phin_circuit) * Math.PI / 180
         const len    = h.In * scale_I
         drawArrow(
@@ -88,7 +87,6 @@ export function PhasorDiagram() {
           color, `I${subscript(h.n)}`,
         )
         legend.push([color, `I${subscript(h.n)}`])
-        void srcRad // phase used in time domain; phasor shows angle from real axis
       })
 
       ctx.font = '11px sans-serif'

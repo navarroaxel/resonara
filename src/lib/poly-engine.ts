@@ -3,6 +3,25 @@ import { calc } from './rlc-engine'
 
 const DEFAULT_FLAGS: ComponentFlags = { hasL: true, hasC: true }
 
+/**
+ * Phasor-combine any rows that share the same harmonic order n.
+ * Two rows at the same frequency are not orthogonal; treating them as
+ * independent would produce wrong RMS/THD/power totals.
+ */
+function combineByN(harmonics: HarmonicInput[]): HarmonicInput[] {
+  const groups = new Map<number, { x: number; y: number }>()
+  for (const { n, An, phin } of harmonics) {
+    const rad  = phin * Math.PI / 180
+    const prev = groups.get(n) ?? { x: 0, y: 0 }
+    groups.set(n, { x: prev.x + An * Math.cos(rad), y: prev.y + An * Math.sin(rad) })
+  }
+  return Array.from(groups.entries()).map(([n, { x, y }]) => ({
+    n,
+    An:   Math.sqrt(x * x + y * y),
+    phin: Math.atan2(y, x) * 180 / Math.PI,
+  }))
+}
+
 export const PRESETS: Record<Exclude<PolyPreset, 'custom'>, HarmonicInput[]> = {
   square:   [1, 3, 5, 7, 9].map(n => ({ n, An: 1 / n, phin: 0 })),
   triangle: [1, 3, 5, 7].map((n, i) => ({ n, An: 1 / (n * n), phin: i % 2 === 0 ? 0 : 180 })),
@@ -15,7 +34,7 @@ export function calcPolyResult(
   harmonics: HarmonicInput[],
   flags: ComponentFlags = DEFAULT_FLAGS,
 ): PolyResult {
-  const harmonicResults: HarmonicResult[] = harmonics.map(({ n, An, phin }) => {
+  const harmonicResults: HarmonicResult[] = combineByN(harmonics).map(({ n, An, phin }) => {
     const fn = n * params.f
     const paramsN: RLCParams = { ...params, f: fn, Vs: An * params.Vs }
     const res = calc(type, paramsN, flags)
@@ -43,11 +62,10 @@ export function calcPolyResult(
     (acc, h) => acc + (h.Vn * h.In / 2) * Math.cos(h.phin_circuit * Math.PI / 180),
     0,
   )
-  const Qp_total = harmonicResults.reduce(
-    (acc, h) => acc + Math.abs((h.Vn * h.In / 2) * Math.sin(h.phin_circuit * Math.PI / 180)),
-    0,
-  )
-  const S_total = V_rms * I_rms
+  const S_total  = V_rms * I_rms
+  // Qp_total derived from S and P so it reflects net reactive power, not the
+  // abs-sum of per-harmonic Q (which would ignore inductive/capacitive cancellation).
+  const Qp_total = Math.sqrt(Math.max(0, S_total ** 2 - P_total ** 2))
 
   return { harmonics: harmonicResults, I_rms, V_rms, THD_I, P_total, Qp_total, S_total }
 }
@@ -63,7 +81,7 @@ export function calcPolyTimeDomain(
   const T     = 1 / params.f
   const omega = 2 * Math.PI * params.f
 
-  const terms = harmonics.map(({ n, An, phin }) => {
+  const terms = combineByN(harmonics).map(({ n, An, phin }) => {
     const paramsN: RLCParams = { ...params, f: n * params.f, Vs: An * params.Vs }
     const res = calc(type, paramsN, flags)
     return {

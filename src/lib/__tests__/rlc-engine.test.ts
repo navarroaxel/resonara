@@ -45,6 +45,25 @@ describe('calcPolyResult', () => {
     expect(poly.I_rms).toBeCloseTo(single.I, 5)
   })
 
+  it('duplicate n rows are phasor-combined, not summed independently', () => {
+    // Two rows at n=1, same phase — equivalent to one row with An=2
+    const combined = calcPolyResult('series', base, [
+      { n: 1, An: 1, phin: 0 },
+      { n: 1, An: 1, phin: 0 },
+    ])
+    const single = calcPolyResult('series', base, [{ n: 1, An: 2, phin: 0 }])
+    expect(combined.I_rms).toBeCloseTo(single.I_rms, 5)
+    expect(combined.THD_I).toBeCloseTo(0, 5)
+  })
+
+  it('duplicate n rows with opposite phase cancel out', () => {
+    const result = calcPolyResult('series', base, [
+      { n: 1, An: 1, phin: 0   },
+      { n: 1, An: 1, phin: 180 },
+    ])
+    expect(result.I_rms).toBeCloseTo(0, 5)
+  })
+
   it('THD_I is 0 when only the fundamental is present', () => {
     const poly = calcPolyResult('series', base, [{ n: 1, An: 1, phin: 0 }])
     expect(poly.THD_I).toBeCloseTo(0, 10)
