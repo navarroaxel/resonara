@@ -9,7 +9,8 @@ import { DCLangToggle }     from '@/components/dc/DCLangToggle'
 import { DCHeaderSubtitle } from '@/components/dc/DCHeaderSubtitle'
 import { DCGitHubLink }     from '@/components/dc/DCGitHubLink'
 import { DCFooter }         from '@/components/dc/DCFooter'
-import { RLCNavLink }       from '@/components/dc/RLCNavLink'
+import { RLCNavLink }            from '@/components/dc/RLCNavLink'
+import { DCThreePhaseNavLink }  from '@/components/dc/DCThreePhaseNavLink'
 
 export default function DCPage() {
   return (
@@ -21,6 +22,7 @@ export default function DCPage() {
         </div>
         <div className="flex items-center gap-2">
           <RLCNavLink />
+          <DCThreePhaseNavLink />
           <DCGitHubLink />
           <DCLangToggle />
           <DCThemeToggle />

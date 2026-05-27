@@ -10,6 +10,7 @@ import { LangToggle }        from '@/components/ui/LangToggle'
 import { HeaderSubtitle }    from '@/components/ui/HeaderSubtitle'
 import { GitHubLink }        from '@/components/ui/GitHubLink'
 import { DCNavLink }         from '@/components/ui/DCNavLink'
+import { ThreePhaseNavLink } from '@/components/ui/ThreePhaseNavLink'
 import { Footer }            from '@/components/ui/Footer'
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
         </div>
         <div className="flex items-center gap-2">
           <DCNavLink />
+          <ThreePhaseNavLink />
           <GitHubLink />
           <LangToggle />
           <ThemeToggle />

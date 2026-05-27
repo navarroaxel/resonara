@@ -34,6 +34,17 @@ export function Footer() {
             kinelab-theta.vercel.app
           </a>
         </li>
+        <li>
+          {t(lang, 'footerSagittaPrompt')}{' '}
+          <a
+            href="https://sagitta-nqm.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+          >
+            sagitta-nqm.vercel.app
+          </a>
+        </li>
       </ul>
     </footer>
   )

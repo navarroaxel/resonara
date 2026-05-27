@@ -1,9 +1,9 @@
 'use client'
-import { useDC } from '@/store/dc-store'
+import { useThreePhase } from '@/store/three-phase-store'
 import { t } from '@/lib/i18n'
 
-export function DCFooter() {
-  const { state: { lang } } = useDC()
+export function ThreePhaseFooter() {
+  const { state: { lang } } = useThreePhase()
   return (
     <footer className="border-t border-neutral-200 dark:border-neutral-800 px-6 py-6 mt-4 text-sm text-neutral-500 dark:text-neutral-400">
       <p className="mb-3">
