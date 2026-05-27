@@ -34,6 +34,25 @@ describe('calcThreePhase — delta', () => {
   })
 })
 
+describe('calcThreePhase — reactive power sign', () => {
+  it('capacitive (XC > XL with defaults): Qr < 0', () => {
+    // base: XL=15.71Ω, XC=31.83Ω → capacitive → phi < 0 → sin(phi) < 0
+    const r = calcThreePhase('star', base)
+    expect(r.Qr).toBeLessThan(0)
+  })
+
+  it('inductive (XL > XC): Qr > 0', () => {
+    const r = calcThreePhase('star', { ...base, L: 300 })
+    expect(r.Qr).toBeGreaterThan(0)
+  })
+
+  it('Qr = 3 * V_ph * I_ph * sin(phi)', () => {
+    const r = calcThreePhase('star', base)
+    const expected = 3 * r.V_ph * r.I_ph * Math.sin(r.phi * Math.PI / 180)
+    expect(r.Qr).toBeCloseTo(expected, 6)
+  })
+})
+
 describe('calcThreePhase — component flags', () => {
   it('pure resistive (no L, no C): Z = R, phi = 0, fp = 1', () => {
     const r = calcThreePhase('star', base, { hasL: false, hasC: false })
