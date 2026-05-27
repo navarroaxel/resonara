@@ -9,6 +9,7 @@ import { ThemeToggle }       from '@/components/ui/ThemeToggle'
 import { LangToggle }        from '@/components/ui/LangToggle'
 import { HeaderSubtitle }    from '@/components/ui/HeaderSubtitle'
 import { GitHubLink }        from '@/components/ui/GitHubLink'
+import { DCNavLink }         from '@/components/ui/DCNavLink'
 import { Footer }            from '@/components/ui/Footer'
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
           <HeaderSubtitle />
         </div>
         <div className="flex items-center gap-2">
+          <DCNavLink />
           <GitHubLink />
           <LangToggle />
           <ThemeToggle />
