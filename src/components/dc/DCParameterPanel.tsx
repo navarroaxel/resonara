@@ -16,9 +16,12 @@ interface ParamConfig {
 const PARAMS: ParamConfig[] = [
   { key: 'V1', labelKey: 'labelV1', unit: 'V', min: 0.1, max: 100,  step: 0.1 },
   { key: 'V2', labelKey: 'labelV2', unit: 'V', min: 0.1, max: 100,  step: 0.1 },
+  { key: 'V3', labelKey: 'labelV3', unit: 'V', min: 0,   max: 100,  step: 0.1 },
   { key: 'R1', labelKey: 'labelR1', unit: 'Ω', min: 1,   max: 1000, step: 1   },
   { key: 'R2', labelKey: 'labelR2', unit: 'Ω', min: 1,   max: 1000, step: 1   },
   { key: 'R3', labelKey: 'labelR3', unit: 'Ω', min: 1,   max: 1000, step: 1   },
+  { key: 'R4', labelKey: 'labelR4', unit: 'Ω', min: 1,   max: 1000, step: 1   },
+  { key: 'R5', labelKey: 'labelR5', unit: 'Ω', min: 1,   max: 1000, step: 1   },
 ]
 
 function ParamRow({

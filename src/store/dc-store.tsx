@@ -4,7 +4,7 @@ import { calcDC } from '@/lib/dc-engine'
 import { readLang, writeLang } from '@/lib/lang-storage'
 import type { DCParams, DCResult, Lang } from '@/lib/types'
 
-const DEFAULT_PARAMS: DCParams = { V1: 12, V2: 6, R1: 100, R2: 200, R3: 150 }
+const DEFAULT_PARAMS: DCParams = { V1: 12, V2: 6, V3: 0, R1: 100, R2: 200, R3: 150, R4: 180, R5: 120 }
 
 interface State {
   params:  DCParams

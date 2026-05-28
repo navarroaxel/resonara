@@ -19,8 +19,8 @@ function Badge({ ok }: { ok: boolean }) {
 
 export function KVLCard() {
   const { state: { params, results, lang } } = useDC()
-  const { V1, V2 } = params
-  const { VR1, VR2, VR3, kvl1, kvl2 } = results
+  const { V1, V2, V3 } = params
+  const { VR1, VR2, VR3, VR4, VR5, kvl1, kvl2, kvl3 } = results
 
   return (
     <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
@@ -51,15 +51,32 @@ export function KVLCard() {
             {t(lang, 'kvlLoop2')}
           </p>
           <p className="font-mono text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-            V₂ − VR₃ + VR₂ = 0
+            V₃ + VR₂ − VR₃ − VR₄ = 0
           </p>
           <p className="font-mono text-sm text-neutral-700 dark:text-neutral-300">
-            {fmt(V2, 3)} − {fmt(VR3, 4)} + {fmt(VR2, 4)}
+            {fmt(V3, 3)} + {fmt(VR2, 4)} − {fmt(VR3, 4)} − {fmt(VR4, 4)}
             {' = '}
             <span className={valid(kvl2) ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}>
               {fmt(kvl2, 9)}
             </span>
             <Badge ok={valid(kvl2)} />
+          </p>
+        </div>
+
+        <div>
+          <p className="text-xs font-medium text-orange-600 dark:text-orange-400 mb-1">
+            {t(lang, 'kvlLoop3')}
+          </p>
+          <p className="font-mono text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+            V₂ − VR₅ + VR₄ = 0
+          </p>
+          <p className="font-mono text-sm text-neutral-700 dark:text-neutral-300">
+            {fmt(V2, 3)} − {fmt(VR5, 4)} + {fmt(VR4, 4)}
+            {' = '}
+            <span className={valid(kvl3) ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}>
+              {fmt(kvl3, 9)}
+            </span>
+            <Badge ok={valid(kvl3)} />
           </p>
         </div>
       </div>
