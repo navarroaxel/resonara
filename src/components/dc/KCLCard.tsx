@@ -10,10 +10,11 @@ function valid(r: number) {
 }
 
 export function KCLCard() {
-  const { state: { results, lang } } = useDC()
+  const { state: { flags, results, lang } } = useDC()
   const { IR1, IR2, IR3, IR4, IR5, kclA, kclB } = results
   const okA = valid(kclA)
   const okB = valid(kclB)
+  const { mesh3 } = flags
 
   return (
     <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
@@ -49,7 +50,7 @@ export function KCLCard() {
           </div>
         </div>
 
-        <div>
+        {mesh3 && <div>
           <p className="text-xs font-medium text-amber-600 dark:text-amber-400 mb-1">
             {t(lang, 'kclNodeB')}
           </p>
@@ -74,7 +75,7 @@ export function KCLCard() {
               </span>
             </p>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   )

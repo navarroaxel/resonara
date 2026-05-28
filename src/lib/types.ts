@@ -59,6 +59,18 @@ export interface RLCResult {
   fp:   number  // Power factor (cosφ)
 }
 
+export interface DCFlags {
+  mesh3: boolean  // when false: circuit reduces to 2-mesh (Mesh 1 + Mesh 2), V2/R5 disconnected
+  V1: boolean
+  V2: boolean
+  V3: boolean
+  R1: boolean
+  R2: boolean
+  R3: boolean
+  R4: boolean
+  R5: boolean
+}
+
 export interface DCParams {
   V1: number  // Source 1 voltage (V), range 0.1–100 — Mesh 1 (left)
   V2: number  // Source 2 voltage (V), range 0.1–100 — Mesh 3 (right)

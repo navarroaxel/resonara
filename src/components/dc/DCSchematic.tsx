@@ -160,7 +160,7 @@ function currentArrowV(
 
 export function DCSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, results, lang } } = useDC()
+  const { state: { params, flags, results, lang } } = useDC()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -182,54 +182,97 @@ export function DCSchematic() {
 
     const { V1, V2, V3, R1, R2, R3, R4, R5 } = params
     const { IR1, IR2, IR3, IR4, IR5, VR1, VR2, VR3, VR4, VR5 } = results
+    const dC  = isDark ? '#4B5563' : '#D1D5DB'   // disabled color
+    const v1C = flags.V1 ? sC : dC
+    const v2C = flags.V2 ? oC : dC
+    const v3C = flags.V3 ? tC : dC
+    const r1C = flags.R1 ? rC : dC
+    const r2C = flags.R2 ? rC : dC
+    const r3C = flags.R3 ? rC : dC
+    const r4C = flags.R4 ? rC : dC
+    const r5C = flags.R5 ? rC : dC
+
+    const railRight = flags.mesh3 ? SRC_R : NODE_B_X
 
     // ── Bottom rail (GND bus) ──────────────────────────────────────────────
-    wire(ctx, SRC_L, BOT, SRC_R, BOT, wC)
+    wire(ctx, SRC_L, BOT, railRight, BOT, wC)
 
     // ── Left branch (V1 source) ──────────────────────────────────────────
-    wire(ctx, SRC_L, TOP, SRC_L, SRC_CY - SRC_R_CIRCLE, wC)
-    wire(ctx, SRC_L, SRC_CY + SRC_R_CIRCLE, SRC_L, BOT, wC)
-    sourceDC(ctx, SRC_L, SRC_CY, SRC_R_CIRCLE, sC, 'V₁', V1)
+    if (flags.V1) {
+      wire(ctx, SRC_L, TOP, SRC_L, SRC_CY - SRC_R_CIRCLE, wC)
+      wire(ctx, SRC_L, SRC_CY + SRC_R_CIRCLE, SRC_L, BOT, wC)
+      sourceDC(ctx, SRC_L, SRC_CY, SRC_R_CIRCLE, v1C, 'V₁', V1)
+    } else {
+      wire(ctx, SRC_L, TOP, SRC_L, BOT, wC)
+    }
 
-    // ── Right branch (V2 source) ─────────────────────────────────────────
-    wire(ctx, SRC_R, TOP, SRC_R, SRC_CY - SRC_R_CIRCLE, wC)
-    wire(ctx, SRC_R, SRC_CY + SRC_R_CIRCLE, SRC_R, BOT, wC)
-    sourceDC(ctx, SRC_R, SRC_CY, SRC_R_CIRCLE, oC, 'V₂', V2)
+    // ── Right branch (V2 source) — only when Mesh 3 is active ────────────
+    if (flags.mesh3) {
+      if (flags.V2) {
+        wire(ctx, SRC_R, TOP, SRC_R, SRC_CY - SRC_R_CIRCLE, wC)
+        wire(ctx, SRC_R, SRC_CY + SRC_R_CIRCLE, SRC_R, BOT, wC)
+        sourceDC(ctx, SRC_R, SRC_CY, SRC_R_CIRCLE, v2C, 'V₂', V2)
+      } else {
+        wire(ctx, SRC_R, TOP, SRC_R, BOT, wC)
+      }
+    }
 
     // ── Top rail ──────────────────────────────────────────────────────────
-    // R1: Mesh 1 top rail (SRC_L → Node A), centered at 175
     const R1_CX = (SRC_L + NODE_A_X) / 2  // 175
-    wire(ctx, SRC_L, TOP, R1_CX - 50, TOP, wC)
-    resistorH(ctx, R1_CX, TOP, 50, rC, mC, `R₁ = ${fmt(R1, 0)}Ω`, `VR₁=${fmt(VR1, 2)}V`)
-    wire(ctx, R1_CX + 50, TOP, NODE_A_X, TOP, wC)
+    if (flags.R1) {
+      wire(ctx, SRC_L, TOP, R1_CX - 50, TOP, wC)
+      resistorH(ctx, R1_CX, TOP, 50, r1C, mC, `R₁ = ${fmt(R1, 0)}Ω`, `VR₁=${fmt(VR1, 2)}V`)
+      wire(ctx, R1_CX + 50, TOP, NODE_A_X, TOP, wC)
+    } else {
+      wire(ctx, SRC_L, TOP, NODE_A_X, TOP, wC)
+    }
 
-    // R3 + V3: Mesh 2 top rail (Node A → Node B)
-    // R3 shifted left to leave room for V3 on the right
     const R3_CX = 355
     const V3_CX = 460
     const V3_R  = 20
-    wire(ctx, NODE_A_X, TOP, R3_CX - 42, TOP, wC)
-    resistorH(ctx, R3_CX, TOP, 42, rC, mC, `R₃ = ${fmt(R3, 0)}Ω`, `VR₃=${fmt(VR3, 2)}V`)
-    wire(ctx, R3_CX + 42, TOP, V3_CX - V3_R, TOP, wC)
-    sourceDCH(ctx, V3_CX, TOP, V3_R, tC, 'V₃', V3)
-    wire(ctx, V3_CX + V3_R, TOP, NODE_B_X, TOP, wC)
+    if (flags.R3) {
+      wire(ctx, NODE_A_X, TOP, R3_CX - 42, TOP, wC)
+      resistorH(ctx, R3_CX, TOP, 42, r3C, mC, `R₃ = ${fmt(R3, 0)}Ω`, `VR₃=${fmt(VR3, 2)}V`)
+      wire(ctx, R3_CX + 42, TOP, V3_CX - V3_R, TOP, wC)
+    } else {
+      wire(ctx, NODE_A_X, TOP, V3_CX - V3_R, TOP, wC)
+    }
+    if (flags.V3) {
+      sourceDCH(ctx, V3_CX, TOP, V3_R, v3C, 'V₃', V3)
+      wire(ctx, V3_CX + V3_R, TOP, NODE_B_X, TOP, wC)
+    } else {
+      wire(ctx, V3_CX - V3_R, TOP, NODE_B_X, TOP, wC)
+    }
 
-    // R5: Mesh 3 top rail (Node B → SRC_R), centered at 625
     const R5_CX = (NODE_B_X + SRC_R) / 2  // 625
-    wire(ctx, NODE_B_X, TOP, R5_CX - 50, TOP, wC)
-    resistorH(ctx, R5_CX, TOP, 50, rC, mC, `R₅ = ${fmt(R5, 0)}Ω`, `VR₅=${fmt(VR5, 2)}V`)
-    wire(ctx, R5_CX + 50, TOP, SRC_R, TOP, wC)
+    if (flags.mesh3) {
+      if (flags.R5) {
+        wire(ctx, NODE_B_X, TOP, R5_CX - 50, TOP, wC)
+        resistorH(ctx, R5_CX, TOP, 50, r5C, mC, `R₅ = ${fmt(R5, 0)}Ω`, `VR₅=${fmt(VR5, 2)}V`)
+        wire(ctx, R5_CX + 50, TOP, SRC_R, TOP, wC)
+      } else {
+        wire(ctx, NODE_B_X, TOP, SRC_R, TOP, wC)
+      }
+    }
 
     // ── Left shared branch (R2, Mesh 1–2 boundary at Node A) ─────────────
     const r2HH = 75
-    wire(ctx, NODE_A_X, TOP,            NODE_A_X, SRC_CY - r2HH, wC)
-    wire(ctx, NODE_A_X, SRC_CY + r2HH, NODE_A_X, BOT,            wC)
-    resistorV(ctx, NODE_A_X, SRC_CY, r2HH, rC, mC, `R₂ = ${fmt(R2, 0)}Ω`, `VR₂=${fmt(VR2, 2)}V`, 14)
+    if (flags.R2) {
+      wire(ctx, NODE_A_X, TOP,            NODE_A_X, SRC_CY - r2HH, wC)
+      wire(ctx, NODE_A_X, SRC_CY + r2HH, NODE_A_X, BOT,            wC)
+      resistorV(ctx, NODE_A_X, SRC_CY, r2HH, r2C, mC, `R₂ = ${fmt(R2, 0)}Ω`, `VR₂=${fmt(VR2, 2)}V`, 14)
+    } else {
+      wire(ctx, NODE_A_X, TOP, NODE_A_X, BOT, wC)
+    }
 
     // ── Right shared branch (R4, Mesh 2–3 boundary at Node B) ────────────
-    wire(ctx, NODE_B_X, TOP,            NODE_B_X, SRC_CY - r2HH, wC)
-    wire(ctx, NODE_B_X, SRC_CY + r2HH, NODE_B_X, BOT,            wC)
-    resistorV(ctx, NODE_B_X, SRC_CY, r2HH, rC, mC, `R₄ = ${fmt(R4, 0)}Ω`, `VR₄=${fmt(VR4, 2)}V`)
+    if (flags.R4) {
+      wire(ctx, NODE_B_X, TOP,            NODE_B_X, SRC_CY - r2HH, wC)
+      wire(ctx, NODE_B_X, SRC_CY + r2HH, NODE_B_X, BOT,            wC)
+      resistorV(ctx, NODE_B_X, SRC_CY, r2HH, r4C, mC, `R₄ = ${fmt(R4, 0)}Ω`, `VR₄=${fmt(VR4, 2)}V`)
+    } else {
+      wire(ctx, NODE_B_X, TOP, NODE_B_X, BOT, wC)
+    }
 
     // ── Nodes ────────────────────────────────────────────────────────────
     dot(ctx, NODE_A_X, TOP, nC)
@@ -252,16 +295,16 @@ export function DCSchematic() {
     // ── Mesh loop arrows ─────────────────────────────────────────────────
     meshLoop(ctx, R1_CX,                        SRC_CY, 50, 42, sC, 'I₁')
     meshLoop(ctx, (NODE_A_X + NODE_B_X) / 2,    SRC_CY, 50, 42, tC, 'I₂')
-    meshLoop(ctx, R5_CX,                        SRC_CY, 50, 42, oC, 'I₃')
+    if (flags.mesh3) meshLoop(ctx, R5_CX,        SRC_CY, 50, 42, oC, 'I₃')
 
     // ── Branch current arrows ─────────────────────────────────────────────
     currentArrowH(ctx, R1_CX, TOP + 22, IR1, iC, `IR₁=${fmt(IR1, 3)}A`)
     currentArrowV(ctx, NODE_A_X + 28, SRC_CY + 50, IR2, iC, `IR₂=${fmt(IR2, 3)}A`)
     currentArrowH(ctx, R3_CX, TOP + 22, IR3, iC, `IR₃=${fmt(IR3, 3)}A`)
     currentArrowV(ctx, NODE_B_X + 28, SRC_CY + 50, IR4, iC, `IR₄=${fmt(IR4, 3)}A`)
-    currentArrowH(ctx, R5_CX, TOP + 22, IR5, iC, `IR₅=${fmt(IR5, 3)}A`)
+    if (flags.mesh3) currentArrowH(ctx, R5_CX, TOP + 22, IR5, iC, `IR₅=${fmt(IR5, 3)}A`)
 
-  }, [params, results])
+  }, [params, flags, results])
 
   return (
     <canvas
