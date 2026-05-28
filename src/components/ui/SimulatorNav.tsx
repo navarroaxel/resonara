@@ -7,12 +7,14 @@ import { useRLC } from '@/store/rlc-store'
 import { useDC } from '@/store/dc-store'
 import { useThreePhase } from '@/store/three-phase-store'
 import { useRCDC } from '@/store/rc-dc-store'
+import { useMagnetic } from '@/store/magnetic-store'
 
 const SIMULATORS = [
   { href: '/',            labelKey: 'navDcTab'         },
   { href: '/rc-dc',       labelKey: 'navRcDcTab'       },
   { href: '/ac',          labelKey: 'navRlcTab'        },
   { href: '/three-phase', labelKey: 'navThreePhaseTab' },
+  { href: '/magnetic',    labelKey: 'navMagneticTab'   },
 ] as const
 
 function SimulatorNav({ lang }: { lang: Lang }) {
@@ -60,5 +62,10 @@ export function ThreePhaseSimulatorNav() {
 
 export function RCDCSimulatorNav() {
   const { state: { lang } } = useRCDC()
+  return <SimulatorNav lang={lang} />
+}
+
+export function MagneticSimulatorNav() {
+  const { state: { lang } } = useMagnetic()
   return <SimulatorNav lang={lang} />
 }
