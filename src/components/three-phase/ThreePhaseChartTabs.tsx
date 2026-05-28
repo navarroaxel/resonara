@@ -2,15 +2,17 @@
 import { useThreePhase } from '@/store/three-phase-store'
 import { t } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
-import { ThreePhasePhasorDiagram } from './ThreePhasePhasorDiagram'
-import { ThreePhaseTimeDomain }    from './ThreePhaseTimeDomain'
-import { ThreePhasePowerChart }    from './ThreePhasePowerChart'
+import { ThreePhasePhasorDiagram }  from './ThreePhasePhasorDiagram'
+import { ThreePhaseTimeDomain }     from './ThreePhaseTimeDomain'
+import { ThreePhasePowerChart }     from './ThreePhasePowerChart'
+import { ThreePhaseEquationsCard }  from './ThreePhaseEquationsCard'
 import type { ThreePhaseActiveTab } from '@/lib/types'
 
-const TABS: { value: ThreePhaseActiveTab; labelKey: 'phasorTab' | 'timeDomainTab' | 'powerTab' }[] = [
-  { value: 'phasor', labelKey: 'phasorTab'     },
-  { value: 'time',   labelKey: 'timeDomainTab' },
-  { value: 'power',  labelKey: 'powerTab'      },
+const TABS: { value: ThreePhaseActiveTab; labelKey: 'phasorTab' | 'timeDomainTab' | 'powerTab' | 'threePhaseEquationsTab' }[] = [
+  { value: 'phasor',     labelKey: 'phasorTab'              },
+  { value: 'time',       labelKey: 'timeDomainTab'          },
+  { value: 'power',      labelKey: 'powerTab'               },
+  { value: 'equations',  labelKey: 'threePhaseEquationsTab' },
 ]
 
 export function ThreePhaseChartTabs() {
@@ -34,9 +36,10 @@ export function ThreePhaseChartTabs() {
           </button>
         ))}
       </div>
-      {activeTab === 'phasor' && <ThreePhasePhasorDiagram />}
-      {activeTab === 'time'   && <ThreePhaseTimeDomain />}
-      {activeTab === 'power'  && <ThreePhasePowerChart />}
+      {activeTab === 'phasor'     && <ThreePhasePhasorDiagram />}
+      {activeTab === 'time'       && <ThreePhaseTimeDomain />}
+      {activeTab === 'power'      && <ThreePhasePowerChart />}
+      {activeTab === 'equations'  && <ThreePhaseEquationsCard />}
     </div>
   )
 }

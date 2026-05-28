@@ -2,6 +2,15 @@
 import { useEffect, useRef } from 'react'
 import { useThreePhase } from '@/store/three-phase-store'
 import { t } from '@/lib/i18n'
+import { fmt } from '@/lib/utils'
+
+const TWO_PI_OVER_3 = 2 * Math.PI / 3
+
+function offsetStr(subtractRad: number): string {
+  if (Math.abs(subtractRad) < 1e-4) return ''
+  const sign = subtractRad > 0 ? ' − ' : ' + '
+  return `${sign}${fmt(Math.abs(subtractRad), 3)}`
+}
 
 const W = 580
 const H = 260
@@ -133,13 +142,101 @@ export function ThreePhaseTimeDomain() {
     })
   }, [results, params, lang])
 
+  const { V_ph, I_ph, phi } = results
+  const w      = 2 * Math.PI * params.f
+  const fmtW   = fmt(w, 2)
+  const phiRad = phi * Math.PI / 180
+  const V_peak = V_ph * Math.SQRT2
+  const I_peak = I_ph * Math.SQRT2
+
   return (
-    <canvas
-      ref={canvasRef}
-      width={W}
-      height={H}
-      className="w-full"
-      aria-label={t(lang, 'timeDomainTab')}
-    />
+    <div>
+      <canvas
+        ref={canvasRef}
+        width={W}
+        height={H}
+        className="w-full"
+        aria-label={t(lang, 'timeDomainTab')}
+      />
+
+      <div className="mt-4 border-t border-neutral-100 dark:border-neutral-800 pt-4">
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+          {t(lang, 'threePhaseGeneralForm')}
+        </p>
+        <div className="font-mono text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300 mb-4 leading-relaxed">
+          <div role="img" aria-label={t(lang, 'ariaVRFormula')}>
+            <span className="text-red-500 font-semibold">v_R(t)</span>
+            {' = V̂ · sin(ωt)'}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
+          </div>
+          <div role="img" aria-label={t(lang, 'ariaVSFormula')}>
+            <span className="text-amber-500 font-semibold">v_S(t)</span>
+            {' = V̂ · sin(ωt − 2π/3)'}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
+          </div>
+          <div role="img" aria-label={t(lang, 'ariaVTFormula')}>
+            <span className="text-blue-500 font-semibold">v_T(t)</span>
+            {' = V̂ · sin(ωt + 2π/3)'}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
+          </div>
+          <div
+            className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5"
+            role="img"
+            aria-label={t(lang, 'ariaIRFormula')}
+          >
+            <span className="text-red-500 font-semibold">i_R(t)</span>
+            {' = Î · sin(ωt − φ)'}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
+          </div>
+          <div role="img" aria-label={t(lang, 'ariaISFormula')}>
+            <span className="text-amber-500 font-semibold">i_S(t)</span>
+            {' = Î · sin(ωt − φ − 2π/3)'}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
+          </div>
+          <div role="img" aria-label={t(lang, 'ariaITFormula')}>
+            <span className="text-blue-500 font-semibold">i_T(t)</span>
+            {' = Î · sin(ωt − φ + 2π/3)'}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
+          </div>
+        </div>
+
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+          {t(lang, 'threePhaseSubstituted')}
+        </p>
+        <div className="font-mono text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300 leading-relaxed">
+          <div>{`ω = ${fmtW} rad/s   V̂ = ${fmt(V_peak, 2)} V   Î = ${fmt(I_peak, 3)} A`}</div>
+          <div>
+            <span className="text-red-500 font-semibold">v_R(t)</span>
+            {` = ${fmt(V_peak, 2)} · sin(${fmtW}·t)`}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
+          </div>
+          <div>
+            <span className="text-amber-500 font-semibold">v_S(t)</span>
+            {` = ${fmt(V_peak, 2)} · sin(${fmtW}·t − ${fmt(TWO_PI_OVER_3, 3)})`}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
+          </div>
+          <div>
+            <span className="text-blue-500 font-semibold">v_T(t)</span>
+            {` = ${fmt(V_peak, 2)} · sin(${fmtW}·t + ${fmt(TWO_PI_OVER_3, 3)})`}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
+          </div>
+          <div className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5">
+            <span className="text-red-500 font-semibold">i_R(t)</span>
+            {` = ${fmt(I_peak, 3)} · sin(${fmtW}·t${offsetStr(phiRad)})`}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
+          </div>
+          <div>
+            <span className="text-amber-500 font-semibold">i_S(t)</span>
+            {` = ${fmt(I_peak, 3)} · sin(${fmtW}·t${offsetStr(phiRad + TWO_PI_OVER_3)})`}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
+          </div>
+          <div>
+            <span className="text-blue-500 font-semibold">i_T(t)</span>
+            {` = ${fmt(I_peak, 3)} · sin(${fmtW}·t${offsetStr(phiRad - TWO_PI_OVER_3)})`}
+            <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

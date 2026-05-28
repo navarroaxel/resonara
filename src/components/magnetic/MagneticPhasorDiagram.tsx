@@ -110,7 +110,7 @@ export function MagneticPhasorDiagram() {
       ctx.fillText(label, lx + 14, ly)
       ly += 16
     }
-  }, [results])
+  }, [results, params])
 
   return (
     <canvas

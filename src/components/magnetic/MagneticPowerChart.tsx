@@ -84,7 +84,8 @@ export function MagneticPowerChart() {
     ctx.beginPath()
     sweep.forEach((p, idx) => {
       const x = toX(p.f); const y = toYp(p.P1)
-      idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (idx === 0) ctx.moveTo(x, y)
+      else           ctx.lineTo(x, y)
     })
     ctx.stroke()
 
@@ -94,7 +95,8 @@ export function MagneticPowerChart() {
     ctx.beginPath()
     sweep.forEach((p, idx) => {
       const x = toX(p.f); const y = toYp(p.P2)
-      idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (idx === 0) ctx.moveTo(x, y)
+      else           ctx.lineTo(x, y)
     })
     ctx.stroke()
 
@@ -104,7 +106,8 @@ export function MagneticPowerChart() {
     ctx.beginPath()
     sweep.forEach((p, idx) => {
       const x = toX(p.f); const y = toYeta(p.eta)
-      idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (idx === 0) ctx.moveTo(x, y)
+      else           ctx.lineTo(x, y)
     })
     ctx.stroke()
     ctx.setLineDash([])

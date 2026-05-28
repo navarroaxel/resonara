@@ -78,7 +78,8 @@ export function MagneticFreqResponse() {
     sweep.forEach((p, idx) => {
       const x = toX(p.f)
       const y = toY(p.I1)
-      idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (idx === 0) ctx.moveTo(x, y)
+      else           ctx.lineTo(x, y)
     })
     ctx.stroke()
 
@@ -91,7 +92,8 @@ export function MagneticFreqResponse() {
     sweep.forEach((p, idx) => {
       const x = toX(p.f)
       const y = toY(p.I2)
-      idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (idx === 0) ctx.moveTo(x, y)
+      else           ctx.lineTo(x, y)
     })
     ctx.stroke()
     ctx.setLineDash([])
