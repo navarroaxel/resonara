@@ -11,7 +11,7 @@ import { useRCDC } from '@/store/rc-dc-store'
 const SIMULATORS = [
   { href: '/dc',          labelKey: 'navDcTab'         },
   { href: '/rc-dc',       labelKey: 'navRcDcTab'       },
-  { href: '/',            labelKey: 'navRlcTab'        },
+  { href: '/ac',          labelKey: 'navRlcTab'        },
   { href: '/three-phase', labelKey: 'navThreePhaseTab' },
 ] as const
 
