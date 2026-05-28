@@ -9,10 +9,10 @@ import { useThreePhase } from '@/store/three-phase-store'
 import { useRCDC } from '@/store/rc-dc-store'
 
 const SIMULATORS = [
-  { href: '/',            labelKey: 'navRlcTab'        },
   { href: '/dc',          labelKey: 'navDcTab'         },
-  { href: '/three-phase', labelKey: 'navThreePhaseTab' },
   { href: '/rc-dc',       labelKey: 'navRcDcTab'       },
+  { href: '/',            labelKey: 'navRlcTab'        },
+  { href: '/three-phase', labelKey: 'navThreePhaseTab' },
 ] as const
 
 function SimulatorNav({ lang }: { lang: Lang }) {
