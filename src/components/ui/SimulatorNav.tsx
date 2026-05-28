@@ -9,7 +9,7 @@ import { useThreePhase } from '@/store/three-phase-store'
 import { useRCDC } from '@/store/rc-dc-store'
 
 const SIMULATORS = [
-  { href: '/dc',          labelKey: 'navDcTab'         },
+  { href: '/',            labelKey: 'navDcTab'         },
   { href: '/rc-dc',       labelKey: 'navRcDcTab'       },
   { href: '/ac',          labelKey: 'navRlcTab'        },
   { href: '/three-phase', labelKey: 'navThreePhaseTab' },

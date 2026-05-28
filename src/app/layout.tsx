@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { RLCProvider } from '@/store/rlc-store'
+import { DCProvider } from '@/store/dc-store'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -22,9 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}} />
       </head>
       <body className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 antialiased">
-        <RLCProvider>
+        <DCProvider>
           {children}
-        </RLCProvider>
+        </DCProvider>
       </body>
     </html>
   )
