@@ -15,7 +15,7 @@ interface ParamConfig {
 
 const PARAMS: ParamConfig[] = [
   { key: 'Vs', labelKey: 'rcDcLabelVs', unit: 'V',  min: 1,   max: 100,    step: 0.5  },
-  { key: 'R',  labelKey: 'rcDcLabelR',  unit: 'Ω',  min: 100, max: 1000,   step: 10   },
+  { key: 'R',  labelKey: 'rcDcLabelR',  unit: 'Ω',  min: 1,   max: 1000,   step: 1    },
   { key: 'C',  labelKey: 'rcDcLabelC',  unit: 'µF', min: 1,   max: 10000,  step: 1    },
 ]
 
