@@ -55,7 +55,7 @@ function sourceAC(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: numb
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
   ctx.fillText('~', cx, cy)
   ctx.font = '11px sans-serif'; ctx.textBaseline = 'alphabetic'
-  ctx.fillText('Vs', cx - r - 6, cy + 4)
+  ctx.fillText('Vs', cx - r - 10, cy + 4)
   ctx.restore()
 }
 
@@ -76,7 +76,7 @@ function drawSeries(
   const cC = hasC ? (isDark ? '#5DCAA5' : '#1D9E75') : grayC
   const top = 60, bot = 220, left = 50, right = 590
   const srcX = left + 36, srcY = (top + bot) / 2
-  wire(ctx, left, bot, right, bot, wC)
+  wire(ctx, srcX, bot, right, bot, wC)
   wire(ctx, right, top, right, bot, wC)
   wire(ctx, srcX, bot, srcX, srcY + 22, wC); wire(ctx, srcX, top, srcX, srcY - 22, wC)
   sourceAC(ctx, srcX, srcY, 22, mC)
@@ -106,7 +106,7 @@ function drawParallel(
   const mC = isDark ? '#9FA0A0' : '#888'
   const top = 60, bot = 220, left = 70, right = 570
   const srcX = left + 22, srcY = (top + bot) / 2
-  wire(ctx, left, top, right, top, wC); wire(ctx, left, bot, right, bot, wC)
+  wire(ctx, srcX, top, right, top, wC); wire(ctx, srcX, bot, right, bot, wC)
   wire(ctx, srcX, top, srcX, srcY - 22, wC); wire(ctx, srcX, bot, srcX, srcY + 22, wC)
   sourceAC(ctx, srcX, srcY, 22, mC)
   const branches = [

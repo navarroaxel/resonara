@@ -47,71 +47,68 @@ export function ThreePhasePowerChart() {
 
     ctx.clearRect(0, 0, W, H)
 
+    // Origin centered vertically so the triangle can go up (inductive) or down (capacitive)
     const ox = ML
-    const oy = MT + PLOT_H
-
-    const scale = S > 0 ? Math.min(PLOT_W / (S * 1.05), PLOT_H / (S * 1.05)) : 1
+    const oy = MT + PLOT_H / 2
+    const scale = S > 0 ? Math.min(PLOT_W / (S * 1.1), (PLOT_H / 2) / (S * 1.1)) : 1
 
     const px = ox + P  * scale
     const py = oy
     const qx = px
-    const qy = oy - Qr * scale
+    const qy = oy - Qr * scale   // above baseline when Qr>0 (inductive), below when Qr<0 (capacitive)
     const sx = ox + P  * scale
     const sy = oy - Qr * scale
 
-    ctx.strokeStyle = gridColor
-    ctx.lineWidth = 0.5
-    ctx.beginPath(); ctx.moveTo(ox, MT); ctx.lineTo(ox, oy); ctx.stroke()
+    // Axes
+    ctx.strokeStyle = gridColor; ctx.lineWidth = 0.5
+    ctx.beginPath(); ctx.moveTo(ox, MT); ctx.lineTo(ox, MT + PLOT_H); ctx.stroke()
     ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox + PLOT_W, oy); ctx.stroke()
 
-    if (S > 0 && P > 0) {
-      const arcR = Math.min(40, P * scale * 0.4)
-      const phiRad = Math.atan2(Qr, P)
+    // Phase angle arc
+    if (S > 0 && P > 0 && Math.abs(Qr) > 0) {
+      const arcR   = Math.min(40, P * scale * 0.4)
+      const phiRad = Math.atan2(Qr, P)  // signed
       ctx.save()
-      ctx.strokeStyle = '#7F77DD'
-      ctx.lineWidth = 1.5
+      ctx.strokeStyle = '#7F77DD'; ctx.lineWidth = 1.5
       ctx.beginPath()
-      ctx.arc(ox, oy, arcR, -phiRad, 0)
+      // arc from x-axis to S direction: min→max ensures correct sweep for both signs
+      ctx.arc(ox, oy, arcR, Math.min(-phiRad, 0), Math.max(-phiRad, 0))
       ctx.stroke()
-      ctx.fillStyle = '#7F77DD'
-      ctx.font = '11px sans-serif'
-      ctx.fillText('φ', ox + arcR * 0.65, oy - arcR * 0.4)
+      ctx.fillStyle = '#7F77DD'; ctx.font = '11px sans-serif'
+      // label on the correct side of the baseline
+      ctx.fillText('φ', ox + arcR * 0.65, oy + (Qr < 0 ? arcR * 0.5 : -arcR * 0.3))
       ctx.restore()
     }
 
+    // S — apparent (hypotenuse)
     if (S > 0) {
       drawArrow(ctx, ox, oy, sx, sy, '#378ADD')
-      const midSx = ox + (sx - ox) * 0.5 - 16
-      const midSy = oy + (sy - oy) * 0.5 - 8
       ctx.save()
-      ctx.fillStyle = '#378ADD'
-      ctx.font = 'bold 11px sans-serif'
-      ctx.fillText(`S=${fmt(S)} VA`, midSx, midSy)
+      ctx.fillStyle = '#378ADD'; ctx.font = 'bold 11px sans-serif'
+      ctx.fillText(`S=${fmt(S)} VA`, ox + (sx - ox) * 0.5 - 16, oy + (sy - oy) * 0.5 - 8)
       ctx.restore()
     }
 
+    // P — active (horizontal)
     if (P > 0) {
       drawArrow(ctx, ox, oy, px, py, '#1D9E75')
       ctx.save()
-      ctx.fillStyle = '#1D9E75'
-      ctx.font = 'bold 11px sans-serif'
-      ctx.fillText(`P=${fmt(P)} W`, ox + (px - ox) * 0.5 - 16, oy + 20)
+      ctx.fillStyle = '#1D9E75'; ctx.font = 'bold 11px sans-serif'
+      ctx.fillText(`P=${fmt(P)} W`, ox + (px - ox) * 0.5 - 16, oy + (Qr >= 0 ? 20 : -8))
       ctx.restore()
     }
 
-    if (Qr > 0) {
+    // Q — reactive (vertical, signed)
+    if (Math.abs(Qr) > 0) {
       drawArrow(ctx, px, py, qx, qy, '#D85A30')
       ctx.save()
-      ctx.fillStyle = '#D85A30'
-      ctx.font = 'bold 11px sans-serif'
+      ctx.fillStyle = '#D85A30'; ctx.font = 'bold 11px sans-serif'
       ctx.fillText(`Q=${fmt(Qr)} VAR`, qx + 6, oy - Qr * scale * 0.5)
       ctx.restore()
     }
 
-    ctx.fillStyle = textColor
-    ctx.font = '11px sans-serif'
-    ctx.textAlign = 'center'
-    ctx.fillText('P (W)', ox + PLOT_W / 2, oy + 36)
+    ctx.fillStyle = textColor; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'
+    ctx.fillText('P (W)', ox + PLOT_W / 2, MT + PLOT_H + 16)
     ctx.save()
     ctx.translate(14, MT + PLOT_H / 2)
     ctx.rotate(-Math.PI / 2)

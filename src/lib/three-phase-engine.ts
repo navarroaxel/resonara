@@ -36,7 +36,7 @@ export function calcThreePhase(
 
   const phiRad = (phi * Math.PI) / 180
   const P  = 3 * V_ph * I_ph * Math.cos(phiRad)
-  const Qr = 3 * V_ph * I_ph * Math.abs(Math.sin(phiRad))
+  const Qr = 3 * V_ph * I_ph * Math.sin(phiRad)
   const S  = 3 * V_ph * I_ph
   const fp = Math.cos(phiRad)
 

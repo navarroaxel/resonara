@@ -43,6 +43,7 @@ const T = {
     waveformEqsTitle:  'Ecuaciones de onda',
     subtitle:          'Simulador RLC en CA',
     switchLang:        'EN',
+    switchLangAria:    'Cambiar idioma',
     vSource:                'V fuente',
     iTotal:                 'I total',
     phasorAriaLabel:        'Diagrama fasorial de voltaje y corriente',
@@ -106,6 +107,11 @@ const T = {
     dcPowerR3:              'Potencia en R₃',
     dcSchematicAriaLabel:   'Esquemático del circuito resistivo de dos mallas',
 
+    // Simulator tab nav
+    navRlcTab:                    'RLC CA',
+    navDcTab:                     'Kirchhoff CC',
+    navThreePhaseTab:             'Trifásico RST',
+
     // Three-phase RST simulator
     navThreePhaseLink:            'Trifásico RST',
     threePhasePageTitle:          'Trifásico RST',
@@ -167,6 +173,7 @@ const T = {
     waveformEqsTitle:  'Waveform equations',
     subtitle:          'AC RLC Simulator',
     switchLang:        'ES',
+    switchLangAria:    'Switch language',
     vSource:                'V source',
     iTotal:                 'I total',
     phasorAriaLabel:        'Voltage and current phasor diagram',
@@ -229,6 +236,11 @@ const T = {
     dcPowerR2:              'Power in R₂',
     dcPowerR3:              'Power in R₃',
     dcSchematicAriaLabel:   'Two-mesh resistive circuit schematic',
+
+    // Simulator tab nav
+    navRlcTab:                    'AC RLC',
+    navDcTab:                     'Kirchhoff DC',
+    navThreePhaseTab:             'Three-Phase RST',
 
     // Three-phase RST simulator
     navThreePhaseLink:            'Three-Phase RST',

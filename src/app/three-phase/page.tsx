@@ -8,7 +8,7 @@ import { ThreePhaseGitHubLink }       from '@/components/three-phase/ThreePhaseG
 import { ThreePhaseLangToggle }       from '@/components/three-phase/ThreePhaseLangToggle'
 import { ThreePhaseThemeToggle }      from '@/components/three-phase/ThreePhaseThemeToggle'
 import { ThreePhaseFooter }           from '@/components/three-phase/ThreePhaseFooter'
-import { ThreePhaseRLCNavLink }       from '@/components/three-phase/ThreePhaseRLCNavLink'
+import { ThreePhaseSimulatorNav }     from '@/components/ui/SimulatorNav'
 
 export default function ThreePhasePage() {
   return (
@@ -19,7 +19,7 @@ export default function ThreePhasePage() {
           <ThreePhaseHeaderSubtitle />
         </div>
         <div className="flex items-center gap-2">
-          <ThreePhaseRLCNavLink />
+          <ThreePhaseSimulatorNav />
           <ThreePhaseGitHubLink />
           <ThreePhaseLangToggle />
           <ThreePhaseThemeToggle />
