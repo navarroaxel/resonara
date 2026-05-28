@@ -152,7 +152,7 @@ export interface TimePoint {
 
 export interface RCDCParams {
   Vs: number  // Source voltage (V), 1–100
-  R:  number  // Resistance (Ω), 100–100000
+  R:  number  // Resistance (Ω), 1–1000
   C:  number  // Capacitance (µF), 1–10000
 }
 
@@ -169,4 +169,36 @@ export interface RCDCPoint {
   vc:  number  // Capacitor voltage (V)
   vr:  number  // Resistor voltage (V)
   i:   number  // Current (A)
+}
+
+export type MagneticActiveTab = 'phasor' | 'time' | 'freqResponse' | 'power'
+
+export interface MagneticParams {
+  Vs: number  // Source RMS voltage (V), 1–500
+  f:  number  // Frequency (Hz), 1–1000
+  R1: number  // Primary resistance (Ω), 0.1–1000
+  L1: number  // Primary inductance (mH), 1–2000
+  R2: number  // Secondary resistance / load (Ω), 0.1–1000
+  L2: number  // Secondary inductance (mH), 1–2000
+  k:  number  // Coupling coefficient, 0–1
+}
+
+export interface MagneticResult {
+  M:      number  // Mutual inductance (mH)
+  XL1:    number  // Primary inductive reactance (Ω)
+  XL2:    number  // Secondary inductive reactance (Ω)
+  XM:     number  // Mutual reactance ωM (Ω)
+  Zin_re: number  // Re(Zin)
+  Zin_im: number  // Im(Zin)
+  Zin:    number  // |Zin| (Ω)
+  Z2:     number  // |Z2| secondary self-impedance (Ω)
+  phi1:   number  // Phase of I1 wrt Vs (degrees, positive = lagging)
+  I1:     number  // Primary RMS current (A)
+  I2:     number  // Secondary RMS current (A)
+  phi2:   number  // Phase of I2 wrt Vs (degrees)
+  P1:     number  // Primary active power (W)
+  P2:     number  // Secondary active power (W)
+  Q1:     number  // Primary reactive power (VAR)
+  S1:     number  // Primary apparent power (VA)
+  eta:    number  // Efficiency P2/P1 (0–1); 0 when k=0; NaN when P1=0
 }
