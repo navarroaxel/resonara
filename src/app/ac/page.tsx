@@ -4,6 +4,7 @@ import { HarmonicPanel }     from '@/components/simulator/HarmonicPanel'
 import { MetricsGrid }       from '@/components/simulator/MetricsGrid'
 import { ResonanceBadge }    from '@/components/simulator/ResonanceBadge'
 import { ChartTabs }         from '@/components/simulator/ChartTabs'
+import { RLCEquationsCard }  from '@/components/simulator/RLCEquationsCard'
 import { CircuitSchematic }  from '@/components/schematic/CircuitSchematic'
 import { ThemeToggle }       from '@/components/ui/ThemeToggle'
 import { LangToggle }        from '@/components/ui/LangToggle'
@@ -46,6 +47,7 @@ export default function Home() {
             <ResonanceBadge />
             <MetricsGrid />
           </div>
+          <RLCEquationsCard />
           <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
             <ChartTabs />
           </div>

@@ -124,11 +124,13 @@ const T = {
     dcPowerR5:              'Potencia en R₅',
     dcSchematicAriaLabel:   'Esquemático del circuito resistivo de tres mallas',
 
+    rlcEquationsTitle:            'Ecuaciones del circuito',
+
     // Simulator tab nav
     navRlcTab:                    'RLC CA',
     navDcTab:                     'Kirchhoff CC',
     navThreePhaseTab:             'Trifásico RST',
-    navRcDcTab:                   'RC en CC',
+    navRcDcTab:                   'RC CC',
 
     // RC DC charging simulator
     rcDcPageTitle:                'RC en CC',
@@ -338,6 +340,8 @@ const T = {
     dcPowerR4:              'Power in R₄',
     dcPowerR5:              'Power in R₅',
     dcSchematicAriaLabel:   'Three-mesh resistive circuit schematic',
+
+    rlcEquationsTitle:            'Circuit equations',
 
     // Simulator tab nav
     navRlcTab:                    'AC RLC',
