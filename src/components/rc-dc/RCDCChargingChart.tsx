@@ -7,7 +7,6 @@ import { t } from '@/lib/i18n'
 const W = 640, H = 300
 const PAD = { top: 30, right: 70, bottom: 48, left: 56 }
 
-function toMs(s: number) { return s < 1 ? s * 1000 : s }
 function timeUnit(tau: number) { return tau < 1 ? 'ms' : 's' }
 function timeScale(tau: number) { return tau < 1 ? 1000 : 1 }
 
@@ -127,7 +126,7 @@ export function RCDCChargingChart() {
     ctx.beginPath()
     pts.forEach(({ t, vc }, i) => {
       const x = xOf(t), y = yVOf(vc)
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
     })
     ctx.stroke()
 
@@ -136,7 +135,7 @@ export function RCDCChargingChart() {
     ctx.beginPath()
     pts.forEach(({ t, vr }, i) => {
       const x = xOf(t), y = yVOf(vr)
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
     })
     ctx.stroke()
     ctx.setLineDash([])
@@ -146,7 +145,7 @@ export function RCDCChargingChart() {
     ctx.beginPath()
     pts.forEach(({ t, i }, idx) => {
       const x = xOf(t), y = yIOf(i)
-      idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (idx === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
     })
     ctx.stroke()
     ctx.setLineDash([])
