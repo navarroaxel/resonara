@@ -80,7 +80,8 @@ export function MagneticTimeDomain() {
     for (let s = 0; s <= SAMPLES; s++) {
       const t_s = (s / SAMPLES) * 2 * T
       const v   = vPeak * Math.sin(2 * Math.PI * f * t_s)
-      s === 0 ? ctx.moveTo(toX(s), toYv(v)) : ctx.lineTo(toX(s), toYv(v))
+      if (s === 0) ctx.moveTo(toX(s), toYv(v))
+      else         ctx.lineTo(toX(s), toYv(v))
     }
     ctx.stroke()
 
@@ -95,7 +96,8 @@ export function MagneticTimeDomain() {
       for (let s = 0; s <= SAMPLES; s++) {
         const t_s = (s / SAMPLES) * 2 * T
         const i   = I1 * Math.SQRT2 * Math.sin(2 * Math.PI * f * t_s - phi1Rad)
-        s === 0 ? ctx.moveTo(toX(s), toYi(i)) : ctx.lineTo(toX(s), toYi(i))
+        if (s === 0) ctx.moveTo(toX(s), toYi(i))
+        else         ctx.lineTo(toX(s), toYi(i))
       }
       ctx.stroke()
     }
@@ -111,7 +113,8 @@ export function MagneticTimeDomain() {
       for (let s = 0; s <= SAMPLES; s++) {
         const t_s = (s / SAMPLES) * 2 * T
         const i   = I2 * Math.SQRT2 * Math.sin(2 * Math.PI * f * t_s - phi2Rad)
-        s === 0 ? ctx.moveTo(toX(s), toYi(i)) : ctx.lineTo(toX(s), toYi(i))
+        if (s === 0) ctx.moveTo(toX(s), toYi(i))
+        else         ctx.lineTo(toX(s), toYi(i))
       }
       ctx.stroke()
     }

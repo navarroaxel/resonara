@@ -13,7 +13,7 @@ function phaseStr(phi_deg: number): string {
 
 export function MagneticEquationsCard() {
   const { state: { params, results, lang } } = useMagnetic()
-  const { Vs, f, R1, L1, R2, L2, k } = params
+  const { Vs, f, L1, R2, L2, k } = params
   const { M, XL1, XL2, XM, Zin, Z2, phi1, I1, I2, phi2, P1, P2, eta } = results
 
   const w    = 2 * Math.PI * f
