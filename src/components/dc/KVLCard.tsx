@@ -52,7 +52,7 @@ export function KVLCard() {
             {t(lang, 'kvlLoop2')}
           </p>
           <p className="font-mono text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-            V₃ + VR₂ − VR₃ − VR₄ = 0
+            V₂ + VR₂ − VR₃ − VR₄ = 0
           </p>
           <p className="font-mono text-sm text-neutral-700 dark:text-neutral-300">
             {fmt(V2, 3)} + {fmt(VR2, 4)} − {fmt(VR3, 4)} − {fmt(VR4, 4)}
@@ -70,7 +70,7 @@ export function KVLCard() {
               {t(lang, 'kvlLoop3')}
             </p>
             <p className="font-mono text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-              V₂ − VR₅ + VR₄ = 0
+              V₃ − VR₅ + VR₄ = 0
             </p>
             <p className="font-mono text-sm text-neutral-700 dark:text-neutral-300">
               {fmt(V3, 3)} − {fmt(VR5, 4)} + {fmt(VR4, 4)}
