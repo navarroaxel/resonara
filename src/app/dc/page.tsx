@@ -9,7 +9,7 @@ import { DCLangToggle }     from '@/components/dc/DCLangToggle'
 import { DCHeaderSubtitle } from '@/components/dc/DCHeaderSubtitle'
 import { DCGitHubLink }     from '@/components/dc/DCGitHubLink'
 import { DCFooter }         from '@/components/dc/DCFooter'
-import { RLCNavLink }       from '@/components/dc/RLCNavLink'
+import { DCSimulatorNav }       from '@/components/ui/SimulatorNav'
 
 export default function DCPage() {
   return (
@@ -20,7 +20,7 @@ export default function DCPage() {
           <DCHeaderSubtitle />
         </div>
         <div className="flex items-center gap-2">
-          <RLCNavLink />
+          <DCSimulatorNav />
           <DCGitHubLink />
           <DCLangToggle />
           <DCThemeToggle />

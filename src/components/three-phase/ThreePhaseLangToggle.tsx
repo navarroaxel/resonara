@@ -1,9 +1,9 @@
 'use client'
-import { useRLC } from '@/store/rlc-store'
+import { useThreePhase } from '@/store/three-phase-store'
 import { t } from '@/lib/i18n'
 
-export function LangToggle() {
-  const { state, dispatch } = useRLC()
+export function ThreePhaseLangToggle() {
+  const { state, dispatch } = useThreePhase()
   return (
     <button
       onClick={() => dispatch({ type: 'SET_LANG', lang: state.lang === 'es' ? 'en' : 'es' })}

@@ -83,6 +83,35 @@ export interface DCResult {
   D:    number  // Determinant (0 = degenerate circuit)
 }
 
+export type ConnectionType = 'star' | 'delta'
+
+export type ThreePhaseActiveTab = 'phasor' | 'time' | 'power'
+
+export interface ThreePhaseParams {
+  VL: number  // Line-to-line voltage (V), 100–1000
+  R:  number  // Resistance (Ω), 1–1000
+  L:  number  // Inductance (mH), 1–500
+  C:  number  // Capacitance (µF), 1–1000
+  f:  number  // Frequency (Hz), 1–500
+}
+
+export interface ThreePhaseResult {
+  V_ph: number  // Phase voltage (V)
+  V_L:  number  // Line voltage (V)
+  I_ph: number  // Phase current (A)
+  I_L:  number  // Line current (A)
+  Z:    number  // Impedance magnitude (Ω)
+  phi:  number  // Phase angle (degrees)
+  XL:   number  // Inductive reactance (Ω)
+  XC:   number  // Capacitive reactance (Ω)
+  fr:   number  // Resonant frequency (Hz), NaN if flag disabled
+  Q:    number  // Quality factor, NaN if flag disabled
+  P:    number  // Total 3-phase active power (W)
+  Qr:   number  // Total 3-phase reactive power (VAR)
+  S:    number  // Total 3-phase apparent power (VA)
+  fp:   number  // Power factor cos(φ)
+}
+
 export interface BodePoint {
   f:   number  // Frequency (Hz)
   Z:   number  // Impedance magnitude (Ω)
