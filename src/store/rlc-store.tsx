@@ -75,7 +75,7 @@ function reducer(state: State, action: Action): State {
     case 'TOGGLE_POLY_MODE': {
       const polyMode = !state.polyMode
       const polyResults = recomputePoly(polyMode, state.circuitType, state.params, state.harmonics, state.flags)
-      const activeTab = !polyMode && state.activeTab === 'spectrum' ? ('bode' as ActiveTab) : state.activeTab
+      const activeTab = !polyMode && state.activeTab === 'spectrum' ? ('phasor' as ActiveTab) : state.activeTab
       return { ...state, polyMode, polyResults, activeTab }
     }
     case 'SET_POLY_PRESET': {
@@ -113,7 +113,7 @@ export function RLCProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, {
     params:      DEFAULT_PARAMS,
     circuitType: 'series',
-    activeTab:   'bode',
+    activeTab:   'phasor',
     results:     calc('series', DEFAULT_PARAMS, DEFAULT_FLAGS),
     flags:       DEFAULT_FLAGS,
     lang:        'es',

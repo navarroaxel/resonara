@@ -59,27 +59,53 @@ export interface RLCResult {
   fp:   number  // Power factor (cosφ)
 }
 
+export interface DCFlags {
+  mesh3:      boolean  // when false: circuit reduces to 2-mesh (Mesh 1 + Mesh 2), V2/R5 disconnected
+  V1:         boolean
+  V2:         boolean
+  V3:         boolean
+  polarityV1: boolean  // true = normal (+ at top/left), false = inverted
+  polarityV2: boolean
+  polarityV3: boolean
+  R1: boolean
+  R2: boolean
+  R3: boolean
+  R4: boolean
+  R5: boolean
+}
+
 export interface DCParams {
-  V1: number  // Source 1 voltage (V), range 0.1–100
-  V2: number  // Source 2 voltage (V), range 0.1–100
-  R1: number  // Resistance 1 (Ω), range 1–1000
-  R2: number  // Resistance 2 (Ω), range 1–1000
-  R3: number  // Resistance 3 (Ω), range 1–1000
+  V1: number  // Source 1 voltage (V), range 0.1–100 — Mesh 1 (left)
+  V2: number  // Source 2 voltage (V), range 0–100   — Mesh 2 top rail
+  V3: number  // Source 3 voltage (V), range 0.1–100 — Mesh 3 (right)
+  R1: number  // Mesh 1 exclusive top rail (Ω), range 1–1000
+  R2: number  // Shared branch Mesh 1–2 (Ω), range 1–1000
+  R3: number  // Mesh 2 exclusive top rail (Ω), range 1–1000
+  R4: number  // Shared branch Mesh 2–3 (Ω), range 1–1000
+  R5: number  // Mesh 3 exclusive top rail (Ω), range 1–1000
 }
 
 export interface DCResult {
-  I1:   number  // Mesh 1 current (A), may be negative
-  I2:   number  // Mesh 2 current (A), may be negative
+  I1:   number  // Mesh 1 current (A)
+  I2:   number  // Mesh 2 current (A)
+  I3:   number  // Mesh 3 current (A)
   IR1:  number  // Branch current through R1 = I1
-  IR2:  number  // Branch current through R2 = I1 - I2
+  IR2:  number  // Branch current through R2 = I1 - I2 (shared Mesh 1–2)
   IR3:  number  // Branch current through R3 = I2
+  IR4:  number  // Branch current through R4 = I2 - I3 (shared Mesh 2–3)
+  IR5:  number  // Branch current through R5 = I3
   VR1:  number  // Voltage across R1
   VR2:  number  // Voltage across R2
   VR3:  number  // Voltage across R3
-  VA:   number  // Node A voltage (V), relative to GND
+  VR4:  number  // Voltage across R4
+  VR5:  number  // Voltage across R5
+  VA:   number  // Node A voltage (V), junction R1/R2/R3
+  VB:   number  // Node B voltage (V), junction R3/R4/R5
   kvl1: number  // KVL residual loop 1 ≈ 0
   kvl2: number  // KVL residual loop 2 ≈ 0
+  kvl3: number  // KVL residual loop 3 ≈ 0
   kclA: number  // KCL residual node A ≈ 0
+  kclB: number  // KCL residual node B ≈ 0
   D:    number  // Determinant (0 = degenerate circuit)
 }
 

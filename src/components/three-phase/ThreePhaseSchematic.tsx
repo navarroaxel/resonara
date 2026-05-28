@@ -102,7 +102,7 @@ function drawStar(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   hasL: boolean, hasC: boolean,
   XL: number, XC: number, Z: number, fr: number,
-  lang: 'es' | 'en',
+  _lang: 'es' | 'en',
 ) {
   const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT
   const mC    = isDark ? '#9FA0A0' : '#888'
@@ -151,7 +151,7 @@ function drawDelta(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   hasL: boolean, hasC: boolean,
   XL: number, XC: number, Z: number, fr: number,
-  lang: 'es' | 'en',
+  _lang: 'es' | 'en',
 ) {
   const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT
   const mC    = isDark ? '#9FA0A0' : '#888'

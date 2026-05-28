@@ -53,22 +53,22 @@ function ParamRow({ config, value, enabled, lang, dispatch, isL, isC }: ParamRow
       <div className="flex justify-between items-center mb-1.5">
         <div className="flex items-center gap-2">
           {hasToggle && (
-            <label className="flex items-center gap-1.5 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={enabled}
-                onChange={(e) =>
-                  dispatch({
-                    type:  'SET_FLAGS',
-                    flags: isL ? { hasL: e.target.checked } : { hasC: e.target.checked },
-                  })
-                }
-                className="w-3.5 h-3.5 rounded accent-blue-500 cursor-pointer"
-              />
-              <span className="text-xs text-neutral-400 dark:text-neutral-500">
-                {t(lang as 'es' | 'en', isL ? 'enableL' : 'enableC')}
-              </span>
-            </label>
+            <button
+              onClick={() =>
+                dispatch({
+                  type:  'SET_FLAGS',
+                  flags: isL ? { hasL: !enabled } : { hasC: !enabled },
+                })
+              }
+              className={`w-8 h-4 rounded-full transition-colors flex-shrink-0 ${
+                enabled ? 'bg-blue-500' : 'bg-neutral-300 dark:bg-neutral-600'
+              }`}
+              aria-label={enabled ? 'Disable' : 'Enable'}
+            >
+              <span className={`block w-3 h-3 rounded-full bg-white shadow transition-transform mx-0.5 ${
+                enabled ? 'translate-x-4' : 'translate-x-0'
+              }`} />
+            </button>
           )}
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
             {t(lang as 'es' | 'en', labelKey)}

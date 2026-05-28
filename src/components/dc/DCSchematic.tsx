@@ -4,11 +4,11 @@ import { useDC } from '@/store/dc-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 
-const W = 640, H = 320
+const W = 800, H = 320
 
-// Layout constants
+// Layout constants — three equal mesh windows across the canvas
 const TOP = 70, BOT = 260
-const SRC_L = 60, SRC_R = 580, NODE_A_X = 320
+const SRC_L = 60, NODE_A_X = 290, NODE_B_X = 510, SRC_R = 740
 const SRC_CY = (TOP + BOT) / 2  // 165
 const SRC_R_CIRCLE = 22
 
@@ -19,7 +19,7 @@ function wire(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number,
 
 function resistorH(
   ctx: CanvasRenderingContext2D,
-  cx: number, cy: number, hw: number,  // half-width
+  cx: number, cy: number, hw: number,
   c: string, mC: string, lbl: string, valueStr: string,
 ) {
   const rw = hw * 0.6, rh = 18
@@ -27,17 +27,17 @@ function resistorH(
   ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
   ctx.strokeRect(cx - rw, cy - rh / 2, rw * 2, rh); ctx.restore()
   wire(ctx, cx + rw, cy, cx + hw, cy, c)
-  ctx.save(); ctx.fillStyle = c; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'
-  ctx.fillText(lbl, cx, cy - rh / 2 - 14)
-  ctx.fillStyle = mC; ctx.font = '10px sans-serif'
-  ctx.fillText(valueStr, cx, cy - rh / 2 - 4)
+  ctx.save(); ctx.fillStyle = mC; ctx.font = '10px sans-serif'; ctx.textAlign = 'center'
+  ctx.fillText(valueStr, cx, cy - rh / 2 - 18)
+  ctx.fillStyle = c; ctx.font = 'bold 11px sans-serif'
+  ctx.fillText(lbl, cx, cy - rh / 2 - 4)
   ctx.restore()
 }
 
 function resistorV(
   ctx: CanvasRenderingContext2D,
-  cx: number, cy: number, hh: number,  // half-height
-  c: string, mC: string, lbl: string, valueStr: string,
+  cx: number, cy: number, hh: number,
+  c: string, mC: string, lbl: string, valueStr: string, valueYOff = 0,
 ) {
   const rh = hh * 0.55, rw = 18
   wire(ctx, cx, cy - hh, cx, cy - rh, c)
@@ -45,24 +45,40 @@ function resistorV(
   ctx.strokeRect(cx - rw / 2, cy - rh, rw, rh * 2); ctx.restore()
   wire(ctx, cx, cy + rh, cx, cy + hh, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'left'
-  ctx.fillText(lbl, cx + rw / 2 + 6, cy - 6)
+  ctx.fillText(lbl, cx + rw / 2 + 6, cy - 8)
   ctx.fillStyle = mC; ctx.font = '10px sans-serif'
-  ctx.fillText(valueStr, cx + rw / 2 + 6, cy + 10)
+  ctx.fillText(valueStr, cx + rw / 2 + 6, cy + 8 + valueYOff)
   ctx.restore()
 }
 
 function sourceDC(
   ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number,
-  c: string, lbl: string, voltage: number,
+  c: string, lbl: string, voltage: number, normal = true,
 ) {
   ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.stroke()
   ctx.fillStyle = c; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-  ctx.fillText('+', cx, cy - 8)
-  ctx.fillText('−', cx, cy + 9)
+  ctx.fillText(normal ? '+' : '−', cx, cy - 8)
+  ctx.fillText(normal ? '−' : '+', cx, cy + 9)
   ctx.font = 'bold 11px sans-serif'; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'right'
   ctx.fillText(lbl, cx - r - 4, cy + 4)
   ctx.font = '10px sans-serif'; ctx.fillText(`${fmt(voltage, 1)}V`, cx - r - 4, cy + 16)
+  ctx.restore()
+}
+
+// Horizontal DC source — + on the right when normal (in direction of clockwise mesh current)
+function sourceDCH(
+  ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number,
+  c: string, lbl: string, voltage: number, normal = true,
+) {
+  ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.stroke()
+  ctx.fillStyle = c; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.fillText(normal ? '+' : '−', cx + 8, cy)
+  ctx.fillText(normal ? '−' : '+', cx - 9, cy)
+  ctx.font = 'bold 11px sans-serif'; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'center'
+  ctx.fillText(lbl, cx, cy - r - 14)
+  ctx.font = '10px sans-serif'; ctx.fillText(`${fmt(voltage, 1)}V`, cx, cy - r - 4)
   ctx.restore()
 }
 
@@ -99,19 +115,15 @@ function meshLoop(
   ctx.save()
   ctx.strokeStyle = c; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3])
   ctx.beginPath()
-  // Approximate ellipse using bezier arcs scaled to rx, ry
   ctx.save()
   ctx.translate(cx, cy); ctx.scale(rx / 50, ry / 50)
   ctx.arc(0, 0, 50, startAngle, endAngle)
   ctx.restore()
   ctx.stroke()
   ctx.setLineDash([])
-  // Arrowhead at end of arc
   const ex = cx + rx * Math.cos(endAngle)
   const ey = cy + ry * Math.sin(endAngle)
-  // Tangent: clockwise → tangent angle = endAngle + PI/2
   arrowHead(ctx, ex, ey, endAngle + Math.PI / 2, 7, c)
-  // Label
   ctx.fillStyle = c; ctx.font = 'italic bold 13px sans-serif'
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
   ctx.fillText(label, cx, cy)
@@ -127,8 +139,8 @@ function currentArrowH(
   const size = 7
   arrowHead(ctx, x, y, dir > 0 ? 0 : Math.PI, size, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = '10px sans-serif'
-  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
-  ctx.fillText(label, x, y - size - 2)
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+  ctx.fillText(label, x + size, y)
   ctx.restore()
 }
 
@@ -139,7 +151,6 @@ function currentArrowV(
   if (!Number.isFinite(current)) return
   const dir = current >= 0 ? 1 : -1
   const size = 7
-  // down = angle PI/2, up = -PI/2
   arrowHead(ctx, x, y, dir > 0 ? Math.PI / 2 : -Math.PI / 2, size, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = '10px sans-serif'
   ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
@@ -149,7 +160,7 @@ function currentArrowV(
 
 export function DCSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, results, lang } } = useDC()
+  const { state: { params, flags, results, lang } } = useDC()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -163,47 +174,108 @@ export function DCSchematic() {
     const wC  = isDark ? '#85B7EB' : '#378ADD'   // wire
     const nC  = isDark ? '#FAC775' : '#BA7517'   // node dot
     const rC  = isDark ? '#F0997B' : '#D85A30'   // resistor
-    const sC  = isDark ? '#AFA9EC' : '#7F77DD'   // source / I1 loop
-    const tC  = isDark ? '#5DCAA5' : '#1D9E75'   // I2 loop / teal
+    const sC  = isDark ? '#AFA9EC' : '#7F77DD'   // Mesh 1 (violet)
+    const tC  = isDark ? '#5DCAA5' : '#1D9E75'   // Mesh 2 (teal)
+    const oC  = isDark ? '#FDBA74' : '#EA580C'   // Mesh 3 (orange)
     const mC  = isDark ? '#9FA0A0' : '#888'      // meta text / gnd
     const iC  = isDark ? '#60A5FA' : '#2563EB'   // current arrows
 
-    const { V1, V2, R1, R2, R3 } = params
-    const { IR1, IR2, IR3, VR1, VR2, VR3 } = results
+    const { V1, V2, V3, R1, R2, R3, R4, R5 } = params
+    const { polarityV1, polarityV2, polarityV3 } = flags
+    const { IR1, IR2, IR3, IR4, IR5, VR1, VR2, VR3, VR4, VR5 } = results
+    const dC    = isDark ? '#4B5563' : '#D1D5DB'   // disabled color
+    const polG  = isDark ? '#4ADE80' : '#16A34A'   // polarity normal  (green)
+    const polR  = isDark ? '#F87171' : '#DC2626'   // polarity inverted (red)
+    const v1C = flags.V1 ? (polarityV1 ? polG : polR) : dC
+    const v2C = flags.V2 ? (polarityV2 ? polG : polR) : dC
+    const v3C = flags.V3 ? (polarityV3 ? polG : polR) : dC
+    const r1C = flags.R1 ? rC : dC
+    const r2C = flags.R2 ? rC : dC
+    const r3C = flags.R3 ? rC : dC
+    const r4C = flags.R4 ? rC : dC
+    const r5C = flags.R5 ? rC : dC
+
+    const railRight = flags.mesh3 ? SRC_R : NODE_B_X
 
     // ── Bottom rail (GND bus) ──────────────────────────────────────────────
-    wire(ctx, SRC_L, BOT, SRC_R, BOT, wC)
+    wire(ctx, SRC_L, BOT, railRight, BOT, wC)
 
     // ── Left branch (V1 source) ──────────────────────────────────────────
-    wire(ctx, SRC_L, TOP, SRC_L, SRC_CY - SRC_R_CIRCLE, wC)
-    wire(ctx, SRC_L, SRC_CY + SRC_R_CIRCLE, SRC_L, BOT, wC)
-    sourceDC(ctx, SRC_L, SRC_CY, SRC_R_CIRCLE, sC, 'V₁', V1)
+    if (flags.V1) {
+      wire(ctx, SRC_L, TOP, SRC_L, SRC_CY - SRC_R_CIRCLE, wC)
+      wire(ctx, SRC_L, SRC_CY + SRC_R_CIRCLE, SRC_L, BOT, wC)
+      sourceDC(ctx, SRC_L, SRC_CY, SRC_R_CIRCLE, v1C, 'V₁', V1, polarityV1)
+    } else {
+      wire(ctx, SRC_L, TOP, SRC_L, BOT, wC)
+    }
 
-    // ── Right branch (V2 source) ─────────────────────────────────────────
-    wire(ctx, SRC_R, TOP, SRC_R, SRC_CY - SRC_R_CIRCLE, wC)
-    wire(ctx, SRC_R, SRC_CY + SRC_R_CIRCLE, SRC_R, BOT, wC)
-    sourceDC(ctx, SRC_R, SRC_CY, SRC_R_CIRCLE, tC, 'V₂', V2)
+    // ── Right branch (V3 source) — only when Mesh 3 is active ────────────
+    if (flags.mesh3) {
+      if (flags.V3) {
+        wire(ctx, SRC_R, TOP, SRC_R, SRC_CY - SRC_R_CIRCLE, wC)
+        wire(ctx, SRC_R, SRC_CY + SRC_R_CIRCLE, SRC_R, BOT, wC)
+        sourceDC(ctx, SRC_R, SRC_CY, SRC_R_CIRCLE, v3C, 'V₃', V3, polarityV3)
+      } else {
+        wire(ctx, SRC_R, TOP, SRC_R, BOT, wC)
+      }
+    }
 
     // ── Top rail ──────────────────────────────────────────────────────────
-    // Left segment: V1 top → R1 left
-    wire(ctx, SRC_L, TOP, 130, TOP, wC)
-    // R1 (centered at ~190, TOP)
-    resistorH(ctx, 190, TOP, 60, rC, mC, 'R₁', `${fmt(R1, 0)}Ω  VR₁=${fmt(VR1, 2)}V`)
-    // R1 right → Node A
-    wire(ctx, 250, TOP, NODE_A_X, TOP, wC)
-    // Node A → R3 left
-    wire(ctx, NODE_A_X, TOP, 390, TOP, wC)
-    // R3 (centered at ~450, TOP)
-    resistorH(ctx, 450, TOP, 60, rC, mC, 'R₃', `${fmt(R3, 0)}Ω  VR₃=${fmt(VR3, 2)}V`)
-    // R3 right → V2 top
-    wire(ctx, 510, TOP, SRC_R, TOP, wC)
+    const R1_CX = (SRC_L + NODE_A_X) / 2  // 175
+    if (flags.R1) {
+      wire(ctx, SRC_L, TOP, R1_CX - 50, TOP, wC)
+      resistorH(ctx, R1_CX, TOP, 50, r1C, mC, `R₁ = ${fmt(R1, 0)}Ω`, `VR₁=${fmt(VR1, 2)}V`)
+      wire(ctx, R1_CX + 50, TOP, NODE_A_X, TOP, wC)
+    } else {
+      wire(ctx, SRC_L, TOP, NODE_A_X, TOP, wC)
+    }
 
-    // ── Middle branch (R2, shared) ────────────────────────────────────────
-    // Wire gaps between node A / GND and the R2 component extents
+    const R3_CX = 355
+    const V3_CX = 460
+    const V3_R  = 20
+    if (flags.R3) {
+      wire(ctx, NODE_A_X, TOP, R3_CX - 42, TOP, wC)
+      resistorH(ctx, R3_CX, TOP, 42, r3C, mC, `R₃ = ${fmt(R3, 0)}Ω`, `VR₃=${fmt(VR3, 2)}V`)
+      wire(ctx, R3_CX + 42, TOP, V3_CX - V3_R, TOP, wC)
+    } else {
+      wire(ctx, NODE_A_X, TOP, V3_CX - V3_R, TOP, wC)
+    }
+    if (flags.V2) {
+      sourceDCH(ctx, V3_CX, TOP, V3_R, v2C, 'V₂', V2, polarityV2)
+      wire(ctx, V3_CX + V3_R, TOP, NODE_B_X, TOP, wC)
+    } else {
+      wire(ctx, V3_CX - V3_R, TOP, NODE_B_X, TOP, wC)
+    }
+
+    const R5_CX = (NODE_B_X + SRC_R) / 2  // 625
+    if (flags.mesh3) {
+      if (flags.R5) {
+        wire(ctx, NODE_B_X, TOP, R5_CX - 50, TOP, wC)
+        resistorH(ctx, R5_CX, TOP, 50, r5C, mC, `R₅ = ${fmt(R5, 0)}Ω`, `VR₅=${fmt(VR5, 2)}V`)
+        wire(ctx, R5_CX + 50, TOP, SRC_R, TOP, wC)
+      } else {
+        wire(ctx, NODE_B_X, TOP, SRC_R, TOP, wC)
+      }
+    }
+
+    // ── Left shared branch (R2, Mesh 1–2 boundary at Node A) ─────────────
     const r2HH = 75
-    wire(ctx, NODE_A_X, TOP,            NODE_A_X, SRC_CY - r2HH, wC)
-    wire(ctx, NODE_A_X, SRC_CY + r2HH, NODE_A_X, BOT,            wC)
-    resistorV(ctx, NODE_A_X, SRC_CY, r2HH, rC, mC, 'R₂', `${fmt(R2, 0)}Ω  VR₂=${fmt(VR2, 2)}V`)
+    if (flags.R2) {
+      wire(ctx, NODE_A_X, TOP,            NODE_A_X, SRC_CY - r2HH, wC)
+      wire(ctx, NODE_A_X, SRC_CY + r2HH, NODE_A_X, BOT,            wC)
+      resistorV(ctx, NODE_A_X, SRC_CY, r2HH, r2C, mC, `R₂ = ${fmt(R2, 0)}Ω`, `VR₂=${fmt(VR2, 2)}V`, 14)
+    } else {
+      wire(ctx, NODE_A_X, TOP, NODE_A_X, BOT, wC)
+    }
+
+    // ── Right shared branch (R4, Mesh 2–3 boundary at Node B) ────────────
+    if (flags.R4) {
+      wire(ctx, NODE_B_X, TOP,            NODE_B_X, SRC_CY - r2HH, wC)
+      wire(ctx, NODE_B_X, SRC_CY + r2HH, NODE_B_X, BOT,            wC)
+      resistorV(ctx, NODE_B_X, SRC_CY, r2HH, r4C, mC, `R₄ = ${fmt(R4, 0)}Ω`, `VR₄=${fmt(VR4, 2)}V`)
+    } else {
+      wire(ctx, NODE_B_X, TOP, NODE_B_X, BOT, wC)
+    }
 
     // ── Nodes ────────────────────────────────────────────────────────────
     dot(ctx, NODE_A_X, TOP, nC)
@@ -211,21 +283,31 @@ export function DCSchematic() {
     ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
     ctx.fillText('A', NODE_A_X, TOP - 6); ctx.restore()
 
-    gndSymbol(ctx, NODE_A_X, BOT + 2, mC)
+    dot(ctx, NODE_B_X, TOP, nC)
+    ctx.save(); ctx.fillStyle = nC; ctx.font = 'bold 11px sans-serif'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
+    ctx.fillText('B', NODE_B_X, TOP - 6); ctx.restore()
+
+    wire(ctx, NODE_A_X, BOT, NODE_A_X, BOT + 10, wC)
+    gndSymbol(ctx, NODE_A_X, BOT + 10, mC)
     ctx.save(); ctx.fillStyle = mC; ctx.font = '10px sans-serif'
     ctx.textAlign = 'center'; ctx.textBaseline = 'top'
-    ctx.fillText('B (GND)', NODE_A_X, BOT + 20); ctx.restore()
+    ctx.fillText('GND', NODE_A_X, BOT + 28)
+    ctx.restore()
 
     // ── Mesh loop arrows ─────────────────────────────────────────────────
-    meshLoop(ctx, 190, SRC_CY, 70, 60, sC, 'I₁')
-    meshLoop(ctx, 450, SRC_CY, 70, 60, tC, 'I₂')
+    meshLoop(ctx, R1_CX,                        SRC_CY, 50, 42, sC, 'I₁')
+    meshLoop(ctx, (NODE_A_X + NODE_B_X) / 2,    SRC_CY, 50, 42, tC, 'I₂')
+    if (flags.mesh3) meshLoop(ctx, R5_CX,        SRC_CY, 50, 42, oC, 'I₃')
 
     // ── Branch current arrows ─────────────────────────────────────────────
-    currentArrowH(ctx, 190, TOP - 28, IR1, iC, `IR₁=${fmt(IR1, 3)}A`)
-    currentArrowV(ctx, NODE_A_X + 28, SRC_CY, IR2, iC, `IR₂=${fmt(IR2, 3)}A`)
-    currentArrowH(ctx, 450, TOP - 28, IR3, iC, `IR₃=${fmt(IR3, 3)}A`)
+    currentArrowH(ctx, R1_CX, TOP + 22, IR1, iC, `IR₁=${fmt(IR1, 3)}A`)
+    currentArrowV(ctx, NODE_A_X + 28, SRC_CY + 50, IR2, iC, `IR₂=${fmt(IR2, 3)}A`)
+    currentArrowH(ctx, R3_CX, TOP + 22, IR3, iC, `IR₃=${fmt(IR3, 3)}A`)
+    currentArrowV(ctx, NODE_B_X + 28, SRC_CY + 50, IR4, iC, `IR₄=${fmt(IR4, 3)}A`)
+    if (flags.mesh3) currentArrowH(ctx, R5_CX, TOP + 22, IR5, iC, `IR₅=${fmt(IR5, 3)}A`)
 
-  }, [params, results])
+  }, [params, flags, results])
 
   return (
     <canvas
