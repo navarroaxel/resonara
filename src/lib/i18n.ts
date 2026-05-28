@@ -174,6 +174,9 @@ const T = {
     schematicTab:                 'Esquemático',
     threePhaseSchematicAriaLabel: 'Esquemático del circuito trifásico',
     threePhasePhasorAriaLabel:    'Diagrama fasorial trifásico',
+    threePhaseEquationsTab:       'Ecuaciones',
+    threePhaseGeneralForm:        'Forma general',
+    threePhaseSubstituted:        'Con los valores actuales',
 
     // Magnetic coupling simulator
     navMagneticTab:             'Acoplamiento M.',
@@ -391,6 +394,9 @@ const T = {
     schematicTab:                 'Schematic',
     threePhaseSchematicAriaLabel: 'Three-phase circuit schematic',
     threePhasePhasorAriaLabel:    'Three-phase phasor diagram',
+    threePhaseEquationsTab:       'Equations',
+    threePhaseGeneralForm:        'General form',
+    threePhaseSubstituted:        'With current values',
 
     // Magnetic coupling simulator
     navMagneticTab:             'Mag. Coupling',

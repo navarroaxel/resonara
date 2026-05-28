@@ -111,7 +111,7 @@ export interface DCResult {
 
 export type ConnectionType = 'star' | 'delta'
 
-export type ThreePhaseActiveTab = 'phasor' | 'time' | 'power'
+export type ThreePhaseActiveTab = 'phasor' | 'time' | 'power' | 'equations'
 
 export interface ThreePhaseParams {
   VL: number  // Line-to-line voltage (V), 100–1000
