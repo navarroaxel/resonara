@@ -151,6 +151,8 @@ const T = {
     rcDcEquationsTitle:           'Ecuaciones del circuito',
     rcDcGeneralForm:              'Forma general',
     rcDcSubstituted:              'Con los valores actuales',
+    toggleEnable:                 'Activar',
+    toggleDisable:                'Desactivar',
 
     // Three-phase RST simulator
     navThreePhaseLink:            'Trifásico RST',
@@ -321,6 +323,8 @@ const T = {
     rcDcEquationsTitle:           'Circuit Equations',
     rcDcGeneralForm:              'General form',
     rcDcSubstituted:              'With current values',
+    toggleEnable:                 'Enable',
+    toggleDisable:                'Disable',
 
     // Three-phase RST simulator
     navThreePhaseLink:            'Three-Phase RST',

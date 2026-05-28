@@ -60,7 +60,7 @@ export interface RLCResult {
 }
 
 export interface DCFlags {
-  mesh3:      boolean  // when false: circuit reduces to 2-mesh (Mesh 1 + Mesh 2), V2/R5 disconnected
+  mesh3:      boolean  // when false: circuit reduces to 2-mesh (Mesh 1 + Mesh 2), V3/R5 disconnected
   V1:         boolean
   V2:         boolean
   V3:         boolean
