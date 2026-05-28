@@ -27,17 +27,17 @@ function resistorH(
   ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
   ctx.strokeRect(cx - rw, cy - rh / 2, rw * 2, rh); ctx.restore()
   wire(ctx, cx + rw, cy, cx + hw, cy, c)
-  ctx.save(); ctx.fillStyle = c; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'
-  ctx.fillText(lbl, cx, cy - rh / 2 - 14)
-  ctx.fillStyle = mC; ctx.font = '10px sans-serif'
-  ctx.fillText(valueStr, cx, cy - rh / 2 - 4)
+  ctx.save(); ctx.fillStyle = mC; ctx.font = '10px sans-serif'; ctx.textAlign = 'center'
+  ctx.fillText(valueStr, cx, cy - rh / 2 - 18)
+  ctx.fillStyle = c; ctx.font = 'bold 11px sans-serif'
+  ctx.fillText(lbl, cx, cy - rh / 2 - 4)
   ctx.restore()
 }
 
 function resistorV(
   ctx: CanvasRenderingContext2D,
   cx: number, cy: number, hh: number,
-  c: string, mC: string, lbl: string, valueStr: string,
+  c: string, mC: string, lbl: string, valueStr: string, valueYOff = 0,
 ) {
   const rh = hh * 0.55, rw = 18
   wire(ctx, cx, cy - hh, cx, cy - rh, c)
@@ -45,9 +45,9 @@ function resistorV(
   ctx.strokeRect(cx - rw / 2, cy - rh, rw, rh * 2); ctx.restore()
   wire(ctx, cx, cy + rh, cx, cy + hh, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'left'
-  ctx.fillText(lbl, cx + rw / 2 + 6, cy - 6)
+  ctx.fillText(lbl, cx + rw / 2 + 6, cy - 8)
   ctx.fillStyle = mC; ctx.font = '10px sans-serif'
-  ctx.fillText(valueStr, cx + rw / 2 + 6, cy + 10)
+  ctx.fillText(valueStr, cx + rw / 2 + 6, cy + 8 + valueYOff)
   ctx.restore()
 }
 
@@ -139,8 +139,8 @@ function currentArrowH(
   const size = 7
   arrowHead(ctx, x, y, dir > 0 ? 0 : Math.PI, size, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = '10px sans-serif'
-  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
-  ctx.fillText(label, x, y - size - 2)
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+  ctx.fillText(label, x + size, y)
   ctx.restore()
 }
 
@@ -200,7 +200,7 @@ export function DCSchematic() {
     // R1: Mesh 1 top rail (SRC_L → Node A), centered at 175
     const R1_CX = (SRC_L + NODE_A_X) / 2  // 175
     wire(ctx, SRC_L, TOP, R1_CX - 50, TOP, wC)
-    resistorH(ctx, R1_CX, TOP, 50, rC, mC, 'R₁', `${fmt(R1, 0)}Ω  VR₁=${fmt(VR1, 2)}V`)
+    resistorH(ctx, R1_CX, TOP, 50, rC, mC, `R₁ = ${fmt(R1, 0)}Ω`, `VR₁=${fmt(VR1, 2)}V`)
     wire(ctx, R1_CX + 50, TOP, NODE_A_X, TOP, wC)
 
     // R3 + V3: Mesh 2 top rail (Node A → Node B)
@@ -209,7 +209,7 @@ export function DCSchematic() {
     const V3_CX = 460
     const V3_R  = 20
     wire(ctx, NODE_A_X, TOP, R3_CX - 42, TOP, wC)
-    resistorH(ctx, R3_CX, TOP, 42, rC, mC, 'R₃', `${fmt(R3, 0)}Ω  VR₃=${fmt(VR3, 2)}V`)
+    resistorH(ctx, R3_CX, TOP, 42, rC, mC, `R₃ = ${fmt(R3, 0)}Ω`, `VR₃=${fmt(VR3, 2)}V`)
     wire(ctx, R3_CX + 42, TOP, V3_CX - V3_R, TOP, wC)
     sourceDCH(ctx, V3_CX, TOP, V3_R, tC, 'V₃', V3)
     wire(ctx, V3_CX + V3_R, TOP, NODE_B_X, TOP, wC)
@@ -217,19 +217,19 @@ export function DCSchematic() {
     // R5: Mesh 3 top rail (Node B → SRC_R), centered at 625
     const R5_CX = (NODE_B_X + SRC_R) / 2  // 625
     wire(ctx, NODE_B_X, TOP, R5_CX - 50, TOP, wC)
-    resistorH(ctx, R5_CX, TOP, 50, rC, mC, 'R₅', `${fmt(R5, 0)}Ω  VR₅=${fmt(VR5, 2)}V`)
+    resistorH(ctx, R5_CX, TOP, 50, rC, mC, `R₅ = ${fmt(R5, 0)}Ω`, `VR₅=${fmt(VR5, 2)}V`)
     wire(ctx, R5_CX + 50, TOP, SRC_R, TOP, wC)
 
     // ── Left shared branch (R2, Mesh 1–2 boundary at Node A) ─────────────
     const r2HH = 75
     wire(ctx, NODE_A_X, TOP,            NODE_A_X, SRC_CY - r2HH, wC)
     wire(ctx, NODE_A_X, SRC_CY + r2HH, NODE_A_X, BOT,            wC)
-    resistorV(ctx, NODE_A_X, SRC_CY, r2HH, rC, mC, 'R₂', `${fmt(R2, 0)}Ω  VR₂=${fmt(VR2, 2)}V`)
+    resistorV(ctx, NODE_A_X, SRC_CY, r2HH, rC, mC, `R₂ = ${fmt(R2, 0)}Ω`, `VR₂=${fmt(VR2, 2)}V`, 14)
 
     // ── Right shared branch (R4, Mesh 2–3 boundary at Node B) ────────────
     wire(ctx, NODE_B_X, TOP,            NODE_B_X, SRC_CY - r2HH, wC)
     wire(ctx, NODE_B_X, SRC_CY + r2HH, NODE_B_X, BOT,            wC)
-    resistorV(ctx, NODE_B_X, SRC_CY, r2HH, rC, mC, 'R₄', `${fmt(R4, 0)}Ω  VR₄=${fmt(VR4, 2)}V`)
+    resistorV(ctx, NODE_B_X, SRC_CY, r2HH, rC, mC, `R₄ = ${fmt(R4, 0)}Ω`, `VR₄=${fmt(VR4, 2)}V`)
 
     // ── Nodes ────────────────────────────────────────────────────────────
     dot(ctx, NODE_A_X, TOP, nC)
@@ -250,16 +250,16 @@ export function DCSchematic() {
     ctx.restore()
 
     // ── Mesh loop arrows ─────────────────────────────────────────────────
-    meshLoop(ctx, R1_CX, SRC_CY, 50, 42, sC, 'I₁')
-    meshLoop(ctx, R3_CX, SRC_CY, 50, 42, tC, 'I₂')
-    meshLoop(ctx, R5_CX, SRC_CY, 50, 42, oC, 'I₃')
+    meshLoop(ctx, R1_CX,                        SRC_CY, 50, 42, sC, 'I₁')
+    meshLoop(ctx, (NODE_A_X + NODE_B_X) / 2,    SRC_CY, 50, 42, tC, 'I₂')
+    meshLoop(ctx, R5_CX,                        SRC_CY, 50, 42, oC, 'I₃')
 
     // ── Branch current arrows ─────────────────────────────────────────────
-    currentArrowH(ctx, R1_CX, TOP - 28, IR1, iC, `IR₁=${fmt(IR1, 3)}A`)
-    currentArrowV(ctx, NODE_A_X + 28, SRC_CY, IR2, iC, `IR₂=${fmt(IR2, 3)}A`)
-    currentArrowH(ctx, R3_CX - 20, TOP - 28, IR3, iC, `IR₃=${fmt(IR3, 3)}A`)
-    currentArrowV(ctx, NODE_B_X + 28, SRC_CY, IR4, iC, `IR₄=${fmt(IR4, 3)}A`)
-    currentArrowH(ctx, R5_CX, TOP - 28, IR5, iC, `IR₅=${fmt(IR5, 3)}A`)
+    currentArrowH(ctx, R1_CX, TOP + 22, IR1, iC, `IR₁=${fmt(IR1, 3)}A`)
+    currentArrowV(ctx, NODE_A_X + 28, SRC_CY + 50, IR2, iC, `IR₂=${fmt(IR2, 3)}A`)
+    currentArrowH(ctx, R3_CX, TOP + 22, IR3, iC, `IR₃=${fmt(IR3, 3)}A`)
+    currentArrowV(ctx, NODE_B_X + 28, SRC_CY + 50, IR4, iC, `IR₄=${fmt(IR4, 3)}A`)
+    currentArrowH(ctx, R5_CX, TOP + 22, IR5, iC, `IR₅=${fmt(IR5, 3)}A`)
 
   }, [params, results])
 
