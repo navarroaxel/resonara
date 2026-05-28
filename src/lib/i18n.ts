@@ -128,6 +128,26 @@ const T = {
     navRlcTab:                    'RLC CA',
     navDcTab:                     'Kirchhoff CC',
     navThreePhaseTab:             'Trifásico RST',
+    navRcDcTab:                   'RC en CC',
+
+    // RC DC charging simulator
+    rcDcPageTitle:                'RC en CC',
+    rcDcPageSubtitle:             'Simulador RC en CC — Carga del Capacitor',
+    rcDcParamsTitle:              'Parámetros del circuito',
+    rcDcLabelVs:                  'Tensión fuente Vs',
+    rcDcLabelR:                   'Resistencia R',
+    rcDcLabelC:                   'Capacitancia C',
+    rcDcMetricsTitle:             'Magnitudes',
+    rcDcTau:                      'Constante de tiempo τ',
+    rcDcI0:                       'Corriente inicial I₀',
+    rcDcVcAtTau:                  'V_C en t = τ  (63.2%)',
+    rcDcT5tau:                    'Tiempo de carga (5τ)',
+    rcDcEfinal:                   'Energía almacenada',
+    rcDcChartTitle:               'Comportamiento temporal',
+    rcDcLegendVc:                 'V_C(t) — Capacitor',
+    rcDcLegendVr:                 'V_R(t) — Resistencia',
+    rcDcLegendI:                  'I(t) — Corriente',
+    rcDcSchematicAriaLabel:       'Esquemático del circuito RC en corriente continua',
 
     // Three-phase RST simulator
     navThreePhaseLink:            'Trifásico RST',
@@ -275,6 +295,26 @@ const T = {
     navRlcTab:                    'AC RLC',
     navDcTab:                     'Kirchhoff DC',
     navThreePhaseTab:             'Three-Phase RST',
+    navRcDcTab:                   'RC DC',
+
+    // RC DC charging simulator
+    rcDcPageTitle:                'RC DC',
+    rcDcPageSubtitle:             'DC RC Simulator — Capacitor Charging',
+    rcDcParamsTitle:              'Circuit Parameters',
+    rcDcLabelVs:                  'Source voltage Vs',
+    rcDcLabelR:                   'Resistance R',
+    rcDcLabelC:                   'Capacitance C',
+    rcDcMetricsTitle:             'Metrics',
+    rcDcTau:                      'Time constant τ',
+    rcDcI0:                       'Initial current I₀',
+    rcDcVcAtTau:                  'V_C at t = τ  (63.2%)',
+    rcDcT5tau:                    'Charge time (5τ)',
+    rcDcEfinal:                   'Stored energy',
+    rcDcChartTitle:               'Time-domain behaviour',
+    rcDcLegendVc:                 'V_C(t) — Capacitor',
+    rcDcLegendVr:                 'V_R(t) — Resistor',
+    rcDcLegendI:                  'I(t) — Current',
+    rcDcSchematicAriaLabel:       'RC circuit schematic in direct current',
 
     // Three-phase RST simulator
     navThreePhaseLink:            'Three-Phase RST',
