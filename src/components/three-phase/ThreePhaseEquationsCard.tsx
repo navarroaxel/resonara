@@ -12,6 +12,7 @@ export function ThreePhaseEquationsCard() {
   const w      = 2 * Math.PI * params.f
   const fmtW   = fmt(w, 2)
   const isStar = connection === 'star'
+  const { hasL, hasC } = flags
 
   return (
     <div>
@@ -19,30 +20,47 @@ export function ThreePhaseEquationsCard() {
         {t(lang, 'threePhaseGeneralForm')}
       </p>
       <div className="font-mono text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300 mb-4 leading-relaxed">
-        <div>
-          <span className="text-blue-600 dark:text-blue-400">XL</span>
-          {' = ω·L   '}
-          <span className="text-blue-600 dark:text-blue-400">XC</span>
-          {' = 1 / (ω·C)'}
-        </div>
-        <div>
+
+        {(hasL || hasC) && (
+          <div>
+            {hasL && (
+              <><span className="text-blue-600 dark:text-blue-400">XL</span>{' = ω·L'}</>
+            )}
+            {hasL && hasC && '   '}
+            {hasC && (
+              <><span className="text-blue-600 dark:text-blue-400">XC</span>{' = 1 / (ω·C)'}</>
+            )}
+          </div>
+        )}
+
+        <div
+          role="img"
+          aria-label={t(lang, hasL && hasC ? 'ariaZFormula' : hasL ? 'ariaZFormulaL' : hasC ? 'ariaZFormulaC' : 'ariaZFormulaR')}
+        >
           {'|'}
           <span className="text-blue-600 dark:text-blue-400">Z</span>
-          {'| = √(R² + ('}
-          <span className="text-blue-600 dark:text-blue-400">XL</span>
-          {' − '}
-          <span className="text-blue-600 dark:text-blue-400">XC</span>
-          {')²)'}
+          {hasL && hasC  && (<>{'| = √(R² + ('}<span className="text-blue-600 dark:text-blue-400">XL</span>{' − '}<span className="text-blue-600 dark:text-blue-400">XC</span>{')²)'}</>)}
+          {hasL && !hasC && (<>{'| = √(R² + '}<span className="text-blue-600 dark:text-blue-400">XL</span>{'²)'}</>)}
+          {!hasL && hasC && (<>{'| = √(R² + '}<span className="text-blue-600 dark:text-blue-400">XC</span>{'²)'}</>)}
+          {!hasL && !hasC && '| = R'}
         </div>
-        <div>
+
+        <div
+          role="img"
+          aria-label={t(lang, hasL && hasC ? 'ariaPhiFormula' : hasL ? 'ariaPhiFormulaL' : hasC ? 'ariaPhiFormulaC' : 'ariaPhiFormulaR')}
+        >
           <span className="text-violet-600 dark:text-violet-400">φ</span>
-          {' = arctan(('}
-          <span className="text-blue-600 dark:text-blue-400">XL</span>
-          {' − '}
-          <span className="text-blue-600 dark:text-blue-400">XC</span>
-          {') / R)'}
+          {hasL && hasC  && (<>{' = arctan(('}<span className="text-blue-600 dark:text-blue-400">XL</span>{' − '}<span className="text-blue-600 dark:text-blue-400">XC</span>{') / R)'}</>)}
+          {hasL && !hasC && (<>{' = arctan('}<span className="text-blue-600 dark:text-blue-400">XL</span>{' / R)'}</>)}
+          {!hasL && hasC && (<>{' = arctan(−'}<span className="text-blue-600 dark:text-blue-400">XC</span>{' / R)'}</>)}
+          {!hasL && !hasC && ' = 0'}
         </div>
-        <div className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5">
+
+        <div
+          className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5"
+          role="img"
+          aria-label={t(lang, isStar ? 'ariaStarVIFormula' : 'ariaDeltaVIFormula')}
+        >
           {isStar ? (
             <>
               {'V_f = V_L / √3   |   '}
@@ -62,7 +80,12 @@ export function ThreePhaseEquationsCard() {
             </>
           )}
         </div>
-        <div className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5">
+
+        <div
+          className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5"
+          role="img"
+          aria-label={t(lang, 'ariaPFormula')}
+        >
           <span className="text-green-600 dark:text-green-400">P</span>
           {' = √3 · V_L · '}
           <span className="text-teal-600 dark:text-teal-400">I_L</span>
@@ -70,7 +93,7 @@ export function ThreePhaseEquationsCard() {
           <span className="text-violet-600 dark:text-violet-400">φ</span>
           {')'}
         </div>
-        <div>
+        <div role="img" aria-label={t(lang, 'ariaQrFormula')}>
           <span className="text-orange-500 dark:text-orange-400">Qr</span>
           {' = √3 · V_L · '}
           <span className="text-teal-600 dark:text-teal-400">I_L</span>
@@ -78,12 +101,13 @@ export function ThreePhaseEquationsCard() {
           <span className="text-violet-600 dark:text-violet-400">φ</span>
           {')'}
         </div>
-        <div>
+        <div role="img" aria-label={t(lang, 'ariaSFormula')}>
           <span className="text-blue-600 dark:text-blue-400">S</span>
           {' = √3 · V_L · '}
           <span className="text-teal-600 dark:text-teal-400">I_L</span>
         </div>
-        {flags.hasL && flags.hasC && (
+
+        {hasL && hasC && (
           <div className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5">
             {'fr = 1 / (2π·√(L·C))   Q = (1/R)·√(L/C)'}
           </div>
@@ -101,13 +125,13 @@ export function ThreePhaseEquationsCard() {
           <span className="font-medium">{fmtW}</span>
           {' rad/s'}
         </div>
-        {flags.hasL && (
+        {hasL && (
           <div>
             <span className="text-blue-600 dark:text-blue-400">XL</span>
             {` = ${fmtW} · ${fmt(L_H, 3)} = ${fmt(XL, 2)} Ω`}
           </div>
         )}
-        {flags.hasC && (
+        {hasC && (
           <div>
             <span className="text-blue-600 dark:text-blue-400">XC</span>
             {` = 1 / (${fmtW} · ${fmt(C_F, 6)}) = ${fmt(XC, 2)} Ω`}
@@ -146,7 +170,7 @@ export function ThreePhaseEquationsCard() {
           {` = ${fmt(S, 2)} VA`}
         </div>
         <div>{`fp = cos(${fmt(phi, 1)}°) = ${fmt(fp, 3)}`}</div>
-        {flags.hasL && flags.hasC && Number.isFinite(fr) && (
+        {hasL && hasC && Number.isFinite(fr) && (
           <div>{`fr = ${fmt(fr, 1)} Hz   Q = ${fmt(Q, 3)}`}</div>
         )}
       </div>

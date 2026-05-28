@@ -164,32 +164,36 @@ export function ThreePhaseTimeDomain() {
           {t(lang, 'threePhaseGeneralForm')}
         </p>
         <div className="font-mono text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300 mb-4 leading-relaxed">
-          <div>
+          <div role="img" aria-label={t(lang, 'ariaVRFormula')}>
             <span className="text-red-500 font-semibold">v_R(t)</span>
             {' = V̂ · sin(ωt)'}
             <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
           </div>
-          <div>
+          <div role="img" aria-label={t(lang, 'ariaVSFormula')}>
             <span className="text-amber-500 font-semibold">v_S(t)</span>
             {' = V̂ · sin(ωt − 2π/3)'}
             <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
           </div>
-          <div>
+          <div role="img" aria-label={t(lang, 'ariaVTFormula')}>
             <span className="text-blue-500 font-semibold">v_T(t)</span>
             {' = V̂ · sin(ωt + 2π/3)'}
             <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
           </div>
-          <div className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5">
+          <div
+            className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5"
+            role="img"
+            aria-label={t(lang, 'ariaIRFormula')}
+          >
             <span className="text-red-500 font-semibold">i_R(t)</span>
             {' = Î · sin(ωt − φ)'}
             <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
           </div>
-          <div>
+          <div role="img" aria-label={t(lang, 'ariaISFormula')}>
             <span className="text-amber-500 font-semibold">i_S(t)</span>
             {' = Î · sin(ωt − φ − 2π/3)'}
             <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
           </div>
-          <div>
+          <div role="img" aria-label={t(lang, 'ariaITFormula')}>
             <span className="text-blue-500 font-semibold">i_T(t)</span>
             {' = Î · sin(ωt − φ + 2π/3)'}
             <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
