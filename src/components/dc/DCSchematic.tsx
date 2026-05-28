@@ -53,29 +53,29 @@ function resistorV(
 
 function sourceDC(
   ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number,
-  c: string, lbl: string, voltage: number,
+  c: string, lbl: string, voltage: number, normal = true,
 ) {
   ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.stroke()
   ctx.fillStyle = c; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-  ctx.fillText('+', cx, cy - 8)
-  ctx.fillText('−', cx, cy + 9)
+  ctx.fillText(normal ? '+' : '−', cx, cy - 8)
+  ctx.fillText(normal ? '−' : '+', cx, cy + 9)
   ctx.font = 'bold 11px sans-serif'; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'right'
   ctx.fillText(lbl, cx - r - 4, cy + 4)
   ctx.font = '10px sans-serif'; ctx.fillText(`${fmt(voltage, 1)}V`, cx - r - 4, cy + 16)
   ctx.restore()
 }
 
-// Horizontal DC source — + on the right (in the direction of clockwise mesh current)
+// Horizontal DC source — + on the right when normal (in direction of clockwise mesh current)
 function sourceDCH(
   ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number,
-  c: string, lbl: string, voltage: number,
+  c: string, lbl: string, voltage: number, normal = true,
 ) {
   ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.stroke()
   ctx.fillStyle = c; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-  ctx.fillText('+', cx + 8, cy)
-  ctx.fillText('−', cx - 9, cy)
+  ctx.fillText(normal ? '+' : '−', cx + 8, cy)
+  ctx.fillText(normal ? '−' : '+', cx - 9, cy)
   ctx.font = 'bold 11px sans-serif'; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'center'
   ctx.fillText(lbl, cx, cy - r - 14)
   ctx.font = '10px sans-serif'; ctx.fillText(`${fmt(voltage, 1)}V`, cx, cy - r - 4)
@@ -181,11 +181,14 @@ export function DCSchematic() {
     const iC  = isDark ? '#60A5FA' : '#2563EB'   // current arrows
 
     const { V1, V2, V3, R1, R2, R3, R4, R5 } = params
+    const { polarityV1, polarityV2, polarityV3 } = flags
     const { IR1, IR2, IR3, IR4, IR5, VR1, VR2, VR3, VR4, VR5 } = results
-    const dC  = isDark ? '#4B5563' : '#D1D5DB'   // disabled color
-    const v1C = flags.V1 ? sC : dC
-    const v2C = flags.V2 ? oC : dC
-    const v3C = flags.V3 ? tC : dC
+    const dC    = isDark ? '#4B5563' : '#D1D5DB'   // disabled color
+    const polG  = isDark ? '#4ADE80' : '#16A34A'   // polarity normal  (green)
+    const polR  = isDark ? '#F87171' : '#DC2626'   // polarity inverted (red)
+    const v1C = flags.V1 ? (polarityV1 ? polG : polR) : dC
+    const v2C = flags.V2 ? (polarityV2 ? polG : polR) : dC
+    const v3C = flags.V3 ? (polarityV3 ? polG : polR) : dC
     const r1C = flags.R1 ? rC : dC
     const r2C = flags.R2 ? rC : dC
     const r3C = flags.R3 ? rC : dC
@@ -201,17 +204,17 @@ export function DCSchematic() {
     if (flags.V1) {
       wire(ctx, SRC_L, TOP, SRC_L, SRC_CY - SRC_R_CIRCLE, wC)
       wire(ctx, SRC_L, SRC_CY + SRC_R_CIRCLE, SRC_L, BOT, wC)
-      sourceDC(ctx, SRC_L, SRC_CY, SRC_R_CIRCLE, v1C, 'V₁', V1)
+      sourceDC(ctx, SRC_L, SRC_CY, SRC_R_CIRCLE, v1C, 'V₁', V1, polarityV1)
     } else {
       wire(ctx, SRC_L, TOP, SRC_L, BOT, wC)
     }
 
-    // ── Right branch (V2 source) — only when Mesh 3 is active ────────────
+    // ── Right branch (V3 source) — only when Mesh 3 is active ────────────
     if (flags.mesh3) {
-      if (flags.V2) {
+      if (flags.V3) {
         wire(ctx, SRC_R, TOP, SRC_R, SRC_CY - SRC_R_CIRCLE, wC)
         wire(ctx, SRC_R, SRC_CY + SRC_R_CIRCLE, SRC_R, BOT, wC)
-        sourceDC(ctx, SRC_R, SRC_CY, SRC_R_CIRCLE, v2C, 'V₂', V2)
+        sourceDC(ctx, SRC_R, SRC_CY, SRC_R_CIRCLE, v3C, 'V₃', V3, polarityV3)
       } else {
         wire(ctx, SRC_R, TOP, SRC_R, BOT, wC)
       }
@@ -237,8 +240,8 @@ export function DCSchematic() {
     } else {
       wire(ctx, NODE_A_X, TOP, V3_CX - V3_R, TOP, wC)
     }
-    if (flags.V3) {
-      sourceDCH(ctx, V3_CX, TOP, V3_R, v3C, 'V₃', V3)
+    if (flags.V2) {
+      sourceDCH(ctx, V3_CX, TOP, V3_R, v2C, 'V₂', V2, polarityV2)
       wire(ctx, V3_CX + V3_R, TOP, NODE_B_X, TOP, wC)
     } else {
       wire(ctx, V3_CX - V3_R, TOP, NODE_B_X, TOP, wC)

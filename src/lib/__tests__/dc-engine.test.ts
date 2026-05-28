@@ -1,6 +1,6 @@
 import { calcDC } from '../dc-engine'
 
-const base = { V1: 12, V2: 6, V3: 0, R1: 100, R2: 200, R3: 150, R4: 180, R5: 120 }
+const base = { V1: 12, V2: 0, V3: 6, R1: 100, R2: 200, R3: 150, R4: 180, R5: 120 }
 
 describe('calcDC', () => {
   it('returns correct mesh currents for a known 3-mesh circuit', () => {
@@ -41,7 +41,7 @@ describe('calcDC', () => {
 
   it('symmetric circuit gives I1=I3 and IR2=IR4', () => {
     // V1=V2, R1=R5, R2=R4, R3 arbitrary → symmetric by construction
-    const r = calcDC({ V1: 10, V2: 10, V3: 0, R1: 100, R2: 200, R3: 150, R4: 200, R5: 100 })
+    const r = calcDC({ V1: 10, V2: 0, V3: 10, R1: 100, R2: 200, R3: 150, R4: 200, R5: 100 })
     expect(r.I1).toBeCloseTo(r.I3, 6)
     expect(Math.abs(r.IR2)).toBeCloseTo(Math.abs(r.IR4), 6)
   })

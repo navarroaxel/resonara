@@ -49,10 +49,10 @@ export function MeshAnalysisCard() {
               <span>·I₂</span>
               <span className="text-neutral-400">+</span>
               <span className="text-orange-600 dark:text-orange-400">({fmt(-R4, 0)})</span>
-              <span>·I₃ = {fmt(V3, 1)}</span>
+              <span>·I₃ = {fmt(V2, 1)}</span>
             </>
           ) : (
-            <span>·I₂ = {fmt(V3, 1)}</span>
+            <span>·I₂ = {fmt(V2, 1)}</span>
           )}
         </div>
         {mesh3 && (
@@ -63,7 +63,7 @@ export function MeshAnalysisCard() {
             <span>·I₂</span>
             <span className="text-neutral-400">+</span>
             <span className="text-orange-600 dark:text-orange-400">({fmt(a33, 0)})</span>
-            <span>·I₃ = {fmt(V2, 1)}</span>
+            <span>·I₃ = {fmt(V3, 1)}</span>
           </div>
         )}
       </div>

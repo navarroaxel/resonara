@@ -7,8 +7,8 @@ export function calcDC(params: DCParams, hasMesh3 = true): DCResult {
 
   // 3-mesh ladder — KVL on each clockwise loop:
   //   Loop 1:  (R1+R2)·I1  −  R2·I2               = V1
-  //   Loop 2:  −R2·I1 + (R2+R3+R4)·I2  −  R4·I3  = V3  (V3 in top rail, + rightward)
-  //   Loop 3:              −R4·I2 + (R4+R5)·I3    = V2
+  //   Loop 2:  −R2·I1 + (R2+R3+R4)·I2  −  R4·I3  = V2  (V2 in top rail, + rightward)
+  //   Loop 3:              −R4·I2 + (R4+R5)·I3    = V3
   //
   // Matrix A (symmetric, tridiagonal):
   //   [ R1+R2      −R2          0   ]
@@ -26,9 +26,9 @@ export function calcDC(params: DCParams, hasMesh3 = true): DCResult {
   const M12 = a21 * a33
   const D   = a11 * M11 - a12 * M12
 
-  const N1 = V1 * M11 - a12 * (V3 * a33 - a23 * V2)
-  const N2 = a11 * (V3 * a33 - a23 * V2) - V1 * a21 * a33
-  const N3 = V1 * (a21 * a32) + V3 * (-a11 * a32) + V2 * (a11 * a22 - a12 * a21)
+  const N1 = V1 * M11 - a12 * (V2 * a33 - a23 * V3)
+  const N2 = a11 * (V2 * a33 - a23 * V3) - V1 * a21 * a33
+  const N3 = V1 * (a21 * a32) + V2 * (-a11 * a32) + V3 * (a11 * a22 - a12 * a21)
 
   const I1 = N1 / D
   const I2 = N2 / D
@@ -50,8 +50,8 @@ export function calcDC(params: DCParams, hasMesh3 = true): DCResult {
   const VB = VA - VR3
 
   const kvl1 = V1 - a11 * I1 - a12 * I2
-  const kvl2 = V3 - a21 * I1 - a22 * I2 - a23 * I3
-  const kvl3 = V2 - a32 * I2 - a33 * I3
+  const kvl2 = V2 - a21 * I1 - a22 * I2 - a23 * I3
+  const kvl3 = V3 - a32 * I2 - a33 * I3
 
   const kclA = IR1 - IR2 - IR3
   const kclB = IR3 - IR4 - IR5
@@ -63,7 +63,7 @@ export function calcDC(params: DCParams, hasMesh3 = true): DCResult {
 // Loop 1: (R1+R2)·I1 − R2·I2 = V1
 // Loop 2: −R2·I1 + (R2+R3+R4)·I2 = V3
 function calcDC2Mesh(params: DCParams): DCResult {
-  const { V1, V3, R1, R2, R3, R4 } = params
+  const { V1, V2, R1, R2, R3, R4 } = params
 
   const a11 = R1 + R2
   const a12 = -R2
@@ -71,8 +71,8 @@ function calcDC2Mesh(params: DCParams): DCResult {
   const a22 = R2 + R3 + R4
 
   const D  = a11 * a22 - a12 * a21
-  const I1 = (V1 * a22 - a12 * V3) / D
-  const I2 = (a11 * V3 - a21 * V1) / D
+  const I1 = (V1 * a22 - a12 * V2) / D
+  const I2 = (a11 * V2 - a21 * V1) / D
   const I3 = 0
 
   const IR1 = I1
@@ -91,7 +91,7 @@ function calcDC2Mesh(params: DCParams): DCResult {
   const VB = VA - VR3
 
   const kvl1 = V1 - a11 * I1 - a12 * I2
-  const kvl2 = V3 - a21 * I1 - a22 * I2
+  const kvl2 = V2 - a21 * I1 - a22 * I2
   const kvl3 = 0
 
   const kclA = IR1 - IR2 - IR3

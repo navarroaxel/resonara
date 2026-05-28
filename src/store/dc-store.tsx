@@ -4,15 +4,20 @@ import { calcDC } from '@/lib/dc-engine'
 import { readLang, writeLang } from '@/lib/lang-storage'
 import type { DCParams, DCFlags, DCResult, Lang } from '@/lib/types'
 
-const DEFAULT_PARAMS: DCParams = { V1: 12, V2: 6, V3: 0, R1: 100, R2: 200, R3: 150, R4: 180, R5: 120 }
-const DEFAULT_FLAGS: DCFlags  = { mesh3: true, V1: true, V2: true, V3: true, R1: true, R2: true, R3: true, R4: true, R5: true }
+const DEFAULT_PARAMS: DCParams = { V1: 12, V2: 0, V3: 6, R1: 100, R2: 200, R3: 150, R4: 180, R5: 120 }
+const DEFAULT_FLAGS: DCFlags  = {
+  mesh3: true,
+  V1: true, V2: true, V3: true,
+  polarityV1: true, polarityV2: true, polarityV3: true,
+  R1: true, R2: true, R3: true, R4: true, R5: true,
+}
 
 function applyFlags(params: DCParams, flags: DCFlags): DCParams {
   return {
     ...params,
-    V1: flags.V1 ? params.V1 : 0,
-    V2: flags.V2 ? params.V2 : 0,
-    V3: flags.V3 ? params.V3 : 0,
+    V1: flags.V1 ? params.V1 * (flags.polarityV1 ? 1 : -1) : 0,
+    V2: flags.V2 ? params.V2 * (flags.polarityV2 ? 1 : -1) : 0,  // Mesh 2 top-rail source
+    V3: flags.V3 ? params.V3 * (flags.polarityV3 ? 1 : -1) : 0,  // Mesh 3 right source
     R1: flags.R1 ? params.R1 : 0,
     R2: flags.R2 ? params.R2 : 0,
     R3: flags.R3 ? params.R3 : 0,

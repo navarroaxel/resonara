@@ -55,7 +55,7 @@ export function KVLCard() {
             V₃ + VR₂ − VR₃ − VR₄ = 0
           </p>
           <p className="font-mono text-sm text-neutral-700 dark:text-neutral-300">
-            {fmt(V3, 3)} + {fmt(VR2, 4)} − {fmt(VR3, 4)} − {fmt(VR4, 4)}
+            {fmt(V2, 3)} + {fmt(VR2, 4)} − {fmt(VR3, 4)} − {fmt(VR4, 4)}
             {' = '}
             <span className={valid(kvl2) ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}>
               {fmt(kvl2, 9)}
@@ -73,7 +73,7 @@ export function KVLCard() {
               V₂ − VR₅ + VR₄ = 0
             </p>
             <p className="font-mono text-sm text-neutral-700 dark:text-neutral-300">
-              {fmt(V2, 3)} − {fmt(VR5, 4)} + {fmt(VR4, 4)}
+              {fmt(V3, 3)} − {fmt(VR5, 4)} + {fmt(VR4, 4)}
               {' = '}
               <span className={valid(kvl3) ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}>
                 {fmt(kvl3, 9)}

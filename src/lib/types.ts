@@ -60,10 +60,13 @@ export interface RLCResult {
 }
 
 export interface DCFlags {
-  mesh3: boolean  // when false: circuit reduces to 2-mesh (Mesh 1 + Mesh 2), V2/R5 disconnected
-  V1: boolean
-  V2: boolean
-  V3: boolean
+  mesh3:      boolean  // when false: circuit reduces to 2-mesh (Mesh 1 + Mesh 2), V2/R5 disconnected
+  V1:         boolean
+  V2:         boolean
+  V3:         boolean
+  polarityV1: boolean  // true = normal (+ at top/left), false = inverted
+  polarityV2: boolean
+  polarityV3: boolean
   R1: boolean
   R2: boolean
   R3: boolean
@@ -73,8 +76,8 @@ export interface DCFlags {
 
 export interface DCParams {
   V1: number  // Source 1 voltage (V), range 0.1–100 — Mesh 1 (left)
-  V2: number  // Source 2 voltage (V), range 0.1–100 — Mesh 3 (right)
-  V3: number  // Source 3 voltage (V), range 0–100 — Mesh 2 top rail
+  V2: number  // Source 2 voltage (V), range 0–100   — Mesh 2 top rail
+  V3: number  // Source 3 voltage (V), range 0.1–100 — Mesh 3 (right)
   R1: number  // Mesh 1 exclusive top rail (Ω), range 1–1000
   R2: number  // Shared branch Mesh 1–2 (Ω), range 1–1000
   R3: number  // Mesh 2 exclusive top rail (Ω), range 1–1000

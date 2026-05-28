@@ -3,31 +3,33 @@ import { useState } from 'react'
 import { useDC } from '@/store/dc-store'
 import { t, type TKey } from '@/lib/i18n'
 import type { DCParams, DCFlags } from '@/lib/types'
+import { BatteryIcon } from './BatteryIcon'
 
 interface ParamConfig {
-  key:      keyof DCParams
-  labelKey: TKey
-  unit:     string
-  min:      number
-  max:      number
-  step:     number
-  flagKey?: keyof DCFlags
+  key:         keyof DCParams
+  labelKey:    TKey
+  unit:        string
+  min:         number
+  max:         number
+  step:        number
+  flagKey?:    keyof DCFlags
+  polarityKey?: keyof DCFlags
 }
 
 const MESH1_PARAMS: ParamConfig[] = [
-  { key: 'V1', labelKey: 'labelV1', unit: 'V', min: 0.1, max: 100,  step: 0.1, flagKey: 'V1' },
+  { key: 'V1', labelKey: 'labelV1', unit: 'V', min: 0.1, max: 100,  step: 0.1, flagKey: 'V1', polarityKey: 'polarityV1' },
   { key: 'R1', labelKey: 'labelR1', unit: 'Ω', min: 1,   max: 1000, step: 1,   flagKey: 'R1' },
   { key: 'R2', labelKey: 'labelR2', unit: 'Ω', min: 1,   max: 1000, step: 1,   flagKey: 'R2' },
 ]
 
 const MESH2_PARAMS: ParamConfig[] = [
-  { key: 'V3', labelKey: 'labelV3', unit: 'V', min: 0,   max: 100,  step: 0.1, flagKey: 'V3' },
+  { key: 'V2', labelKey: 'labelV2', unit: 'V', min: 0,   max: 100,  step: 0.1, flagKey: 'V2', polarityKey: 'polarityV2' },
   { key: 'R3', labelKey: 'labelR3', unit: 'Ω', min: 1,   max: 1000, step: 1,   flagKey: 'R3' },
   { key: 'R4', labelKey: 'labelR4', unit: 'Ω', min: 1,   max: 1000, step: 1,   flagKey: 'R4' },
 ]
 
 const MESH3_PARAMS: ParamConfig[] = [
-  { key: 'V2', labelKey: 'labelV2', unit: 'V', min: 0.1, max: 100,  step: 0.1, flagKey: 'V2' },
+  { key: 'V3', labelKey: 'labelV3', unit: 'V', min: 0.1, max: 100,  step: 0.1, flagKey: 'V3', polarityKey: 'polarityV3' },
   { key: 'R5', labelKey: 'labelR5', unit: 'Ω', min: 1,   max: 1000, step: 1,   flagKey: 'R5' },
 ]
 
@@ -35,16 +37,18 @@ function ParamRow({
   config,
   value,
   enabled,
+  polarity,
   lang,
   dispatch,
 }: {
   config:   ParamConfig
   value:    number
   enabled:  boolean
+  polarity: boolean
   lang:     'es' | 'en'
   dispatch: (a: { type: 'SET_PARAM'; key: keyof DCParams; value: number } | { type: 'SET_FLAG'; key: keyof DCFlags; value: boolean }) => void
 }) {
-  const { key, labelKey, unit, min, max, step, flagKey } = config
+  const { key, labelKey, unit, min, max, step, flagKey, polarityKey } = config
   const [inputText, setInputText] = useState(String(value))
   const [focused,   setFocused]   = useState(false)
 
@@ -70,6 +74,19 @@ function ParamRow({
               <span className={`block w-3 h-3 rounded-full bg-white shadow transition-transform mx-0.5 ${
                 enabled ? 'translate-x-4' : 'translate-x-0'
               }`} />
+            </button>
+          )}
+          {polarityKey && (
+            <button
+              onClick={() => dispatch({ type: 'SET_FLAG', key: polarityKey, value: !polarity })}
+              title="Flip polarity"
+              className={`flex items-center justify-center w-12 h-7 rounded border flex-shrink-0 transition-colors ${
+                polarity
+                  ? 'border-green-500 text-green-600 dark:text-green-400'
+                  : 'border-red-500 text-red-600 dark:text-red-400'
+              }`}
+            >
+              <BatteryIcon normal={polarity} />
             </button>
           )}
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
@@ -139,6 +156,7 @@ export function DCParameterPanel() {
             config={config}
             value={state.params[config.key]}
             enabled={config.flagKey ? flags[config.flagKey] : true}
+            polarity={config.polarityKey ? flags[config.polarityKey] : true}
             lang={lang}
             dispatch={dispatch}
           />
@@ -155,6 +173,7 @@ export function DCParameterPanel() {
             config={config}
             value={state.params[config.key]}
             enabled={config.flagKey ? flags[config.flagKey] : true}
+            polarity={config.polarityKey ? flags[config.polarityKey] : true}
             lang={lang}
             dispatch={dispatch}
           />
@@ -186,6 +205,7 @@ export function DCParameterPanel() {
                   config={config}
                   value={state.params[config.key]}
                   enabled={config.flagKey ? flags[config.flagKey] : true}
+                  polarity={config.polarityKey ? flags[config.polarityKey] : true}
                   lang={lang}
                   dispatch={dispatch}
                 />
