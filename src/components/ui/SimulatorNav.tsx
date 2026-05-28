@@ -6,10 +6,12 @@ import { t } from '@/lib/i18n'
 import { useRLC } from '@/store/rlc-store'
 import { useDC } from '@/store/dc-store'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useRCDC } from '@/store/rc-dc-store'
 
 const SIMULATORS = [
-  { href: '/',            labelKey: 'navRlcTab'        },
-  { href: '/dc',          labelKey: 'navDcTab'         },
+  { href: '/',            labelKey: 'navDcTab'         },
+  { href: '/rc-dc',       labelKey: 'navRcDcTab'       },
+  { href: '/ac',          labelKey: 'navRlcTab'        },
   { href: '/three-phase', labelKey: 'navThreePhaseTab' },
 ] as const
 
@@ -53,5 +55,10 @@ export function DCSimulatorNav() {
 
 export function ThreePhaseSimulatorNav() {
   const { state: { lang } } = useThreePhase()
+  return <SimulatorNav lang={lang} />
+}
+
+export function RCDCSimulatorNav() {
+  const { state: { lang } } = useRCDC()
   return <SimulatorNav lang={lang} />
 }

@@ -60,7 +60,7 @@ export interface RLCResult {
 }
 
 export interface DCFlags {
-  mesh3:      boolean  // when false: circuit reduces to 2-mesh (Mesh 1 + Mesh 2), V2/R5 disconnected
+  mesh3:      boolean  // when false: circuit reduces to 2-mesh (Mesh 1 + Mesh 2), V3/R5 disconnected
   V1:         boolean
   V2:         boolean
   V3:         boolean
@@ -148,4 +148,25 @@ export interface TimePoint {
   t:  number  // Time (ms)
   v:  number  // Voltage v(t) (V)
   i:  number  // Current i(t) (A)
+}
+
+export interface RCDCParams {
+  Vs: number  // Source voltage (V), 1–100
+  R:  number  // Resistance (Ω), 100–100000
+  C:  number  // Capacitance (µF), 1–10000
+}
+
+export interface RCDCResult {
+  tau:     number  // Time constant RC (s)
+  I0:      number  // Initial current Vs/R (A)
+  Vc_tau:  number  // Capacitor voltage at t=τ (V) ≈ 0.6321·Vs
+  t5tau:   number  // Time to 99.3% charge = 5τ (s)
+  E_final: number  // Energy stored at full charge ½·C·Vs² (J)
+}
+
+export interface RCDCPoint {
+  t:   number  // Time (s)
+  vc:  number  // Capacitor voltage (V)
+  vr:  number  // Resistor voltage (V)
+  i:   number  // Current (A)
 }

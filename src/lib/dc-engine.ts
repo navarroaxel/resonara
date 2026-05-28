@@ -30,6 +30,13 @@ export function calcDC(params: DCParams, hasMesh3 = true): DCResult {
   const N2 = a11 * (V2 * a33 - a23 * V3) - V1 * a21 * a33
   const N3 = V1 * (a21 * a32) + V2 * (-a11 * a32) + V3 * (a11 * a22 - a12 * a21)
 
+  if (Math.abs(D) < 1e-9) {
+    const nan = NaN
+    return { I1: nan, I2: nan, I3: nan, IR1: nan, IR2: nan, IR3: nan, IR4: nan, IR5: nan,
+             VR1: nan, VR2: nan, VR3: nan, VR4: nan, VR5: nan, VA: nan, VB: nan,
+             kvl1: nan, kvl2: nan, kvl3: nan, kclA: nan, kclB: nan, D }
+  }
+
   const I1 = N1 / D
   const I2 = N2 / D
   const I3 = N3 / D
@@ -61,7 +68,7 @@ export function calcDC(params: DCParams, hasMesh3 = true): DCResult {
 
 // 2-mesh reduction: Mesh 3 absent, R4 terminates Mesh 2 to GND
 // Loop 1: (R1+R2)·I1 − R2·I2 = V1
-// Loop 2: −R2·I1 + (R2+R3+R4)·I2 = V3
+// Loop 2: −R2·I1 + (R2+R3+R4)·I2 = V2
 function calcDC2Mesh(params: DCParams): DCResult {
   const { V1, V2, R1, R2, R3, R4 } = params
 

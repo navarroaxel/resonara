@@ -69,7 +69,7 @@ function ParamRow({
               className={`w-8 h-4 rounded-full transition-colors flex-shrink-0 ${
                 enabled ? 'bg-blue-500' : 'bg-neutral-300 dark:bg-neutral-600'
               }`}
-              aria-label={enabled ? 'Disable' : 'Enable'}
+              aria-label={`${t(lang, enabled ? 'toggleDisable' : 'toggleEnable')} ${t(lang, labelKey)}`}
             >
               <span className={`block w-3 h-3 rounded-full bg-white shadow transition-transform mx-0.5 ${
                 enabled ? 'translate-x-4' : 'translate-x-0'
@@ -190,7 +190,7 @@ export function DCParameterPanel() {
               className={`w-8 h-4 rounded-full transition-colors flex-shrink-0 ${
                 flags.mesh3 ? 'bg-blue-500' : 'bg-neutral-300 dark:bg-neutral-600'
               }`}
-              aria-label={flags.mesh3 ? 'Disable Mesh 3' : 'Enable Mesh 3'}
+              aria-label={`${t(lang, flags.mesh3 ? 'toggleDisable' : 'toggleEnable')} ${t(lang, 'meshSection3')}`}
             >
               <span className={`block w-3 h-3 rounded-full bg-white shadow transition-transform mx-0.5 ${
                 flags.mesh3 ? 'translate-x-4' : 'translate-x-0'
