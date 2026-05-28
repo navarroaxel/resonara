@@ -11,10 +11,10 @@ import { WaveformEquations }  from '@/components/simulator/WaveformEquations'
 import type { ActiveTab }     from '@/lib/types'
 
 const BASE_TABS: { value: ActiveTab; labelKey: 'freqResponseTab' | 'phasorTab' | 'timeDomainTab' | 'powerTab' | 'spectrumTab' }[] = [
-  { value: 'bode',   labelKey: 'freqResponseTab' },
   { value: 'phasor', labelKey: 'phasorTab'        },
   { value: 'time',   labelKey: 'timeDomainTab'    },
   { value: 'power',  labelKey: 'powerTab'         },
+  { value: 'bode',   labelKey: 'freqResponseTab' },
 ]
 
 export function ChartTabs() {
