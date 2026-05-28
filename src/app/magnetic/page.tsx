@@ -2,6 +2,7 @@ import { MagneticSchematic }      from '@/components/magnetic/MagneticSchematic'
 import { MagneticParameterPanel } from '@/components/magnetic/MagneticParameterPanel'
 import { MagneticMetricsGrid }    from '@/components/magnetic/MagneticMetricsGrid'
 import { MagneticChartTabs }      from '@/components/magnetic/MagneticChartTabs'
+import { MagneticEquationsCard }  from '@/components/magnetic/MagneticEquationsCard'
 import { MagneticHeaderSubtitle } from '@/components/magnetic/MagneticHeaderSubtitle'
 import { MagneticGitHubLink }     from '@/components/magnetic/MagneticGitHubLink'
 import { MagneticLangToggle }     from '@/components/magnetic/MagneticLangToggle'
@@ -40,6 +41,7 @@ export default function MagneticPage() {
           <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
             <MagneticMetricsGrid />
           </div>
+          <MagneticEquationsCard />
           <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
             <MagneticChartTabs />
           </div>
