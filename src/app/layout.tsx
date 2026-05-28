@@ -3,8 +3,8 @@ import { DCProvider } from '@/store/dc-store'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Resonara — Simulador RLC en CA',
-  description: 'Simulador interactivo de circuitos RLC en corriente alterna.',
+  title: 'Resonara',
+  description: 'Simuladores interactivos de circuitos eléctricos.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

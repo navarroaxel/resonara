@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { DCSchematic }      from '@/components/dc/DCSchematic'
 import { DCParameterPanel } from '@/components/dc/DCParameterPanel'
 import { DCMetricsGrid }    from '@/components/dc/DCMetricsGrid'
@@ -10,6 +11,11 @@ import { DCHeaderSubtitle } from '@/components/dc/DCHeaderSubtitle'
 import { DCGitHubLink }     from '@/components/dc/DCGitHubLink'
 import { DCFooter }         from '@/components/dc/DCFooter'
 import { DCSimulatorNav }       from '@/components/ui/SimulatorNav'
+
+export const metadata: Metadata = {
+  title: 'Resonara — Kirchhoff CC',
+  description: 'Simulador interactivo de circuitos resistivos con KVL, KCL y análisis de mallas.',
+}
 
 export default function DCPage() {
   return (
