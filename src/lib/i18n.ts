@@ -148,6 +148,9 @@ const T = {
     rcDcLegendVr:                 'V_R(t) — Resistencia',
     rcDcLegendI:                  'I(t) — Corriente',
     rcDcSchematicAriaLabel:       'Esquemático del circuito RC en corriente continua',
+    rcDcEquationsTitle:           'Ecuaciones del circuito',
+    rcDcGeneralForm:              'Forma general',
+    rcDcSubstituted:              'Con los valores actuales',
 
     // Three-phase RST simulator
     navThreePhaseLink:            'Trifásico RST',
@@ -315,6 +318,9 @@ const T = {
     rcDcLegendVr:                 'V_R(t) — Resistor',
     rcDcLegendI:                  'I(t) — Current',
     rcDcSchematicAriaLabel:       'RC circuit schematic in direct current',
+    rcDcEquationsTitle:           'Circuit Equations',
+    rcDcGeneralForm:              'General form',
+    rcDcSubstituted:              'With current values',
 
     // Three-phase RST simulator
     navThreePhaseLink:            'Three-Phase RST',

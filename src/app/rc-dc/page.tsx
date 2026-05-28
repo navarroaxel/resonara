@@ -2,6 +2,7 @@ import { RCDCSchematic }       from '@/components/rc-dc/RCDCSchematic'
 import { RCDCParameterPanel }  from '@/components/rc-dc/RCDCParameterPanel'
 import { RCDCMetricsGrid }     from '@/components/rc-dc/RCDCMetricsGrid'
 import { RCDCChargingChart }   from '@/components/rc-dc/RCDCChargingChart'
+import { RCDCEquationsCard }   from '@/components/rc-dc/RCDCEquationsCard'
 import { RCDCThemeToggle }     from '@/components/rc-dc/RCDCThemeToggle'
 import { RCDCLangToggle }      from '@/components/rc-dc/RCDCLangToggle'
 import { RCDCHeaderSubtitle }  from '@/components/rc-dc/RCDCHeaderSubtitle'
@@ -40,6 +41,7 @@ export default function RCDCPage() {
             <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
               <RCDCMetricsGrid />
             </div>
+            <RCDCEquationsCard />
             <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
               <RCDCChargingChart />
             </div>
