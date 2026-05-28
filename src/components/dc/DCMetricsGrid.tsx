@@ -25,7 +25,7 @@ export function DCMetricsGrid() {
 
   const PR1 = IR1 * IR1 * R1
   const PR3 = IR3 * IR3 * R3
-  const PR4 = IR4 * IR4 * R5
+  const PR4 = IR4 * IR4 * R4
   const PR5 = IR5 * IR5 * R5
 
   // Effective voltages (after enable + polarity flags) — same as applyFlags in store
