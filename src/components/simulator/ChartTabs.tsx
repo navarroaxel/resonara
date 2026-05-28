@@ -7,6 +7,7 @@ import { PhasorDiagram }      from '@/components/charts/PhasorDiagram'
 import { TimeDomainChart }    from '@/components/charts/TimeDomainChart'
 import { PowerChart }         from '@/components/charts/PowerChart'
 import { HarmonicSpectrum }   from '@/components/charts/HarmonicSpectrum'
+import { WaveformEquations }  from '@/components/simulator/WaveformEquations'
 import type { ActiveTab }     from '@/lib/types'
 
 const BASE_TABS: { value: ActiveTab; labelKey: 'freqResponseTab' | 'phasorTab' | 'timeDomainTab' | 'powerTab' | 'spectrumTab' }[] = [
@@ -43,7 +44,12 @@ export function ChartTabs() {
       </div>
       {activeTab === 'bode'     && <BodeChart />}
       {activeTab === 'phasor'   && <PhasorDiagram />}
-      {activeTab === 'time'     && <TimeDomainChart />}
+      {activeTab === 'time'     && (
+        <>
+          {!polyMode && <WaveformEquations />}
+          <TimeDomainChart />
+        </>
+      )}
       {activeTab === 'power'    && <PowerChart />}
       {activeTab === 'spectrum' && <HarmonicSpectrum />}
     </div>

@@ -3,13 +3,6 @@ import { useRLC } from '@/store/rlc-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
-function phaseStr(phi_deg: number): string {
-  const absRad = Math.abs(phi_deg) * Math.PI / 180
-  if (absRad < 0.001) return ''
-  const sign = phi_deg >= 0 ? ' − ' : ' + '
-  return `${sign}${fmt(absRad, 3)}`
-}
-
 export function RLCEquationsCard() {
   const { state: { params, results, circuitType, flags, lang, polyMode } } = useRLC()
 
@@ -29,9 +22,6 @@ export function RLCEquationsCard() {
   const G  = 1 / R
   const BL = flags.hasL && XL > 0 ? 1 / XL : 0
   const BC = flags.hasC && XC > 0 ? 1 / XC : 0
-
-  const Vpeak = Vs * Math.SQRT2
-  const Ipeak = I  * Math.SQRT2
 
   return (
     <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
@@ -199,30 +189,6 @@ export function RLCEquationsCard() {
           {` = ${fmt(S, 2)} VA`}
         </div>
         <div>{`fp = cos(${fmt(phi, 1)}°) = ${fmt(fp, 3)}`}</div>
-      </div>
-
-      {/* ── Waveforms ── */}
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
-        {t(lang, 'waveformEqsTitle')}
-      </p>
-      <div className="font-mono text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300 leading-relaxed">
-        <div>
-          <span className="text-blue-500 font-semibold">u(t)</span>
-          {` = ${fmt(Vpeak, 2)} · sin(${fmtW}·t)`}
-          <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
-        </div>
-        <div>
-          <span className="text-teal-500 font-semibold">i(t)</span>
-          {` = ${fmt(Ipeak, 3)} · sin(${fmtW}·t${phaseStr(phi)})`}
-          <span className="text-neutral-400 dark:text-neutral-500 ml-1">A</span>
-        </div>
-        {isSeries && (
-          <div>
-            <span className="text-orange-500 font-semibold">v&#8336;(t)</span>
-            {` = ${fmt(I * R * Math.SQRT2, 2)} · sin(${fmtW}·t${phaseStr(phi)})`}
-            <span className="text-neutral-400 dark:text-neutral-500 ml-1">V</span>
-          </div>
-        )}
       </div>
     </div>
   )
