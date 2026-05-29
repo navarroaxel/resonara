@@ -26,7 +26,7 @@ function phasorLabel(cd: ComplexDisplay): string {
 
 export function KirchhoffACMetricsGrid() {
   const { state: { results, flags, lang } } = useKirchhoffAC()
-  const { I1, I2, I3, Zm_mag, Zc_mag, P, Q, S, fp, C_req, P_m, Q_m, S_m } = results
+  const { I1, I2, I3, Zm_re, Zm_im, Zc_mag, P, Q, S, fp, C_req, P_m, Q_m, S_m, eta_m, P_R, P_R1 } = results
 
   return (
     <div className="space-y-2">
@@ -56,7 +56,7 @@ export function KirchhoffACMetricsGrid() {
           value={fmt(fp, 4)}
           color={fp >= 0.95 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}
         />
-        <MetricCard label={t(lang, 'kacZm')} value={fmt(Zm_mag, 2)} unit="Ω" />
+        <MetricCard label={t(lang, 'kacZm')} value={`${fmt(Zm_re, 2)} + j${fmt(Zm_im, 2)}`} unit="Ω" />
         <MetricCard
           label={t(lang, 'kacZc')}
           value={flags.mesh3 ? fmt(Zc_mag, 2) : '—'}
@@ -74,6 +74,13 @@ export function KirchhoffACMetricsGrid() {
         <MetricCard label={t(lang, 'kacMotorActivePower')}   value={fmt(P_m, 2)} unit="W"   color="text-green-600 dark:text-green-400" />
         <MetricCard label={t(lang, 'kacMotorReactivePower')} value={fmt(Q_m, 2)} unit="VAR" color="text-orange-600 dark:text-orange-400" />
         <MetricCard label={t(lang, 'kacMotorApparentPower')} value={fmt(S_m, 2)} unit="VA"  />
+      </div>
+
+      {/* Resistance power + motor efficiency */}
+      <div className="grid grid-cols-3 gap-2">
+        <MetricCard label={t(lang, 'kacLoadPower')}      value={fmt(P_R,   2)} unit="W" color="text-green-600 dark:text-green-400" />
+        <MetricCard label={t(lang, 'kacLinePower')}      value={fmt(P_R1,  2)} unit="W" />
+        <MetricCard label={t(lang, 'kacMotorEfficiency')} value={fmt(eta_m, 4)} color={eta_m >= 0.9 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'} />
       </div>
 
       {/* C_req highlight row */}

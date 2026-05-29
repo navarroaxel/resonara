@@ -90,7 +90,7 @@ export function KirchhoffACTimeDomain() {
         const t_s = (s / SAMPLES) * 2 * T
         const val  = ampPeak * Math.sin(omega * t_s + phiRad)
         const y    = useV ? toYv(val) : toYi(val)
-        s === 0 ? ctx.moveTo(toX(s), y) : ctx.lineTo(toX(s), y)
+        if (s === 0) ctx.moveTo(toX(s), y); else ctx.lineTo(toX(s), y)
       }
       ctx.stroke(); ctx.setLineDash([])
     }

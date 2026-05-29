@@ -252,6 +252,9 @@ export interface KirchhoffACResult {
   P_m:   number  // Motor active power |IZm|²·Rm (W)
   Q_m:   number  // Motor reactive power |IZm|²·XLm (VAR)
   S_m:   number  // Motor apparent power |IZm|·|VZm| (VA)
+  eta_m: number  // Motor efficiency Pm/Sm = Rm/|Zm| (0–1)
+  P_R:   number  // Load resistance active power |IR|²·R (W)
+  P_R1:  number  // Line resistance active power |I1|²·R1 (W)
   // KVL complex residuals (both components ≈ 0)
   kvl1_re: number; kvl1_im: number
   kvl2_re: number; kvl2_im: number

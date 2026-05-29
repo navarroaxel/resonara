@@ -33,7 +33,7 @@ function nanResult(): KirchhoffACResult {
     Zm_re: NaN, Zm_im: NaN, Zm_mag: NaN,
     Zc_im: NaN, Zc_mag: NaN,
     P: NaN, Q: NaN, S: NaN, fp: NaN,
-    C_req: NaN, P_m: NaN, Q_m: NaN, S_m: NaN,
+    C_req: NaN, P_m: NaN, Q_m: NaN, S_m: NaN, eta_m: NaN, P_R: NaN, P_R1: NaN,
     kvl1_re: NaN, kvl1_im: NaN,
     kvl2_re: NaN, kvl2_im: NaN,
     kvl3_re: NaN, kvl3_im: NaN,
@@ -80,8 +80,9 @@ export function calcKirchhoffAC(
   const Zc_im  = Zc.im
   const Zc_mag = cabs(Zc)
 
-  // ── Always solve 2-mesh for C_req and reference power ──────────────────────
-  const { I1: I1_2m, I2: I2_2m, C_req } = solve2Mesh(Vs, R1, R, Zm, omega)
+  // ── Always solve 2-mesh for reference currents; C_req via 3-mesh bisection ──
+  const { I1: I1_2m, I2: I2_2m } = solve2Mesh(Vs, R1, R, Zm)
+  const C_req = findCReq(Vs, omega, R1, R, Zm)
 
   // ── Solve 2 or 3-mesh system ───────────────────────────────────────────────
   if (!flags.mesh3) {
@@ -107,11 +108,14 @@ export function calcKirchhoffAC(
     const S   = Math.hypot(P, Q)
     const fp  = S > 1e-12 ? P / S : 0
 
-    // Motor power
+    // Motor power and efficiency
     const IZm_mag2 = IZm.re * IZm.re + IZm.im * IZm.im
-    const P_m = IZm_mag2 * Zm_re
-    const Q_m = IZm_mag2 * Zm_im
-    const S_m = IZm_mag2 * Zm_mag
+    const P_m  = IZm_mag2 * Zm_re
+    const Q_m  = IZm_mag2 * Zm_im
+    const S_m  = IZm_mag2 * Zm_mag
+    const eta_m = S_m > 1e-12 ? P_m / S_m : 0
+    const P_R  = (IR.re * IR.re + IR.im * IR.im) * R
+    const P_R1 = (I1.re * I1.re + I1.im * I1.im) * R1
 
     // kvl1: Vs − Z11·I1 − Z12·I2 = Vs − (R1+R)·I1 + R·I2
     const kvl1 = csub(c(Vs, 0), cadd(cscale(R1 + R, I1), cscale(-R, I2)))
@@ -123,7 +127,7 @@ export function calcKirchhoffAC(
       IR: cd(IR), IZm: cd(IZm), IZc: cd(IZc),
       VR1: cd(VR1), VR: cd(VR), VZm: cd(VZm), VZc: cd(VZc),
       Zm_re, Zm_im, Zm_mag, Zc_im, Zc_mag,
-      P, Q, S, fp, C_req, P_m, Q_m, S_m,
+      P, Q, S, fp, C_req, P_m, Q_m, S_m, eta_m, P_R, P_R1,
       kvl1_re: kvl1.re, kvl1_im: kvl1.im,
       kvl2_re: kvl2.re, kvl2_im: kvl2.im,
       kvl3_re: 0,        kvl3_im: 0,
@@ -173,11 +177,14 @@ export function calcKirchhoffAC(
   const S   = Math.hypot(P, Q)
   const fp  = S > 1e-12 ? P / S : 0
 
-  // Motor power
+  // Motor power and efficiency
   const IZm_mag2 = IZm.re * IZm.re + IZm.im * IZm.im
-  const P_m = IZm_mag2 * Zm_re
-  const Q_m = IZm_mag2 * Zm_im
-  const S_m = IZm_mag2 * Zm_mag
+  const P_m  = IZm_mag2 * Zm_re
+  const Q_m  = IZm_mag2 * Zm_im
+  const S_m  = IZm_mag2 * Zm_mag
+  const eta_m = S_m > 1e-12 ? P_m / S_m : 0
+  const P_R  = (IR.re * IR.re + IR.im * IR.im) * R
+  const P_R1 = (I1.re * I1.re + I1.im * I1.im) * R1
 
   // KVL residuals
   // Loop 1: Vs − Z11·I1 − Z12·I2 = 0
@@ -192,7 +199,7 @@ export function calcKirchhoffAC(
     IR: cd(IR), IZm: cd(IZm), IZc: cd(IZc),
     VR1: cd(VR1), VR: cd(VR), VZm: cd(VZm), VZc: cd(VZc),
     Zm_re, Zm_im, Zm_mag, Zc_im, Zc_mag,
-    P, Q, S, fp, C_req, P_m, Q_m, S_m,
+    P, Q, S, fp, C_req, P_m, Q_m, S_m, eta_m, P_R, P_R1,
     kvl1_re: kvl1.re, kvl1_im: kvl1.im,
     kvl2_re: kvl2.re, kvl2_im: kvl2.im,
     kvl3_re: kvl3.re, kvl3_im: kvl3.im,
@@ -200,45 +207,63 @@ export function calcKirchhoffAC(
   }
 }
 
-// ── 2-mesh helper (also used for C_req) ──────────────────────────────────────
-function solve2Mesh(Vs: number, R1: number, R: number, Zm: C, omega: number) {
+// ── 2-mesh helper ────────────────────────────────────────────────────────────
+function solve2Mesh(Vs: number, R1: number, R: number, Zm: C) {
   const Z11 = c(R1 + R, 0)
   const Z12 = c(-R, 0)
   const Z22 = cadd(c(R, 0), Zm)
 
-  // D2 = Z11·Z22 − Z12²
   const D2 = csub(cmul(Z11, Z22), cmul(Z12, Z12))
+  if (cabs(D2) < 1e-12) return { I1: c(NaN, NaN), I2: c(NaN, NaN) }
 
-  if (cabs(D2) < 1e-12) {
-    return { I1: c(NaN, NaN), I2: c(NaN, NaN), C_req: NaN }
-  }
-
-  // b = [Vs, 0], so:
-  // I1 = Vs·Z22 / D2
-  // I2 = −Vs·Z12 / D2 = Vs·R / D2
   const I1 = cdiv(cscale(Vs, Z22), D2)
   const I2 = cdiv(c(Vs * R, 0), D2)
+  return { I1, I2 }
+}
 
-  // Power at source
-  const S_c = cmul(c(Vs, 0), cconj(I1))
-  const P   = S_c.re
-  const Q   = S_c.im   // positive = inductive (lagging)
+// ── Numerical C_req: bisect on full 3-mesh fp = 0.95 ─────────────────────────
+// The fp(C) curve rises from fp_2mesh → 1.0 at C_unity, then falls back.
+// The target crossing (fp = 0.95, lagging) is always in (0, C_unity), so we
+// use C_unity as the exact upper bound to avoid hitting the recovery crossing.
+function findCReq(Vs: number, omega: number, R1: number, R: number, Zm: C): number {
+  if (omega < 1e-12) return NaN
 
-  // Required C for cos φ = 0.95
-  const phi_target = Math.acos(0.95)
-  const Q_target   = P * Math.tan(phi_target)
-  const dQ         = Q - Q_target
-
-  let C_req: number
-  if (!Number.isFinite(P) || P <= 1e-12) {
-    C_req = NaN
-  } else if (dQ <= 0) {
-    C_req = 0
-  } else if (omega < 1e-12) {
-    C_req = NaN
-  } else {
-    C_req = (dQ / (omega * Vs * Vs)) * 1e6  // convert F → µF
+  function fp3At(C_uF: number): number {
+    const Zc  = c(0, -1 / (omega * C_uF * 1e-6))
+    const Z11 = c(R1 + R, 0), Z12 = c(-R, 0)
+    const Z22 = cadd(c(R, 0), Zm)
+    const Z23 = cscale(-1, Zm)
+    const Z33 = cadd(Zm, Zc)
+    const M22 = csub(cmul(Z22, Z33), cmul(Z23, Z23))
+    const D   = csub(cmul(Z11, M22), cmul(cmul(Z12, Z12), Z33))
+    if (cabs(D) < 1e-12) return 0
+    const I1  = cdiv(cscale(Vs, M22), D)
+    const S_c = cmul(c(Vs, 0), cconj(I1))
+    const P = S_c.re, S = Math.hypot(P, S_c.im)
+    return S > 1e-12 ? P / S : 0
   }
 
-  return { I1, I2, C_req }
+  // If 2-mesh already meets target, no cap needed
+  const { I1: I1_2m } = solve2Mesh(Vs, R1, R, Zm)
+  if (!Number.isFinite(I1_2m.re)) return NaN
+  const S0 = cmul(c(Vs, 0), cconj(I1_2m))
+  const fp0_mag = Math.hypot(S0.re, S0.im)
+  if (fp0_mag > 1e-12 && S0.re / fp0_mag >= 0.95) return 0
+
+  // C_unity = Im(Y_Zm)/ω = XLm/(|Zm|²·ω) — exact unity-pf capacitance.
+  // fp is monotone increasing in [0, C_unity], so the first fp=0.95 crossing
+  // is always in that interval. Searching beyond it risks the recovery branch.
+  const Zm_mag2 = Zm.re * Zm.re + Zm.im * Zm.im
+  if (Zm_mag2 < 1e-12 || Zm.im < 1e-9) return NaN
+  const C_unity_uF = (Zm.im / Zm_mag2 / omega) * 1e6
+  if (fp3At(C_unity_uF) < 0.95) return NaN  // unreachable with this topology
+
+  // Bisect in [lo, C_unity_uF]
+  let lo = 1e-3, hi = C_unity_uF
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2
+    if (fp3At(mid) < 0.95) lo = mid
+    else hi = mid
+  }
+  return (lo + hi) / 2
 }

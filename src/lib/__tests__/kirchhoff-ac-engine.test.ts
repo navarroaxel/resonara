@@ -23,7 +23,7 @@ describe('calcKirchhoffAC', () => {
   })
 
   test('degenerate circuit (R1=0, R=0, Rm=0, Lm=0) returns NaN', () => {
-    const r = calcKirchhoffAC({ ...base, R1: 0, R: 0.001, Rm: 0, Lm: 0 }, { mesh3: false })
+    calcKirchhoffAC({ ...base, R1: 0, R: 0.001, Rm: 0, Lm: 0 }, { mesh3: false })
     // Near-degenerate: R effectively 0 when R1 and Rm both 0 and R very small
     // Force true degeneracy: R=0, R1=0, Rm=0
     const r2 = calcKirchhoffAC({ ...base, R1: 0, R: 0, Rm: 0, Lm: 0 }, { mesh3: false })

@@ -123,7 +123,7 @@ function inductorV(ctx: CanvasRenderingContext2D, cx: number, cy: number, hh: nu
   for (let i = 0; i < bumps; i++) {
     const bCY = startY + bumpR + i * bumpR * 2
     ctx.beginPath()
-    ctx.arc(cx, bCY, bumpR, Math.PI, 0)
+    ctx.arc(cx, bCY, bumpR, -Math.PI / 2, Math.PI / 2)
     ctx.stroke()
   }
   ctx.fillStyle = c; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'left'
@@ -198,7 +198,7 @@ export function KirchhoffACSchematic() {
     const iC = isDark ? '#60A5FA' : '#2563EB'   // current arrows
 
     const { Vs, f, R1, R, Rm, Lm, C } = params
-    const { I1, I2, I3, IR, IZm, Zm_mag } = results
+    const { I1, I2, I3, IR, IZm } = results
     const { mesh3 } = flags
 
     // ── Bottom rail ──────────────────────────────────────────────────────────
@@ -231,8 +231,12 @@ export function KirchhoffACSchematic() {
     const brHH = (BOT - TOP) / 2
     resistorV(ctx, NODE_A, SRC_CY, brHH, rC, mC, `R`, `${fmt(R, 0)}Ω`)
 
-    // ── Second shared branch: Motor Zm at Node B (inductive symbol) ──────────
-    inductorV(ctx, NODE_B, SRC_CY, brHH, rC, mC, `Zm`, `${fmt(Zm_mag, 1)}Ω`)
+    // ── Second shared branch: Motor Zm at Node B — Rm (top) + Lm (bottom) ───
+    const motorHH  = brHH / 2
+    const rmCY     = (TOP + SRC_CY) / 2   // 122.5 — centre of upper half
+    const lmCY     = (SRC_CY + BOT) / 2   // 227.5 — centre of lower half
+    resistorV(ctx, NODE_B, rmCY, motorHH, rC, mC, `Rm`, `${fmt(Rm, 1)}Ω`)
+    inductorV(ctx, NODE_B,  lmCY, motorHH, rC, mC, `Lm`, `${fmt(Lm, 0)}mH`)
 
     // ── Third branch: Capacitor Zc at Node C ────────────────────────────────
     capacitorV(ctx, NODE_C, SRC_CY, brHH, mesh3 ? oC : mC, mC, `C`, `${fmt(C, 1)}µF`)
