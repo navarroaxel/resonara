@@ -8,13 +8,15 @@ import { useDC } from '@/store/dc-store'
 import { useThreePhase } from '@/store/three-phase-store'
 import { useRCDC } from '@/store/rc-dc-store'
 import { useMagnetic } from '@/store/magnetic-store'
+import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
 
 const SIMULATORS = [
-  { href: '/',            labelKey: 'navDcTab'         },
-  { href: '/rc-dc',       labelKey: 'navRcDcTab'       },
-  { href: '/ac',          labelKey: 'navRlcTab'        },
-  { href: '/three-phase', labelKey: 'navThreePhaseTab' },
-  { href: '/magnetic',    labelKey: 'navMagneticTab'   },
+  { href: '/',             labelKey: 'navDcTab'           },
+  { href: '/rc-dc',        labelKey: 'navRcDcTab'         },
+  { href: '/ac',           labelKey: 'navRlcTab'          },
+  { href: '/kirchhoff-ac', labelKey: 'navKirchhoffACTab'  },
+  { href: '/three-phase',  labelKey: 'navThreePhaseTab'   },
+  { href: '/magnetic',     labelKey: 'navMagneticTab'     },
 ] as const
 
 function SimulatorNav({ lang }: { lang: Lang }) {
@@ -67,5 +69,10 @@ export function RCDCSimulatorNav() {
 
 export function MagneticSimulatorNav() {
   const { state: { lang } } = useMagnetic()
+  return <SimulatorNav lang={lang} />
+}
+
+export function KirchhoffACSimulatorNav() {
+  const { state: { lang } } = useKirchhoffAC()
   return <SimulatorNav lang={lang} />
 }

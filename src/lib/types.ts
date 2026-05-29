@@ -202,3 +202,62 @@ export interface MagneticResult {
   S1:     number  // Primary apparent power (VA)
   eta:    number  // Efficiency P2/P1 (0–1); 0 when k=0; NaN when P1=0
 }
+
+// ── AC Kirchhoff mesh simulator ──────────────────────────────────────────────
+
+export type KirchhoffACActiveTab = 'phasor' | 'time' | 'power' | 'kvl'
+
+export interface KirchhoffACParams {
+  Vs: number  // Source RMS voltage (V), 1–500
+  f:  number  // Frequency (Hz), 1–500
+  R1: number  // Line resistance (Ω), 0–200
+  R:  number  // Resistive load (Ω), 1–1000
+  Rm: number  // Motor winding resistance (Ω), 1–500
+  Lm: number  // Motor inductance (mH), 1–2000
+  C:  number  // PFC capacitor (µF), 0.1–5000
+}
+
+export interface KirchhoffACFlags {
+  mesh3: boolean  // when false: capacitor branch is open; reduces to 2-mesh
+}
+
+export interface ComplexDisplay {
+  mag: number  // magnitude |z|
+  ang: number  // angle in degrees (arg)
+  re:  number
+  im:  number
+}
+
+export interface KirchhoffACResult {
+  I1:  ComplexDisplay  // Mesh 1 current
+  I2:  ComplexDisplay  // Mesh 2 current
+  I3:  ComplexDisplay  // Mesh 3 current (zero when mesh3=false)
+  IR:  ComplexDisplay  // Branch current through R (shared M1–M2) = I1 − I2
+  IZm: ComplexDisplay  // Branch current through Zm (shared M2–M3) = I2 − I3
+  IZc: ComplexDisplay  // Branch current through Zc (M3 only) = I3
+  VR1: ComplexDisplay  // Voltage across R1 = I1·R1
+  VR:  ComplexDisplay  // Voltage across R = IR·R
+  VZm: ComplexDisplay  // Voltage across Zm = IZm·Zm
+  VZc: ComplexDisplay  // Voltage across Zc = IZc·Zc
+  Zm_re:  number  // Re(Zm) = Rm
+  Zm_im:  number  // Im(Zm) = ω·Lm
+  Zm_mag: number  // |Zm|
+  Zc_im:  number  // Im(Zc) = −1/(ω·C)
+  Zc_mag: number  // |Zc| (Infinity when mesh3=false)
+  P:     number  // Active power at source (W)
+  Q:     number  // Reactive power at source (VAR, positive = inductive)
+  S:     number  // Apparent power at source (VA)
+  fp:    number  // Power factor cos φ = P/S
+  C_req: number  // Required C (µF) for cos φ = 0.95, via 3-mesh numerical bisection
+  P_m:   number  // Motor active power |IZm|²·Rm (W)
+  Q_m:   number  // Motor reactive power |IZm|²·XLm (VAR)
+  S_m:   number  // Motor apparent power |IZm|·|VZm| (VA)
+  eta_m: number  // Motor efficiency Pm/Sm = Rm/|Zm| (0–1)
+  P_R:   number  // Load resistance active power |IR|²·R (W)
+  P_R1:  number  // Line resistance active power |I1|²·R1 (W)
+  // KVL complex residuals (both components ≈ 0)
+  kvl1_re: number; kvl1_im: number
+  kvl2_re: number; kvl2_im: number
+  kvl3_re: number; kvl3_im: number
+  D_mag: number  // |det| of impedance matrix (0 = degenerate)
+}
