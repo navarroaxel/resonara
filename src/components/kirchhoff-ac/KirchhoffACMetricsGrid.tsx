@@ -26,7 +26,7 @@ function phasorLabel(cd: ComplexDisplay): string {
 
 export function KirchhoffACMetricsGrid() {
   const { state: { results, flags, lang } } = useKirchhoffAC()
-  const { I1, I2, I3, Zm_re, Zm_im, Zc_mag, P, Q, S, fp, C_req, P_m, Q_m, S_m, eta_m, P_R, P_R1 } = results
+  const { I1, I2, I3, Zm_re, Zm_im, Zc_mag, P, Q, S, fp, P_m, Q_m, S_m, eta_m, P_R, P_R1 } = results
 
   return (
     <div className="space-y-2">
@@ -81,16 +81,6 @@ export function KirchhoffACMetricsGrid() {
         <MetricCard label={t(lang, 'kacLoadPower')}      value={fmt(P_R,   2)} unit="W" color="text-green-600 dark:text-green-400" />
         <MetricCard label={t(lang, 'kacLinePower')}      value={fmt(P_R1,  2)} unit="W" />
         <MetricCard label={t(lang, 'kacMotorEfficiency')} value={fmt(eta_m, 4)} color={eta_m >= 0.9 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'} />
-      </div>
-
-      {/* C_req highlight row */}
-      <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center justify-between">
-        <span className="text-xs text-amber-700 dark:text-amber-400">
-          {t(lang, 'kacCReq')}
-        </span>
-        <span className="text-base font-semibold tabular-nums text-amber-800 dark:text-amber-300">
-          {fmt(C_req, 2)} <span className="text-xs font-normal">µF</span>
-        </span>
       </div>
     </div>
   )

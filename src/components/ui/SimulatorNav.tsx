@@ -11,12 +11,12 @@ import { useMagnetic } from '@/store/magnetic-store'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
 
 const SIMULATORS = [
-  { href: '/',            labelKey: 'navDcTab'         },
-  { href: '/rc-dc',       labelKey: 'navRcDcTab'       },
-  { href: '/ac',          labelKey: 'navRlcTab'        },
-  { href: '/three-phase', labelKey: 'navThreePhaseTab' },
-  { href: '/magnetic',      labelKey: 'navMagneticTab'      },
-  { href: '/kirchhoff-ac', labelKey: 'navKirchhoffACTab'   },
+  { href: '/',             labelKey: 'navDcTab'           },
+  { href: '/rc-dc',        labelKey: 'navRcDcTab'         },
+  { href: '/ac',           labelKey: 'navRlcTab'          },
+  { href: '/kirchhoff-ac', labelKey: 'navKirchhoffACTab'  },
+  { href: '/three-phase',  labelKey: 'navThreePhaseTab'   },
+  { href: '/magnetic',     labelKey: 'navMagneticTab'     },
 ] as const
 
 function SimulatorNav({ lang }: { lang: Lang }) {
