@@ -248,7 +248,7 @@ export interface KirchhoffACResult {
   Q:     number  // Reactive power at source (VAR, positive = inductive)
   S:     number  // Apparent power at source (VA)
   fp:    number  // Power factor cos φ = P/S
-  C_req: number  // Required C (µF) for cos φ = 0.95, from 2-mesh formula
+  C_req: number  // Required C (µF) for cos φ = 0.95, via 3-mesh numerical bisection
   P_m:   number  // Motor active power |IZm|²·Rm (W)
   Q_m:   number  // Motor reactive power |IZm|²·XLm (VAR)
   S_m:   number  // Motor apparent power |IZm|·|VZm| (VA)

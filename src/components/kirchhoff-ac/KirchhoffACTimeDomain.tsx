@@ -16,6 +16,7 @@ export function KirchhoffACTimeDomain() {
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
+    const c = ctx
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
     ctx.clearRect(0, 0, W, H)
@@ -84,15 +85,15 @@ export function KirchhoffACTimeDomain() {
     function plotWave(ampPeak: number, phiDeg: number, color: string, dash: number[], useV = false) {
       if (ampPeak < 1e-9) return
       const phiRad = phiDeg * Math.PI / 180
-      ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.setLineDash(dash)
-      ctx.beginPath()
+      c.strokeStyle = color; c.lineWidth = 2; c.setLineDash(dash)
+      c.beginPath()
       for (let s = 0; s <= SAMPLES; s++) {
         const t_s = (s / SAMPLES) * 2 * T
         const val  = ampPeak * Math.sin(omega * t_s + phiRad)
         const y    = useV ? toYv(val) : toYi(val)
-        if (s === 0) ctx.moveTo(toX(s), y); else ctx.lineTo(toX(s), y)
+        if (s === 0) c.moveTo(toX(s), y); else c.lineTo(toX(s), y)
       }
-      ctx.stroke(); ctx.setLineDash([])
+      c.stroke(); c.setLineDash([])
     }
 
     const cVs  = isDark ? '#60a5fa' : '#2563eb'    // blue  — vs(t)

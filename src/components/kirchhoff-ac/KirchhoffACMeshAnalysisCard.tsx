@@ -17,7 +17,7 @@ function fmtPhasor(mag: number, ang: number, d = 3): string {
 export function KirchhoffACMeshAnalysisCard() {
   const { state: { params, flags, results, lang } } = useKirchhoffAC()
   const { Vs, R1, R } = params
-  const { I1, I2, I3, Zm_re, Zm_im, Zc_im, D_mag } = results
+  const { I1, I2, I3, Zm_re, Zm_im, Zc_im, D_mag, C_req } = results
 
   const Z11_re = R1 + R;        const Z11_im = 0
   const Z12_re = -R;             const Z12_im = 0
@@ -101,6 +101,22 @@ export function KirchhoffACMeshAnalysisCard() {
             <span className="text-neutral-700 dark:text-neutral-300"> = {fmtPhasor(I3.mag, I3.ang)} A</span>
           </div>
         )}
+      </div>
+      {/* PFC formula */}
+      <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+        <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
+          {t(lang, 'kacPFCFormula')}
+        </p>
+        <div className="font-mono text-xs space-y-1 text-neutral-600 dark:text-neutral-400">
+          <p>cos φ = 0.95  →  Q<sub>C</sub> = Q − P·tan(φ)</p>
+          <p className="text-neutral-500 dark:text-neutral-500 italic">{t(lang, 'kacPFCFormulaBisect')}</p>
+        </div>
+        <div className="mt-2 flex items-baseline gap-1.5 font-mono text-sm">
+          <span className="text-amber-700 dark:text-amber-400 font-semibold">C<sub>req</sub></span>
+          <span className="text-neutral-400">=</span>
+          <span className="text-neutral-800 dark:text-neutral-200 font-semibold">{fmt(C_req, 2)}</span>
+          <span className="text-xs text-neutral-400">µF</span>
+        </div>
       </div>
     </div>
   )

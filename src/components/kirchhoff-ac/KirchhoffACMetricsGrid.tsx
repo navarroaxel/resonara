@@ -80,7 +80,7 @@ export function KirchhoffACMetricsGrid() {
       <div className="grid grid-cols-3 gap-2">
         <MetricCard label={t(lang, 'kacLoadPower')}      value={fmt(P_R,   2)} unit="W" color="text-green-600 dark:text-green-400" />
         <MetricCard label={t(lang, 'kacLinePower')}      value={fmt(P_R1,  2)} unit="W" />
-        <MetricCard label={t(lang, 'kacMotorEfficiency')} value={fmt(eta_m, 4)} color={eta_m >= 0.9 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'} />
+        <MetricCard label={t(lang, 'kacMotorEfficiency')} value={fmt(eta_m * 100, 2)} unit="%" color={eta_m >= 0.9 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'} />
       </div>
     </div>
   )
