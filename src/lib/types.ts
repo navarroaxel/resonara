@@ -205,7 +205,7 @@ export interface MagneticResult {
 
 // ── AC Kirchhoff mesh simulator ──────────────────────────────────────────────
 
-export type KirchhoffACActiveTab = 'phasor' | 'time' | 'power' | 'kvl'
+export type KirchhoffACActiveTab = 'phasor' | 'time' | 'power' | 'kvl' | 'pfcCurve'
 
 export interface KirchhoffACParams {
   Vs: number  // Source RMS voltage (V), 1–500
@@ -249,6 +249,7 @@ export interface KirchhoffACResult {
   S:     number  // Apparent power at source (VA)
   fp:    number  // Power factor cos φ = P/S
   C_req: number  // Required C (µF) for cos φ = 0.95, via 3-mesh numerical bisection
+  fp_0:  number  // System power factor without PFC (2-mesh)
   P_m:   number  // Motor active power |IZm|²·Rm (W)
   Q_m:   number  // Motor reactive power |IZm|²·XLm (VAR)
   S_m:   number  // Motor apparent power |IZm|·|VZm| (VA)
