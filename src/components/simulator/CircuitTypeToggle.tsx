@@ -1,5 +1,6 @@
 'use client'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import type { CircuitType } from '@/lib/types'
@@ -11,6 +12,7 @@ const OPTIONS: { value: CircuitType; labelKey: 'seriesName' | 'parallelName' }[]
 
 export function CircuitTypeToggle() {
   const { state, dispatch } = useRLC()
+  const { state: { lang } } = useUI()
 
   return (
     <div className="flex gap-2 mb-4">
@@ -25,7 +27,7 @@ export function CircuitTypeToggle() {
               : 'border-neutral-200 dark:border-neutral-700 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50'
           )}
         >
-          {t(state.lang, labelKey)}
+          {t(lang, labelKey)}
         </button>
       ))}
     </div>

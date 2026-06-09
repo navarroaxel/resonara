@@ -10,24 +10,19 @@ import { ThemeToggle }       from '@/components/ui/ThemeToggle'
 import { LangToggle }        from '@/components/ui/LangToggle'
 import { HeaderSubtitle }    from '@/components/ui/HeaderSubtitle'
 import { GitHubLink }        from '@/components/ui/GitHubLink'
-import { RLCSimulatorNav }  from '@/components/ui/SimulatorNav'
+import { SimulatorNav }     from '@/components/ui/SimulatorNav'
+import { SimulatorHeader }  from '@/components/ui/SimulatorHeader'
 import { Footer }            from '@/components/ui/Footer'
 
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <header className="border-b border-neutral-200 dark:border-neutral-800 px-6 py-3 flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-semibold tracking-tight">Resonara</h1>
-          <HeaderSubtitle />
-        </div>
-        <div className="flex items-center gap-2">
-          <RLCSimulatorNav />
-          <GitHubLink />
-          <LangToggle />
-          <ThemeToggle />
-        </div>
-      </header>
+      <SimulatorHeader subtitle={<HeaderSubtitle />}>
+        <SimulatorNav />
+        <GitHubLink />
+        <LangToggle />
+        <ThemeToggle />
+      </SimulatorHeader>
 
       <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 

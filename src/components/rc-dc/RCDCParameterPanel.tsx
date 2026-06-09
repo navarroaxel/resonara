@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRCDC } from '@/store/rc-dc-store'
+import { useUI } from '@/store/ui-store'
 import { t, type TKey } from '@/lib/i18n'
 import type { RCDCParams } from '@/lib/types'
 
@@ -89,7 +90,8 @@ function ParamRow({
 
 export function RCDCParameterPanel() {
   const { state, dispatch } = useRCDC()
-  const { lang } = state
+  const { state: { lang } } = useUI()
+  const {} = state
 
   return (
     <div>

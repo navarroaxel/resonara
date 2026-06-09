@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -8,7 +9,8 @@ const W = 400, H = 280
 
 export function KirchhoffACPowerTriangle() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, lang } } = useKirchhoffAC()
+  const { state: { results } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

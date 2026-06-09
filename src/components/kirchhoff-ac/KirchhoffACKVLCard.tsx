@@ -1,5 +1,6 @@
 'use client'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -23,7 +24,8 @@ function fmtMag(re: number, im: number) {
 }
 
 export function KirchhoffACKVLCard() {
-  const { state: { params, flags, results, lang } } = useKirchhoffAC()
+  const { state: { params, flags, results } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
   const { Vs, R1, R } = params
   const { kvl1_re, kvl1_im, kvl2_re, kvl2_im, kvl3_re, kvl3_im, Zm_re, Zm_im, Zc_im } = results
 

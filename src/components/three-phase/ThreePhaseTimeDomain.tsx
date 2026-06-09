@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -22,7 +23,8 @@ const PHASE_COLORS = ['#E53E3E', '#D69E2E', '#3182CE'] as const
 
 export function ThreePhaseTimeDomain() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, params, lang } } = useThreePhase()
+  const { state: { results, params } } = useThreePhase()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -140,7 +142,7 @@ export function ThreePhaseTimeDomain() {
       ctx.fillStyle = color
       ctx.fillText(label, lx + 22, ly + 4)
     })
-  }, [results, params, lang])
+  }, [results, params])
 
   const { V_ph, I_ph, phi } = results
   const w      = 2 * Math.PI * params.f

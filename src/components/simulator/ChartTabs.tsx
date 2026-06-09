@@ -1,5 +1,6 @@
 'use client'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { BodeChart }          from '@/components/charts/BodeChart'
@@ -18,7 +19,8 @@ const BASE_TABS: { value: ActiveTab; labelKey: 'freqResponseTab' | 'phasorTab' |
 ]
 
 export function ChartTabs() {
-  const { state: { activeTab, lang, polyMode }, dispatch } = useRLC()
+  const { state: { activeTab, polyMode }, dispatch } = useRLC()
+  const { state: { lang } } = useUI()
 
   const tabs = polyMode
     ? [...BASE_TABS, { value: 'spectrum' as ActiveTab, labelKey: 'spectrumTab' as const }]

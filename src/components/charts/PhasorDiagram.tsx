@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 const SIZE = 280
@@ -40,7 +41,8 @@ function drawArrow(
 
 export function PhasorDiagram() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, results, circuitType, flags, lang, polyMode, polyResults } } = useRLC()
+  const { state: { params, results, circuitType, flags, polyMode, polyResults } } = useRLC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -132,7 +134,7 @@ export function PhasorDiagram() {
         ctx.fillText(l, 22, 18 + i * 16)
       })
     }
-  }, [params, results, circuitType, flags, lang, polyMode, polyResults])
+  }, [params, results, circuitType, flags, polyMode, polyResults])
 
   return (
     <canvas

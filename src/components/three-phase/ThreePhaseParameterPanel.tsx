@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useUI } from '@/store/ui-store'
 import { t, type TKey } from '@/lib/i18n'
 import type { ThreePhaseParams, ComponentFlags } from '@/lib/types'
 
@@ -31,7 +32,7 @@ interface ParamRowProps {
   isC:      boolean
 }
 
-function ParamRow({ config, value, enabled, lang, dispatch, isL, isC }: ParamRowProps) {
+function ParamRow({ config, value, lang, enabled, dispatch, isL, isC }: ParamRowProps) {
   const { key, labelKey, unit, min, max, step } = config
   const hasToggle = isL || isC
 
@@ -126,7 +127,8 @@ function ParamRow({ config, value, enabled, lang, dispatch, isL, isC }: ParamRow
 
 export function ThreePhaseParameterPanel() {
   const { state, dispatch } = useThreePhase()
-  const { lang, flags } = state
+  const { state: { lang } } = useUI()
+  const { flags } = state
 
   return (
     <div>

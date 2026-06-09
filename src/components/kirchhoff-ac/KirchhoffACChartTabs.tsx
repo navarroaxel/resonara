@@ -1,5 +1,6 @@
 'use client'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { KirchhoffACPhasorDiagram }    from './KirchhoffACPhasorDiagram'
@@ -20,7 +21,8 @@ const TABS: { value: KirchhoffACActiveTab; labelKey: 'kacPhasorTab' | 'kacTimeDo
 ]
 
 export function KirchhoffACChartTabs() {
-  const { state: { activeTab, lang }, dispatch } = useKirchhoffAC()
+  const { state: { activeTab }, dispatch } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
 
   return (
     <div>

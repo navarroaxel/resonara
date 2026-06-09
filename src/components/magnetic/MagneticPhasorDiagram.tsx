@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useMagnetic } from '@/store/magnetic-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 const SIZE = 320
@@ -30,7 +31,8 @@ function drawArrow(
 
 export function MagneticPhasorDiagram() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, params, lang } } = useMagnetic()
+  const { state: { results, params } } = useMagnetic()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { calcKirchhoffAC } from '@/lib/kirchhoff-ac-engine'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
@@ -15,7 +16,8 @@ const LM_MIN = 1, LM_MAX = 2000
 
 export function KirchhoffACPFCCurve() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, lang } } = useKirchhoffAC()
+  const { state: { params } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

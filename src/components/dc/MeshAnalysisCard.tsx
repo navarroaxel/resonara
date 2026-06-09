@@ -1,10 +1,12 @@
 'use client'
 import { useDC } from '@/store/dc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
 export function MeshAnalysisCard() {
-  const { state: { params, flags, results, lang } } = useDC()
+  const { state: { params, flags, results } } = useDC()
+  const { state: { lang } } = useUI()
   const { V1, V2, V3, R1, R2, R3, R4, R5 } = params
   const { I1, I2, I3, D } = results
   const { mesh3 } = flags

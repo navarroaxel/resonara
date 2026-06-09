@@ -1,11 +1,10 @@
 'use client'
-import { createContext, useContext, useReducer, useMemo, useEffect } from 'react'
+import { createContext, useContext, useReducer, useMemo } from 'react'
 import { calcThreePhase } from '@/lib/three-phase-engine'
-import { readLang, writeLang } from '@/lib/lang-storage'
 import type {
   ThreePhaseParams, ThreePhaseResult,
   ConnectionType, ThreePhaseActiveTab,
-  ComponentFlags, Lang,
+  ComponentFlags,
 } from '@/lib/types'
 
 const DEFAULT_PARAMS: ThreePhaseParams = { VL: 380, R: 100, L: 50, C: 100, f: 50 }
@@ -18,7 +17,6 @@ interface State {
   flags:      ComponentFlags
   activeTab:  ThreePhaseActiveTab
   results:    ThreePhaseResult
-  lang:       Lang
 }
 
 type Action =
@@ -26,7 +24,6 @@ type Action =
   | { type: 'SET_CONNECTION'; connection: ConnectionType }
   | { type: 'SET_FLAGS';      flags: Partial<ComponentFlags> }
   | { type: 'SET_TAB';        activeTab: ThreePhaseActiveTab }
-  | { type: 'SET_LANG';       lang: Lang }
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -46,9 +43,6 @@ function reducer(state: State, action: Action): State {
     }
     case 'SET_TAB':
       return { ...state, activeTab: action.activeTab }
-    case 'SET_LANG':
-      writeLang(action.lang)
-      return { ...state, lang: action.lang }
   }
 }
 
@@ -61,14 +55,7 @@ export function ThreePhaseProvider({ children }: { children: React.ReactNode }) 
     flags:      DEFAULT_FLAGS,
     activeTab:  'phasor',
     results:    calcThreePhase(DEFAULT_CONNECTION, DEFAULT_PARAMS, DEFAULT_FLAGS),
-    lang:       'es',
   })
-
-  useEffect(() => {
-    const saved = readLang()
-    if (saved !== state.lang) dispatch({ type: 'SET_LANG', lang: saved })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const value = useMemo(() => ({ state, dispatch }), [state])
   return <ThreePhaseContext.Provider value={value}>{children}</ThreePhaseContext.Provider>

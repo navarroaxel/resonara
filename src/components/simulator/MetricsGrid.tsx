@@ -1,5 +1,6 @@
 'use client'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -18,7 +19,8 @@ function MetricCard({ label, value, unit, color }: {
 }
 
 export function MetricsGrid() {
-  const { state: { results, polyResults, polyMode, lang } } = useRLC()
+  const { state: { results, polyResults, polyMode } } = useRLC()
+  const { state: { lang } } = useUI()
   const { Z, phi, I, XL, XC, fr, Q } = results
 
   if (polyMode && polyResults) {

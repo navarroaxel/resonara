@@ -1,14 +1,9 @@
 'use client'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import type { Lang } from '@/lib/types'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
-import { useRLC } from '@/store/rlc-store'
-import { useDC } from '@/store/dc-store'
-import { useThreePhase } from '@/store/three-phase-store'
-import { useRCDC } from '@/store/rc-dc-store'
-import { useMagnetic } from '@/store/magnetic-store'
-import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
 
 const SIMULATORS = [
   { href: '/',             labelKey: 'navDcTab'           },
@@ -19,60 +14,100 @@ const SIMULATORS = [
   { href: '/magnetic',     labelKey: 'navMagneticTab'     },
 ] as const
 
-function SimulatorNav({ lang }: { lang: Lang }) {
+export function SimulatorNav() {
+  const { state: { lang } } = useUI()
   const pathname = usePathname()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false)
+  const activeSimulator = SIMULATORS.find(s => s.href === pathname) ?? SIMULATORS[0]
+
+  useEffect(() => {
+    if (!open) return
+    function handleOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node))
+        setOpen(false)
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('mousedown', handleOutside)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleOutside)
+      document.removeEventListener('keydown', handleKey)
+    }
+  }, [open])
+
+  useEffect(() => { setOpen(false) }, [pathname])
+
   return (
-    <nav
-      aria-label="Simulators"
-      className="flex items-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/60 p-0.5 gap-0.5"
-    >
-      {SIMULATORS.map(({ href, labelKey }) => {
-        const active = pathname === href
-        return (
-          <Link
-            key={href}
-            href={href}
-            aria-current={active ? 'page' : undefined}
-            className={
-              active
-                ? 'inline-flex items-center rounded-md px-3 py-1 text-xs font-semibold bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm pointer-events-none'
-                : 'inline-flex items-center rounded-md px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors'
-            }
-          >
-            {t(lang, labelKey)}
-          </Link>
-        )
-      })}
-    </nav>
+    <div ref={containerRef} className="relative">
+
+      {/* Mobile: dropdown — visible solo bajo sm */}
+      <div className="lg:hidden">
+        <button
+          onClick={() => setOpen(v => !v)}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          className="inline-flex items-center gap-1.5 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+        >
+          {t(lang, activeSimulator.labelKey)}
+          <span className={`transition-transform duration-150 ${open ? 'rotate-180' : ''}`}>
+            <svg aria-hidden viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-3">
+              <path d="M4 6l4 4 4-4" />
+            </svg>
+          </span>
+        </button>
+
+        {open && (
+          <div role="listbox" className="absolute right-0 top-full mt-1 z-50 min-w-[10rem] rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-md py-0.5">
+            {SIMULATORS.map(({ href, labelKey }) => {
+              const active = pathname === href
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  role="option"
+                  aria-selected={active}
+                  aria-current={active ? 'page' : undefined}
+                  className={
+                    active
+                      ? 'flex items-center w-full px-3 py-1.5 text-xs font-semibold rounded-md mx-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 pointer-events-none'
+                      : 'flex items-center w-full px-3 py-1.5 text-xs font-medium rounded-md mx-0.5 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors'
+                  }
+                >
+                  {t(lang, labelKey)}
+                </Link>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: pills — hidden bajo sm */}
+      <nav
+        aria-label="Simulators"
+        className="hidden lg:flex items-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/60 p-0.5 gap-0.5"
+      >
+        {SIMULATORS.map(({ href, labelKey }) => {
+          const active = pathname === href
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-current={active ? 'page' : undefined}
+              className={
+                active
+                  ? 'inline-flex items-center rounded-md px-3 py-1 text-xs font-semibold bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm pointer-events-none'
+                  : 'inline-flex items-center rounded-md px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors'
+              }
+            >
+              {t(lang, labelKey)}
+            </Link>
+          )
+        })}
+      </nav>
+
+    </div>
   )
-}
-
-export function RLCSimulatorNav() {
-  const { state: { lang } } = useRLC()
-  return <SimulatorNav lang={lang} />
-}
-
-export function DCSimulatorNav() {
-  const { state: { lang } } = useDC()
-  return <SimulatorNav lang={lang} />
-}
-
-export function ThreePhaseSimulatorNav() {
-  const { state: { lang } } = useThreePhase()
-  return <SimulatorNav lang={lang} />
-}
-
-export function RCDCSimulatorNav() {
-  const { state: { lang } } = useRCDC()
-  return <SimulatorNav lang={lang} />
-}
-
-export function MagneticSimulatorNav() {
-  const { state: { lang } } = useMagnetic()
-  return <SimulatorNav lang={lang} />
-}
-
-export function KirchhoffACSimulatorNav() {
-  const { state: { lang } } = useKirchhoffAC()
-  return <SimulatorNav lang={lang} />
 }

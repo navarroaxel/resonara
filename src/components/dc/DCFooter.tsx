@@ -1,9 +1,9 @@
 'use client'
-import { useDC } from '@/store/dc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 export function DCFooter() {
-  const { state: { lang } } = useDC()
+  const { state: { lang } } = useUI()
   return (
     <footer className="border-t border-neutral-200 dark:border-neutral-800 px-6 py-6 mt-4 text-sm text-neutral-500 dark:text-neutral-400">
       <p className="mb-3">

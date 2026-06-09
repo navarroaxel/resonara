@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useDC } from '@/store/dc-store'
+import { useUI } from '@/store/ui-store'
 import { t, type TKey } from '@/lib/i18n'
 import type { DCParams, DCFlags } from '@/lib/types'
 import { BatteryIcon } from './BatteryIcon'
@@ -137,7 +138,8 @@ function ParamRow({
 
 export function DCParameterPanel() {
   const { state, dispatch } = useDC()
-  const { lang, flags } = state
+  const { state: { lang } } = useUI()
+  const { flags } = state
 
   return (
     <div>

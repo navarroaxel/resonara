@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 
@@ -209,7 +210,8 @@ function drawDelta(
 
 export function ThreePhaseSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { connection, results, flags, lang } } = useThreePhase()
+  const { state: { connection, results, flags } } = useThreePhase()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -227,7 +229,7 @@ export function ThreePhaseSchematic() {
     } else {
       drawDelta(ctx, isDark, hasL, hasC, XL, XC, Z, fr, lang)
     }
-  }, [connection, results, flags, lang])
+  }, [connection, results, flags])
 
   return (
     <canvas

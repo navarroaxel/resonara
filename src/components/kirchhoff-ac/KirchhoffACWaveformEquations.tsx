@@ -1,5 +1,6 @@
 'use client'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -27,7 +28,8 @@ function WaveRow({ color, name, peak, angDeg, unit }: {
 
 
 export function KirchhoffACWaveformEquations() {
-  const { state: { params, results, flags, lang } } = useKirchhoffAC()
+  const { state: { params, results, flags } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
   const { Vs, f } = params
   const { IR, IZm, IZc } = results
   const omega = 2 * Math.PI * f

@@ -1,5 +1,6 @@
 'use client'
 import { useRCDC } from '@/store/rc-dc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -17,7 +18,8 @@ function fmtTauExp(tau: number): string {
 }
 
 export function RCDCEquationsCard() {
-  const { state: { params, results, lang } } = useRCDC()
+  const { state: { params, results } } = useRCDC()
+  const { state: { lang } } = useUI()
   const { Vs, R, C } = params
   const { tau, I0 } = results
 

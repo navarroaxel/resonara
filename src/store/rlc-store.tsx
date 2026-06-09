@@ -1,10 +1,9 @@
 'use client'
-import { createContext, useContext, useReducer, useMemo, useEffect } from 'react'
+import { createContext, useContext, useReducer, useMemo } from 'react'
 import { calc } from '@/lib/rlc-engine'
 import { calcPolyResult, PRESETS } from '@/lib/poly-engine'
-import { readLang, writeLang } from '@/lib/lang-storage'
 import type {
-  RLCParams, RLCResult, CircuitType, ActiveTab, ComponentFlags, Lang,
+  RLCParams, RLCResult, CircuitType, ActiveTab, ComponentFlags,
   PolyPreset, HarmonicInput, PolyResult,
 } from '@/lib/types'
 
@@ -17,7 +16,6 @@ interface State {
   activeTab:   ActiveTab
   results:     RLCResult
   flags:       ComponentFlags
-  lang:        Lang
   polyMode:    boolean
   polyPreset:  PolyPreset
   harmonics:   HarmonicInput[]
@@ -29,7 +27,6 @@ type Action =
   | { type: 'SET_TYPE';        circuitType: CircuitType }
   | { type: 'SET_TAB';         activeTab: ActiveTab }
   | { type: 'SET_FLAGS';       flags: Partial<ComponentFlags> }
-  | { type: 'SET_LANG';        lang: Lang }
   | { type: 'TOGGLE_POLY_MODE' }
   | { type: 'SET_POLY_PRESET'; preset: PolyPreset }
   | { type: 'SET_HARMONIC';    index: number; harmonic: Partial<HarmonicInput> }
@@ -68,10 +65,6 @@ function reducer(state: State, action: Action): State {
       const polyResults = recomputePoly(state.polyMode, state.circuitType, state.params, state.harmonics, flags)
       return { ...state, flags, results, polyResults }
     }
-    case 'SET_LANG':
-      writeLang(action.lang)
-      return { ...state, lang: action.lang }
-
     case 'TOGGLE_POLY_MODE': {
       const polyMode = !state.polyMode
       const polyResults = recomputePoly(polyMode, state.circuitType, state.params, state.harmonics, state.flags)
@@ -116,18 +109,11 @@ export function RLCProvider({ children }: { children: React.ReactNode }) {
     activeTab:   'phasor',
     results:     calc('series', DEFAULT_PARAMS, DEFAULT_FLAGS),
     flags:       DEFAULT_FLAGS,
-    lang:        'es',
     polyMode:    false,
     polyPreset:  'square',
     harmonics:   DEFAULT_HARMONICS,
     polyResults: null,
   })
-
-  useEffect(() => {
-    const saved = readLang()
-    if (saved !== state.lang) dispatch({ type: 'SET_LANG', lang: saved })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const value = useMemo(() => ({ state, dispatch }), [state])
   return <RLCContext.Provider value={value}>{children}</RLCContext.Provider>

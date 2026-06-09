@@ -1,5 +1,6 @@
 'use client'
 import { useRCDC } from '@/store/rc-dc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -37,7 +38,8 @@ function fmtCurrent(a: number): { value: string; unit: string } {
 }
 
 export function RCDCMetricsGrid() {
-  const { state: { results, lang } } = useRCDC()
+  const { state: { results } } = useRCDC()
+  const { state: { lang } } = useUI()
   const { tau, I0, Vc_tau, t5tau, E_final } = results
 
   const tauFmt  = fmtTime(tau)

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRCDC } from '@/store/rc-dc-store'
+import { useUI } from '@/store/ui-store'
 import { rcDCPoints } from '@/lib/rc-dc-engine'
 import { t } from '@/lib/i18n'
 
@@ -12,7 +13,8 @@ function timeScale(tau: number) { return tau < 1 ? 1000 : 1 }
 
 export function RCDCChargingChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, results, lang } } = useRCDC()
+  const { state: { params, results } } = useRCDC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -183,7 +185,7 @@ export function RCDCChargingChart() {
       ctx.restore()
     })
 
-  }, [params, results, lang])
+  }, [params, results])
 
   return (
     <div>

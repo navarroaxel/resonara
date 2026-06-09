@@ -1,5 +1,6 @@
 'use client'
 import { useMagnetic } from '@/store/magnetic-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -12,7 +13,8 @@ function phaseStr(phi_deg: number): string {
 }
 
 export function MagneticEquationsCard() {
-  const { state: { params, results, lang } } = useMagnetic()
+  const { state: { params, results } } = useMagnetic()
+  const { state: { lang } } = useUI()
   const { Vs, f, L1, R2, L2, k } = params
   const { M, XL1, XL2, XM, Zin, Z2, phi1, I1, I2, phi2, P1, P2, eta } = results
 

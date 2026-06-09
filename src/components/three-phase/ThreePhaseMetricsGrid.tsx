@@ -1,5 +1,6 @@
 'use client'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -18,7 +19,8 @@ function MetricCard({ label, value, unit, color }: {
 }
 
 export function ThreePhaseMetricsGrid() {
-  const { state: { results, lang } } = useThreePhase()
+  const { state: { results } } = useThreePhase()
+  const { state: { lang } } = useUI()
   const { V_ph, V_L, I_ph, I_L, Z, phi, XL, XC, fr, Q, P, Qr, S, fp } = results
 
   return (

@@ -1,5 +1,6 @@
 'use client'
 import { useDC } from '@/store/dc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -18,7 +19,8 @@ function MetricCard({ label, value, unit, color }: {
 }
 
 export function DCMetricsGrid() {
-  const { state: { results, params, flags, lang } } = useDC()
+  const { state: { results, params, flags } } = useDC()
+  const { state: { lang } } = useUI()
   const { I1, I2, I3, IR2, IR3, IR4, VR1, VR2, VR3, IR1, IR5 } = results
   const { R1, R3, R4, R5 } = params
   const { mesh3, V1: enV1, V2: enV2, V3: enV3, polarityV1, polarityV2, polarityV3 } = flags

@@ -1,9 +1,9 @@
 'use client'
-import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 export function GitHubLink() {
-  const { state: { lang } } = useRLC()
+  const { state: { lang } } = useUI()
   const label = t(lang, 'githubAria')
 
   return (

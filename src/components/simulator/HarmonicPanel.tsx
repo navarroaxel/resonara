@@ -1,5 +1,6 @@
 'use client'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t, type TKey } from '@/lib/i18n'
 import { cn, fmt } from '@/lib/utils'
 import type { PolyPreset } from '@/lib/types'
@@ -11,7 +12,8 @@ const PRESETS: { value: Exclude<PolyPreset, 'custom'>; labelKey: TKey }[] = [
 ]
 
 export function HarmonicPanel() {
-  const { state: { polyMode, polyPreset, harmonics, polyResults, lang }, dispatch } = useRLC()
+  const { state: { polyMode, polyPreset, harmonics, polyResults }, dispatch } = useRLC()
+  const { state: { lang } } = useUI()
 
   return (
     <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 space-y-3">

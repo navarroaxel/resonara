@@ -1,5 +1,6 @@
 'use client'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 import type { ComplexDisplay } from '@/lib/types'
@@ -25,7 +26,8 @@ function phasorLabel(cd: ComplexDisplay): string {
 }
 
 export function KirchhoffACMetricsGrid() {
-  const { state: { results, flags, lang } } = useKirchhoffAC()
+  const { state: { results, flags } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
   const { I1, I2, I3, Zm_re, Zm_im, Zc_mag, P, Q, S, fp, P_m, Q_m, S_m, eta_m, P_R, P_R1 } = results
 
   return (

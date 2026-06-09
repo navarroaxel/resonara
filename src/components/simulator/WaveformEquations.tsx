@@ -1,10 +1,12 @@
 'use client'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
 export function WaveformEquations() {
-  const { state: { params, results, circuitType, lang } } = useRLC()
+  const { state: { params, results, circuitType } } = useRLC()
+  const { state: { lang } } = useUI()
   const { Vs, R, f } = params
   const { I, phi } = results
 

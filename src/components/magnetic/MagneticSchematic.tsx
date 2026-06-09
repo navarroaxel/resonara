@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useMagnetic } from '@/store/magnetic-store'
+import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 
@@ -111,7 +112,8 @@ function acSource(
 
 export function MagneticSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, params, lang } } = useMagnetic()
+  const { state: { results, params } } = useMagnetic()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -237,7 +239,7 @@ export function MagneticSchematic() {
     ctx.textAlign  = 'center'
     ctx.fillText(t(lang, 'magPrimaryLabel'),   (xVs + xL1) / 2, botY + 14)
     ctx.fillText(t(lang, 'magSecondaryLabel'), (xL2 + xEnd) / 2, botY + 14)
-  }, [results, params, lang])
+  }, [results, params])
 
   return (
     <canvas

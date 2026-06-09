@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 const W = 580, H = 280
@@ -9,7 +10,8 @@ const PAD = { top: 28, right: 56, bottom: 40, left: 52 }
 
 export function KirchhoffACTimeDomain() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, params, flags, lang } } = useKirchhoffAC()
+  const { state: { results, params, flags } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

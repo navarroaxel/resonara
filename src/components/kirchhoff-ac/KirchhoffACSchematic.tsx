@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 import type { ComplexDisplay } from '@/lib/types'
@@ -176,7 +177,8 @@ function phasorAnnotation(ctx: CanvasRenderingContext2D, x: number, y: number, c
 
 export function KirchhoffACSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, flags, results, lang } } = useKirchhoffAC()
+  const { state: { params, flags, results } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

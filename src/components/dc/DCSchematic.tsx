@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useDC } from '@/store/dc-store'
+import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 
@@ -160,7 +161,8 @@ function currentArrowV(
 
 export function DCSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, flags, results, lang } } = useDC()
+  const { state: { params, flags, results } } = useDC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

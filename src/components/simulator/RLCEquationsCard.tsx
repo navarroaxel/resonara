@@ -1,10 +1,12 @@
 'use client'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
 export function RLCEquationsCard() {
-  const { state: { params, results, circuitType, flags, lang, polyMode } } = useRLC()
+  const { state: { params, results, circuitType, flags, polyMode } } = useRLC()
+  const { state: { lang } } = useUI()
 
   if (polyMode) return null
 

@@ -5,12 +5,13 @@ import { DCMetricsGrid }    from '@/components/dc/DCMetricsGrid'
 import { MeshAnalysisCard } from '@/components/dc/MeshAnalysisCard'
 import { KVLCard }          from '@/components/dc/KVLCard'
 import { KCLCard }          from '@/components/dc/KCLCard'
-import { DCThemeToggle }    from '@/components/dc/DCThemeToggle'
-import { DCLangToggle }     from '@/components/dc/DCLangToggle'
 import { DCHeaderSubtitle } from '@/components/dc/DCHeaderSubtitle'
-import { DCGitHubLink }     from '@/components/dc/DCGitHubLink'
 import { DCFooter }         from '@/components/dc/DCFooter'
-import { DCSimulatorNav }       from '@/components/ui/SimulatorNav'
+import { SimulatorNav }     from '@/components/ui/SimulatorNav'
+import { SimulatorHeader }  from '@/components/ui/SimulatorHeader'
+import { GitHubLink }       from '@/components/ui/GitHubLink'
+import { LangToggle }       from '@/components/ui/LangToggle'
+import { ThemeToggle }      from '@/components/ui/ThemeToggle'
 
 export const metadata: Metadata = {
   title: 'Resonara — Kirchhoff CC',
@@ -20,18 +21,12 @@ export const metadata: Metadata = {
 export default function DCPage() {
   return (
     <main className="min-h-screen">
-      <header className="border-b border-neutral-200 dark:border-neutral-800 px-6 py-3 flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-semibold tracking-tight">Resonara</h1>
-          <DCHeaderSubtitle />
-        </div>
-        <div className="flex items-center gap-2">
-          <DCSimulatorNav />
-          <DCGitHubLink />
-          <DCLangToggle />
-          <DCThemeToggle />
-        </div>
-      </header>
+      <SimulatorHeader subtitle={<DCHeaderSubtitle />}>
+        <SimulatorNav />
+        <GitHubLink />
+        <LangToggle />
+        <ThemeToggle />
+      </SimulatorHeader>
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
 

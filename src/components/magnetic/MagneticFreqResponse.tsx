@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useMemo, useRef } from 'react'
 import { useMagnetic } from '@/store/magnetic-store'
+import { useUI } from '@/store/ui-store'
 import { calcMagneticSweep } from '@/lib/magnetic-engine'
 import { t } from '@/lib/i18n'
 
@@ -10,7 +11,8 @@ const PAD = { top: 24, right: 52, bottom: 40, left: 52 }
 
 export function MagneticFreqResponse() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, params, lang } } = useMagnetic()
+  const { state: { results, params } } = useMagnetic()
+  const { state: { lang } } = useUI()
 
   const sweep = useMemo(
     () => calcMagneticSweep(params),
