@@ -104,10 +104,12 @@ export function SettingsPanel() {
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1 text-xs text-zinc-600 dark:text-zinc-300">
                 {t(lang, 'unitNotationLabel')}
-                <span
-                  title={t(lang, 'unitNotationTooltip')}
-                  className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border border-zinc-400 dark:border-zinc-500 text-zinc-400 dark:text-zinc-500 text-[9px] leading-none cursor-help select-none"
-                >i</span>
+                <span className="group relative inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border border-zinc-400 dark:border-zinc-500 text-zinc-400 dark:text-zinc-500 text-[9px] leading-none cursor-help select-none">
+                  i
+                  <span className="pointer-events-none absolute left-0 top-full mt-1.5 w-52 rounded bg-zinc-800 dark:bg-zinc-700 px-2 py-1.5 text-[10px] leading-snug text-white opacity-0 group-hover:opacity-100 transition-opacity z-[60]">
+                    {t(lang, 'unitNotationTooltip')}
+                  </span>
+                </span>
               </span>
               <div className="flex rounded-md overflow-hidden border border-zinc-300 dark:border-zinc-700">
                 {(['raw', 'si'] as UnitNotation[]).map(v => (
