@@ -17,7 +17,9 @@ export const metadata: Metadata = {
 export default function DCPage() {
   return (
     <main className="min-h-screen">
-      <SimulatorHeader><DCHeaderSubtitle /></SimulatorHeader>
+      <SimulatorHeader>
+        <DCHeaderSubtitle />
+      </SimulatorHeader>
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
           <DCSchematic />
