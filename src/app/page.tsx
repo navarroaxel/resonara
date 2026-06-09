@@ -7,10 +7,7 @@ import { KVLCard }          from '@/components/dc/KVLCard'
 import { KCLCard }          from '@/components/dc/KCLCard'
 import { DCHeaderSubtitle } from '@/components/dc/DCHeaderSubtitle'
 import { DCFooter }         from '@/components/dc/DCFooter'
-import { SimulatorNav }     from '@/components/ui/SimulatorNav'
 import { SimulatorHeader }  from '@/components/ui/SimulatorHeader'
-import { GitHubLink }       from '@/components/ui/GitHubLink'
-import { SettingsPanel }      from '@/components/ui/SettingsPanel'
 
 export const metadata: Metadata = {
   title: 'Resonara — Kirchhoff CC',
@@ -20,12 +17,7 @@ export const metadata: Metadata = {
 export default function DCPage() {
   return (
     <main className="min-h-screen">
-      <SimulatorHeader subtitle={<DCHeaderSubtitle />}>
-        <SimulatorNav />
-        <GitHubLink />
-
-        <SettingsPanel />
-      </SimulatorHeader>
+      <SimulatorHeader subtitle={<DCHeaderSubtitle />} />
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
 

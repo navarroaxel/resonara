@@ -5,20 +5,12 @@ import { ThreePhaseMetricsGrid }      from '@/components/three-phase/ThreePhaseM
 import { ThreePhaseChartTabs }        from '@/components/three-phase/ThreePhaseChartTabs'
 import { ThreePhaseHeaderSubtitle }   from '@/components/three-phase/ThreePhaseHeaderSubtitle'
 import { ThreePhaseFooter }    from '@/components/three-phase/ThreePhaseFooter'
-import { SimulatorNav }        from '@/components/ui/SimulatorNav'
 import { SimulatorHeader }     from '@/components/ui/SimulatorHeader'
-import { GitHubLink }          from '@/components/ui/GitHubLink'
-import { SettingsPanel }      from '@/components/ui/SettingsPanel'
 
 export default function ThreePhasePage() {
   return (
     <main className="min-h-screen">
-      <SimulatorHeader subtitle={<ThreePhaseHeaderSubtitle />}>
-        <SimulatorNav />
-        <GitHubLink />
-
-        <SettingsPanel />
-      </SimulatorHeader>
+      <SimulatorHeader subtitle={<ThreePhaseHeaderSubtitle />} />
 
       <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 

@@ -5,20 +5,12 @@ import { KirchhoffACChartTabs }      from '@/components/kirchhoff-ac/KirchhoffAC
 import { KirchhoffACMeshAnalysisCard } from '@/components/kirchhoff-ac/KirchhoffACMeshAnalysisCard'
 import { KirchhoffACHeaderSubtitle } from '@/components/kirchhoff-ac/KirchhoffACHeaderSubtitle'
 import { KirchhoffACFooter }  from '@/components/kirchhoff-ac/KirchhoffACFooter'
-import { SimulatorNav }      from '@/components/ui/SimulatorNav'
 import { SimulatorHeader }   from '@/components/ui/SimulatorHeader'
-import { GitHubLink }        from '@/components/ui/GitHubLink'
-import { SettingsPanel }      from '@/components/ui/SettingsPanel'
 
 export default function KirchhoffACPage() {
   return (
     <main className="min-h-screen">
-      <SimulatorHeader subtitle={<KirchhoffACHeaderSubtitle />}>
-        <SimulatorNav />
-        <GitHubLink />
-
-        <SettingsPanel />
-      </SimulatorHeader>
+      <SimulatorHeader subtitle={<KirchhoffACHeaderSubtitle />} />
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
 

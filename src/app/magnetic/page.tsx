@@ -5,20 +5,12 @@ import { MagneticChartTabs }      from '@/components/magnetic/MagneticChartTabs'
 import { MagneticEquationsCard }  from '@/components/magnetic/MagneticEquationsCard'
 import { MagneticHeaderSubtitle } from '@/components/magnetic/MagneticHeaderSubtitle'
 import { MagneticFooter }  from '@/components/magnetic/MagneticFooter'
-import { SimulatorNav }    from '@/components/ui/SimulatorNav'
 import { SimulatorHeader } from '@/components/ui/SimulatorHeader'
-import { GitHubLink }      from '@/components/ui/GitHubLink'
-import { SettingsPanel }      from '@/components/ui/SettingsPanel'
 
 export default function MagneticPage() {
   return (
     <main className="min-h-screen">
-      <SimulatorHeader subtitle={<MagneticHeaderSubtitle />}>
-        <SimulatorNav />
-        <GitHubLink />
-
-        <SettingsPanel />
-      </SimulatorHeader>
+      <SimulatorHeader subtitle={<MagneticHeaderSubtitle />} />
 
       <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 

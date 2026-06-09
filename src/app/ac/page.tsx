@@ -6,22 +6,14 @@ import { ResonanceBadge }    from '@/components/simulator/ResonanceBadge'
 import { ChartTabs }         from '@/components/simulator/ChartTabs'
 import { RLCEquationsCard }  from '@/components/simulator/RLCEquationsCard'
 import { CircuitSchematic }  from '@/components/schematic/CircuitSchematic'
-import { SettingsPanel }      from '@/components/ui/SettingsPanel'
 import { HeaderSubtitle }    from '@/components/ui/HeaderSubtitle'
-import { GitHubLink }        from '@/components/ui/GitHubLink'
-import { SimulatorNav }     from '@/components/ui/SimulatorNav'
 import { SimulatorHeader }  from '@/components/ui/SimulatorHeader'
 import { Footer }            from '@/components/ui/Footer'
 
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <SimulatorHeader subtitle={<HeaderSubtitle />}>
-        <SimulatorNav />
-        <GitHubLink />
-
-        <SettingsPanel />
-      </SimulatorHeader>
+      <SimulatorHeader subtitle={<HeaderSubtitle />} />
 
       <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 
