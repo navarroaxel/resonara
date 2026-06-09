@@ -11,7 +11,6 @@ export default function RCDCPage() {
   return (
     <main className="min-h-screen">
       <SimulatorHeader subtitle={<RCDCHeaderSubtitle />} />
-
       <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
           <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">

@@ -11,21 +11,14 @@ export default function KirchhoffACPage() {
   return (
     <main className="min-h-screen">
       <SimulatorHeader subtitle={<KirchhoffACHeaderSubtitle />} />
-
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-
-        {/* Full-width schematic */}
         <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
           <KirchhoffACSchematic />
         </div>
-
-        {/* Two-column grid: params (left) + metrics/charts (right) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
           <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
             <KirchhoffACParameterPanel />
           </div>
-
           <div className="space-y-4">
             <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
               <KirchhoffACMetricsGrid />
@@ -35,11 +28,8 @@ export default function KirchhoffACPage() {
               <KirchhoffACChartTabs />
             </div>
           </div>
-
         </div>
-
       </div>
-
       <KirchhoffACFooter />
     </main>
   )

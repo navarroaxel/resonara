@@ -11,9 +11,7 @@ export default function ThreePhasePage() {
   return (
     <main className="min-h-screen">
       <SimulatorHeader subtitle={<ThreePhaseHeaderSubtitle />} />
-
       <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-
         <div className="space-y-4">
           <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
             <ConnectionTypeToggle />
@@ -23,7 +21,6 @@ export default function ThreePhasePage() {
             <ThreePhaseParameterPanel />
           </div>
         </div>
-
         <div className="space-y-4">
           <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
             <ThreePhaseMetricsGrid />
@@ -32,9 +29,7 @@ export default function ThreePhasePage() {
             <ThreePhaseChartTabs />
           </div>
         </div>
-
       </div>
-
       <ThreePhaseFooter />
     </main>
   )
