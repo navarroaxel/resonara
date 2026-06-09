@@ -1,5 +1,6 @@
 'use client'
 import { useDC } from '@/store/dc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -10,7 +11,8 @@ function valid(r: number) {
 }
 
 export function KCLCard() {
-  const { state: { flags, results, lang } } = useDC()
+  const { state: { flags, results } } = useDC()
+  const { state: { lang } } = useUI()
   const { IR1, IR2, IR3, IR4, IR5, kclA, kclB } = results
   const okA = valid(kclA)
   const okB = valid(kclB)

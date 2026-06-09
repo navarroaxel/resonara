@@ -1,5 +1,6 @@
 'use client'
 import { useDC } from '@/store/dc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -18,7 +19,8 @@ function Badge({ ok }: { ok: boolean }) {
 }
 
 export function KVLCard() {
-  const { state: { params, flags, results, lang } } = useDC()
+  const { state: { params, flags, results } } = useDC()
+  const { state: { lang } } = useUI()
   const { V1, V2, V3 } = params
   const { VR1, VR2, VR3, VR4, VR5, kvl1, kvl2, kvl3 } = results
   const { mesh3 } = flags

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRCDC } from '@/store/rc-dc-store'
+import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 
@@ -60,7 +61,8 @@ function sourceDC(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: numb
 
 export function RCDCSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, results, lang } } = useRCDC()
+  const { state: { params, results } } = useRCDC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

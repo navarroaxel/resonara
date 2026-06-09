@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import { DCProvider } from '@/store/dc-store'
+import { UIProvider } from '@/store/ui-store'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -23,9 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}} />
       </head>
       <body className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 antialiased">
-        <DCProvider>
-          {children}
-        </DCProvider>
+        <UIProvider>
+          <DCProvider>
+            {children}
+          </DCProvider>
+        </UIProvider>
         <Analytics />
       </body>
     </html>

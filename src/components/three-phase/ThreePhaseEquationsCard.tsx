@@ -1,10 +1,12 @@
 'use client'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
 export function ThreePhaseEquationsCard() {
-  const { state: { params, results, connection, flags, lang } } = useThreePhase()
+  const { state: { params, results, connection, flags } } = useThreePhase()
+  const { state: { lang } } = useUI()
   const L_H = params.L / 1000
   const C_F = params.C / 1e6
   const { V_ph, V_L, I_ph, I_L, Z, phi, XL, XC, fr, Q, P, Qr, S, fp } = results

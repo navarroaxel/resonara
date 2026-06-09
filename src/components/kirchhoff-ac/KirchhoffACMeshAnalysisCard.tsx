@@ -1,5 +1,6 @@
 'use client'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -15,7 +16,8 @@ function fmtPhasor(mag: number, ang: number, d = 3): string {
 }
 
 export function KirchhoffACMeshAnalysisCard() {
-  const { state: { params, flags, results, lang } } = useKirchhoffAC()
+  const { state: { params, flags, results } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
   const { Vs, R1, R } = params
   const { I1, I2, I3, Zm_re, Zm_im, Zc_im, D_mag, C_req } = results
 

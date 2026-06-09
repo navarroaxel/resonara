@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useMagnetic } from '@/store/magnetic-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 const W = 580
@@ -10,7 +11,8 @@ const PAD = { top: 24, right: 52, bottom: 40, left: 52 }
 
 export function MagneticTimeDomain() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, params, lang } } = useMagnetic()
+  const { state: { results, params } } = useMagnetic()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -141,7 +143,7 @@ export function MagneticTimeDomain() {
       ctx.fillText(label, lx + 24, PAD.top - 4)
       lx += 80
     }
-  }, [results, params, lang])
+  }, [results, params])
 
   return (
     <canvas

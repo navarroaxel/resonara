@@ -1,5 +1,6 @@
 'use client'
 import { useMagnetic } from '@/store/magnetic-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -18,7 +19,8 @@ function MetricCard({ label, value, unit, color }: {
 }
 
 export function MagneticMetricsGrid() {
-  const { state: { results, lang } } = useMagnetic()
+  const { state: { results } } = useMagnetic()
+  const { state: { lang } } = useUI()
   const { M, XL1, XL2, XM, Zin, phi1, I1, I2, phi2, P1, P2, eta } = results
 
   const etaStr = Number.isFinite(eta) ? (eta * 100).toFixed(1) + ' %' : '—'

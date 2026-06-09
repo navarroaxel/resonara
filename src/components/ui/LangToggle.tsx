@@ -1,9 +1,9 @@
 'use client'
-import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 export function LangToggle() {
-  const { state, dispatch } = useRLC()
+  const { state, dispatch } = useUI()
   return (
     <button
       onClick={() => dispatch({ type: 'SET_LANG', lang: state.lang === 'es' ? 'en' : 'es' })}

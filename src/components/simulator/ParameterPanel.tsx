@@ -1,5 +1,6 @@
 'use client'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t, type TKey } from '@/lib/i18n'
 import type { RLCParams } from '@/lib/types'
 import { useState } from 'react'
@@ -31,7 +32,7 @@ interface ParamRowProps {
   isC:      boolean
 }
 
-function ParamRow({ config, value, enabled, lang, dispatch, isL, isC }: ParamRowProps) {
+function ParamRow({ config, value, lang, enabled, dispatch, isL, isC }: ParamRowProps) {
   const { key, labelKey, unit, min, max, step } = config
   const hasToggle = isL || isC
 
@@ -129,7 +130,8 @@ function ParamRow({ config, value, enabled, lang, dispatch, isL, isC }: ParamRow
 
 export function ParameterPanel() {
   const { state, dispatch } = useRLC()
-  const { lang, flags } = state
+  const { state: { lang } } = useUI()
+  const { flags } = state
 
   return (
     <div>

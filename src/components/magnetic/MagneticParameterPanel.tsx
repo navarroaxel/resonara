@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useMagnetic } from '@/store/magnetic-store'
+import { useUI } from '@/store/ui-store'
 import { t, type TKey } from '@/lib/i18n'
 import type { MagneticParams } from '@/lib/types'
 
@@ -90,7 +91,8 @@ function ParamRow({ config, value, lang, onChange }: ParamRowProps) {
 
 export function MagneticParameterPanel() {
   const { state, dispatch } = useMagnetic()
-  const { lang, params } = state
+  const { state: { lang } } = useUI()
+  const { params } = state
 
   function handleChange(key: keyof MagneticParams, value: number) {
     dispatch({ type: 'SET_PARAM', key, value })

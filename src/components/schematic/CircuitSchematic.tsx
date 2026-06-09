@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 
@@ -158,7 +159,8 @@ function drawParallel(
 
 export function CircuitSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { circuitType, results, flags, lang } } = useRLC()
+  const { state: { circuitType, results, flags } } = useRLC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

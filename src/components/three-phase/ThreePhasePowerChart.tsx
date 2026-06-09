@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -32,7 +33,8 @@ function drawArrow(
 
 export function ThreePhasePowerChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, lang } } = useThreePhase()
+  const { state: { results } } = useThreePhase()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const { P, Qr, S, fp } = results

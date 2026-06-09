@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 import type { KirchhoffACParams } from '@/lib/types'
@@ -100,7 +101,8 @@ function ParamRow({
 
 export function KirchhoffACParameterPanel() {
   const { state, dispatch } = useKirchhoffAC()
-  const { lang, flags, results } = state
+  const { state: { lang } } = useUI()
+  const { flags, results } = state
 
   return (
     <div>

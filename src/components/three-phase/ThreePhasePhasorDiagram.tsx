@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 const SIZE = 320
@@ -36,7 +37,8 @@ function drawArrow(
 
 export function ThreePhasePhasorDiagram() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, lang } } = useThreePhase()
+  const { state: { results } } = useThreePhase()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -97,7 +99,7 @@ export function ThreePhasePhasorDiagram() {
     ctx.fillStyle = isDark ? '#9FA0A0' : '#888'
     ctx.font = '10px sans-serif'
     ctx.fillText('— V  ╌╌ I', 8, 8 + 3 * 16)
-  }, [results, lang])
+  }, [results])
 
   return (
     <canvas

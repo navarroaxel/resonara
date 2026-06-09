@@ -1,10 +1,12 @@
 'use client'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 
 export function ResonanceBadge() {
-  const { state: { params, results, circuitType, flags, lang } } = useRLC()
+  const { state: { params, results, circuitType, flags } } = useRLC()
+  const { state: { lang } } = useUI()
   const { fr, phi } = results
 
   let text: string

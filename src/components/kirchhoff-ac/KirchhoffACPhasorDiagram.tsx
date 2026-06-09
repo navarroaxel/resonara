@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 const SIZE = 320
@@ -33,7 +34,8 @@ function drawArrow(
 
 export function KirchhoffACPhasorDiagram() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, params, flags, lang } } = useKirchhoffAC()
+  const { state: { results, params, flags } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

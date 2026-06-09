@@ -1,5 +1,6 @@
 'use client'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { ThreePhasePhasorDiagram }  from './ThreePhasePhasorDiagram'
@@ -16,7 +17,8 @@ const TABS: { value: ThreePhaseActiveTab; labelKey: 'phasorTab' | 'timeDomainTab
 ]
 
 export function ThreePhaseChartTabs() {
-  const { state: { activeTab, lang }, dispatch } = useThreePhase()
+  const { state: { activeTab }, dispatch } = useThreePhase()
+  const { state: { lang } } = useUI()
 
   return (
     <div>

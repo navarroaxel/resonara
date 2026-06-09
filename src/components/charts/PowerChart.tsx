@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -32,7 +33,8 @@ function drawArrow(
 
 export function PowerChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { results, lang } } = useRLC()
+  const { state: { results } } = useRLC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const { P, Qp, S, fp } = results

@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useLayoutEffect, useState } from 'react'
-import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 
 // useLayoutEffect warns during SSR; fall back to useEffect there.
@@ -35,7 +35,7 @@ const ICONS: Record<ThemeMode, string> = { auto: '◑', light: '☀️', dark: '
 export function ThemeToggle() {
   const [mode, setMode] = useState<ThemeMode>('auto')
   const [mounted, setMounted] = useState(false)
-  const { state: { lang } } = useRLC()
+  const { state: { lang } } = useUI()
   const prefix = t(lang, 'themeLabel')
   const labels: Record<ThemeMode, string> = {
     auto:  `${prefix} Auto`,

@@ -1,12 +1,14 @@
 'use client'
 import { useEffect, useRef, useMemo } from 'react'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { calcBodeCurve } from '@/lib/bode'
 import { t } from '@/lib/i18n'
 
 export function BodeChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, circuitType, results, flags, lang, polyMode, polyResults } } = useRLC()
+  const { state: { params, circuitType, results, flags, polyMode, polyResults } } = useRLC()
+  const { state: { lang } } = useUI()
   const data = useMemo(() => calcBodeCurve(circuitType, params, flags), [circuitType, params, flags])
 
   useEffect(() => {
@@ -79,7 +81,7 @@ export function BodeChart() {
       ctx.fillStyle = '#D85A30'; ctx.fill()
       ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.stroke()
     }
-  }, [data, params.f, results.Z, lang, polyMode, polyResults])
+  }, [data, params.f, results.Z, polyMode, polyResults, lang])
 
   return (
     <canvas

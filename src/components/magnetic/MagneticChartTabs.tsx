@@ -1,5 +1,6 @@
 'use client'
 import { useMagnetic } from '@/store/magnetic-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { MagneticPhasorDiagram } from './MagneticPhasorDiagram'
@@ -16,7 +17,8 @@ const TABS: { value: MagneticActiveTab; labelKey: 'magPhasorTab' | 'magTimeDomai
 ]
 
 export function MagneticChartTabs() {
-  const { state: { activeTab, lang }, dispatch } = useMagnetic()
+  const { state: { activeTab }, dispatch } = useMagnetic()
+  const { state: { lang } } = useUI()
 
   return (
     <div>

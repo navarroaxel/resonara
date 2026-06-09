@@ -1,5 +1,6 @@
 'use client'
 import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
@@ -19,7 +20,8 @@ function PowerRow({ color, name, formula, value, unit }: {
 }
 
 export function KirchhoffACPowerEquations() {
-  const { state: { results, lang } } = useKirchhoffAC()
+  const { state: { results } } = useKirchhoffAC()
+  const { state: { lang } } = useUI()
   const { Zm_re, Zm_im, Zm_mag, P_m, Q_m, S_m, P, Q, S, I1 } = results
 
   return (

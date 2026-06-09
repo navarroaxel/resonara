@@ -1,12 +1,14 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { t } from '@/lib/i18n'
 import { fmt } from '@/lib/utils'
 
 export function HarmonicSpectrum() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { polyResults, lang } } = useRLC()
+  const { state: { polyResults } } = useRLC()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current

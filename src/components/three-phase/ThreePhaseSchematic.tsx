@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useThreePhase } from '@/store/three-phase-store'
+import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
 
@@ -102,7 +103,7 @@ function drawStar(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   hasL: boolean, hasC: boolean,
   XL: number, XC: number, Z: number, fr: number,
-  _lang: 'es' | 'en',
+
 ) {
   const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT
   const mC    = isDark ? '#9FA0A0' : '#888'
@@ -151,7 +152,7 @@ function drawDelta(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   hasL: boolean, hasC: boolean,
   XL: number, XC: number, Z: number, fr: number,
-  _lang: 'es' | 'en',
+
 ) {
   const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT
   const mC    = isDark ? '#9FA0A0' : '#888'
@@ -209,7 +210,8 @@ function drawDelta(
 
 export function ThreePhaseSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { connection, results, flags, lang } } = useThreePhase()
+  const { state: { connection, results, flags } } = useThreePhase()
+  const { state: { lang } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -223,9 +225,9 @@ export function ThreePhaseSchematic() {
     const { hasL, hasC } = flags
 
     if (connection === 'star') {
-      drawStar(ctx, isDark, hasL, hasC, XL, XC, Z, fr, lang)
+      drawStar(ctx, isDark, hasL, hasC, XL, XC, Z, fr)
     } else {
-      drawDelta(ctx, isDark, hasL, hasC, XL, XC, Z, fr, lang)
+      drawDelta(ctx, isDark, hasL, hasC, XL, XC, Z, fr)
     }
   }, [connection, results, flags, lang])
 

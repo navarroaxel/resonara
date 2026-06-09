@@ -1,13 +1,15 @@
 'use client'
 import { useEffect, useRef, useMemo } from 'react'
 import { useRLC } from '@/store/rlc-store'
+import { useUI } from '@/store/ui-store'
 import { calcTimeDomain } from '@/lib/time-domain'
 import { calcPolyTimeDomain } from '@/lib/poly-engine'
 import { t } from '@/lib/i18n'
 
 export function TimeDomainChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { state: { params, circuitType, flags, lang, polyMode, harmonics } } = useRLC()
+  const { state: { params, circuitType, flags, polyMode, harmonics } } = useRLC()
+  const { state: { lang } } = useUI()
   const data = useMemo(
     () => polyMode
       ? calcPolyTimeDomain(circuitType, params, harmonics, flags)
