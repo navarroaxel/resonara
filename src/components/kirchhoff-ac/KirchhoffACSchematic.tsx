@@ -4,7 +4,8 @@ import { useKirchhoffAC } from '@/store/kirchhoff-ac-store'
 import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
-import type { ComplexDisplay } from '@/lib/types'
+import { drawResistorHBody, drawResistorVBody } from '@/lib/schematic-draw'
+import type { ComplexDisplay, ResistorSymbol } from '@/lib/types'
 
 const W = 800, H = 340
 
@@ -85,11 +86,10 @@ function sourceAC(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: numb
 }
 
 // Vertical resistor
-function resistorV(ctx: CanvasRenderingContext2D, cx: number, cy: number, hh: number, c: string, mC: string, lbl: string, valueStr: string) {
+function resistorV(ctx: CanvasRenderingContext2D, cx: number, cy: number, hh: number, c: string, mC: string, lbl: string, valueStr: string, symbol: ResistorSymbol) {
   const rh = hh * 0.55, rw = 18
   wire(ctx, cx, cy - hh, cx, cy - rh, c)
-  ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
-  ctx.strokeRect(cx - rw / 2, cy - rh, rw, rh * 2); ctx.restore()
+  drawResistorVBody(ctx, cx - rw / 2, cy - rh, rw, rh * 2, c, symbol)
   wire(ctx, cx, cy + rh, cx, cy + hh, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'left'
   ctx.fillText(lbl, cx + rw / 2 + 6, cy - 8)
@@ -99,11 +99,10 @@ function resistorV(ctx: CanvasRenderingContext2D, cx: number, cy: number, hh: nu
 }
 
 // Horizontal resistor (for R1 in top rail)
-function resistorH(ctx: CanvasRenderingContext2D, cx: number, cy: number, hw: number, c: string, mC: string, lbl: string, valueStr: string) {
+function resistorH(ctx: CanvasRenderingContext2D, cx: number, cy: number, hw: number, c: string, mC: string, lbl: string, valueStr: string, symbol: ResistorSymbol) {
   const rw = hw * 0.6, rh = 18
   wire(ctx, cx - hw, cy, cx - rw, cy, c)
-  ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
-  ctx.strokeRect(cx - rw, cy - rh / 2, rw * 2, rh); ctx.restore()
+  drawResistorHBody(ctx, cx - rw, cy - rh / 2, rw * 2, rh, c, symbol)
   wire(ctx, cx + rw, cy, cx + hw, cy, c)
   ctx.save(); ctx.fillStyle = mC; ctx.font = '10px sans-serif'; ctx.textAlign = 'center'
   ctx.fillText(valueStr, cx, cy - rh / 2 - 18)
@@ -178,7 +177,7 @@ function phasorAnnotation(ctx: CanvasRenderingContext2D, x: number, y: number, c
 export function KirchhoffACSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { state: { params, flags, results } } = useKirchhoffAC()
-  const { state: { lang } } = useUI()
+  const { state: { lang, resistorSymbol } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -216,7 +215,7 @@ export function KirchhoffACSchematic() {
     const R1_CX = (SRC_L + NODE_A) / 2  // 175
     if (R1 > 0) {
       wire(ctx, SRC_L, TOP, R1_CX - 50, TOP, wC)
-      resistorH(ctx, R1_CX, TOP, 50, rC, mC, `R₁`, `${fmt(R1, 1)}Ω`)
+      resistorH(ctx, R1_CX, TOP, 50, rC, mC, `R₁`, `${fmt(R1, 1)}Ω`, resistorSymbol)
       wire(ctx, R1_CX + 50, TOP, NODE_A, TOP, wC)
     } else {
       wire(ctx, SRC_L, TOP, NODE_A, TOP, wC)
@@ -231,13 +230,13 @@ export function KirchhoffACSchematic() {
     // ── First shared branch: R (load) at Node A ──────────────────────────────
     // brHH = (BOT-TOP)/2 = 105 so resistorV spans exactly TOP to BOT
     const brHH = (BOT - TOP) / 2
-    resistorV(ctx, NODE_A, SRC_CY, brHH, rC, mC, `R`, `${fmt(R, 0)}Ω`)
+    resistorV(ctx, NODE_A, SRC_CY, brHH, rC, mC, `R`, `${fmt(R, 0)}Ω`, resistorSymbol)
 
     // ── Second shared branch: Motor Zm at Node B — Rm (top) + Lm (bottom) ───
     const motorHH  = brHH / 2
     const rmCY     = (TOP + SRC_CY) / 2   // 122.5 — centre of upper half
     const lmCY     = (SRC_CY + BOT) / 2   // 227.5 — centre of lower half
-    resistorV(ctx, NODE_B, rmCY, motorHH, rC, mC, `Rm`, `${fmt(Rm, 1)}Ω`)
+    resistorV(ctx, NODE_B, rmCY, motorHH, rC, mC, `Rm`, `${fmt(Rm, 1)}Ω`, resistorSymbol)
     inductorV(ctx, NODE_B,  lmCY, motorHH, rC, mC, `Lm`, `${fmt(Lm, 0)}mH`)
 
     // ── Third branch: Capacitor Zc at Node C ────────────────────────────────
@@ -279,7 +278,7 @@ export function KirchhoffACSchematic() {
     // Motor annotation goes to the left to avoid overlapping the Rm/Lm labels
     phasorAnnotation(ctx, NODE_B - 65, SRC_CY - 60, IZm, iC)
 
-  }, [params, flags, results])
+  }, [params, flags, results, resistorSymbol])
 
   return (
     <canvas

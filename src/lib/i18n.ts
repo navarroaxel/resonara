@@ -294,6 +294,20 @@ const T = {
     kacSchematicAria:           'Esquemático del circuito CA de tres mallas',
     kacPhasorAria:              'Diagrama fasorial del circuito CA',
     kacPowerAria:               'Triángulo de potencias del circuito CA',
+
+    // Settings panel
+    settingsLabel:              'Ajustes',
+    settingsAriaOpen:           'Abrir ajustes',
+    settingsDisplaySection:     'Visualización',
+    settingsInterfaceSection:   'Interfaz',
+    settingsLangLabel:          'Idioma',
+    resistorSymbolLabel:        'Símbolo R',
+    resistorSymbolEU:           'EU',
+    resistorSymbolUSA:          'USA',
+    unitNotationLabel:          'Unidades',
+    unitNotationRaw:            'Exacto',
+    unitNotationSI:             'SI',
+    unitNotationTooltip:        'Exacto: muestra el valor tal cual (ej. 1200 Ω). SI: escala automáticamente con prefijos (ej. 1.2 kΩ, 3 mA).',
   },
   en: {
     seriesName:         'Series RLC',
@@ -588,6 +602,20 @@ const T = {
     kacSchematicAria:           'AC three-mesh circuit schematic',
     kacPhasorAria:              'AC circuit phasor diagram',
     kacPowerAria:               'AC circuit power triangle',
+
+    // Settings panel
+    settingsLabel:              'Settings',
+    settingsAriaOpen:           'Open settings',
+    settingsDisplaySection:     'Display',
+    settingsInterfaceSection:   'Interface',
+    settingsLangLabel:          'Language',
+    resistorSymbolLabel:        'Resistor symbol',
+    resistorSymbolEU:           'EU',
+    resistorSymbolUSA:          'USA',
+    unitNotationLabel:          'Units',
+    unitNotationRaw:            'Exact',
+    unitNotationSI:             'SI',
+    unitNotationTooltip:        'Exact: shows value as-is (e.g. 1200 Ω). SI: auto-scales with prefixes (e.g. 1.2 kΩ, 3 mA).',
   },
 }
 

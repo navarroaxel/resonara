@@ -4,6 +4,8 @@ import { useDC } from '@/store/dc-store'
 import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
+import { drawResistorHBody, drawResistorVBody } from '@/lib/schematic-draw'
+import type { ResistorSymbol } from '@/lib/types'
 
 const W = 800, H = 320
 
@@ -22,11 +24,11 @@ function resistorH(
   ctx: CanvasRenderingContext2D,
   cx: number, cy: number, hw: number,
   c: string, mC: string, lbl: string, valueStr: string,
+  symbol: ResistorSymbol,
 ) {
   const rw = hw * 0.6, rh = 18
   wire(ctx, cx - hw, cy, cx - rw, cy, c)
-  ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
-  ctx.strokeRect(cx - rw, cy - rh / 2, rw * 2, rh); ctx.restore()
+  drawResistorHBody(ctx, cx - rw, cy - rh / 2, rw * 2, rh, c, symbol)
   wire(ctx, cx + rw, cy, cx + hw, cy, c)
   ctx.save(); ctx.fillStyle = mC; ctx.font = '10px sans-serif'; ctx.textAlign = 'center'
   ctx.fillText(valueStr, cx, cy - rh / 2 - 18)
@@ -38,12 +40,13 @@ function resistorH(
 function resistorV(
   ctx: CanvasRenderingContext2D,
   cx: number, cy: number, hh: number,
-  c: string, mC: string, lbl: string, valueStr: string, valueYOff = 0,
+  c: string, mC: string, lbl: string, valueStr: string,
+  symbol: ResistorSymbol,
+  valueYOff = 0,
 ) {
   const rh = hh * 0.55, rw = 18
   wire(ctx, cx, cy - hh, cx, cy - rh, c)
-  ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
-  ctx.strokeRect(cx - rw / 2, cy - rh, rw, rh * 2); ctx.restore()
+  drawResistorVBody(ctx, cx - rw / 2, cy - rh, rw, rh * 2, c, symbol)
   wire(ctx, cx, cy + rh, cx, cy + hh, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'left'
   ctx.fillText(lbl, cx + rw / 2 + 6, cy - 8)
@@ -162,7 +165,7 @@ function currentArrowV(
 export function DCSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { state: { params, flags, results } } = useDC()
-  const { state: { lang } } = useUI()
+  const { state: { lang, resistorSymbol } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -226,7 +229,7 @@ export function DCSchematic() {
     const R1_CX = (SRC_L + NODE_A_X) / 2  // 175
     if (flags.R1) {
       wire(ctx, SRC_L, TOP, R1_CX - 50, TOP, wC)
-      resistorH(ctx, R1_CX, TOP, 50, r1C, mC, `R₁ = ${fmt(R1, 0)}Ω`, `VR₁=${fmt(VR1, 2)}V`)
+      resistorH(ctx, R1_CX, TOP, 50, r1C, mC, `R₁ = ${fmt(R1, 0)}Ω`, `VR₁=${fmt(VR1, 2)}V`, resistorSymbol)
       wire(ctx, R1_CX + 50, TOP, NODE_A_X, TOP, wC)
     } else {
       wire(ctx, SRC_L, TOP, NODE_A_X, TOP, wC)
@@ -237,7 +240,7 @@ export function DCSchematic() {
     const V3_R  = 20
     if (flags.R3) {
       wire(ctx, NODE_A_X, TOP, R3_CX - 42, TOP, wC)
-      resistorH(ctx, R3_CX, TOP, 42, r3C, mC, `R₃ = ${fmt(R3, 0)}Ω`, `VR₃=${fmt(VR3, 2)}V`)
+      resistorH(ctx, R3_CX, TOP, 42, r3C, mC, `R₃ = ${fmt(R3, 0)}Ω`, `VR₃=${fmt(VR3, 2)}V`, resistorSymbol)
       wire(ctx, R3_CX + 42, TOP, V3_CX - V3_R, TOP, wC)
     } else {
       wire(ctx, NODE_A_X, TOP, V3_CX - V3_R, TOP, wC)
@@ -253,7 +256,7 @@ export function DCSchematic() {
     if (flags.mesh3) {
       if (flags.R5) {
         wire(ctx, NODE_B_X, TOP, R5_CX - 50, TOP, wC)
-        resistorH(ctx, R5_CX, TOP, 50, r5C, mC, `R₅ = ${fmt(R5, 0)}Ω`, `VR₅=${fmt(VR5, 2)}V`)
+        resistorH(ctx, R5_CX, TOP, 50, r5C, mC, `R₅ = ${fmt(R5, 0)}Ω`, `VR₅=${fmt(VR5, 2)}V`, resistorSymbol)
         wire(ctx, R5_CX + 50, TOP, SRC_R, TOP, wC)
       } else {
         wire(ctx, NODE_B_X, TOP, SRC_R, TOP, wC)
@@ -265,7 +268,7 @@ export function DCSchematic() {
     if (flags.R2) {
       wire(ctx, NODE_A_X, TOP,            NODE_A_X, SRC_CY - r2HH, wC)
       wire(ctx, NODE_A_X, SRC_CY + r2HH, NODE_A_X, BOT,            wC)
-      resistorV(ctx, NODE_A_X, SRC_CY, r2HH, r2C, mC, `R₂ = ${fmt(R2, 0)}Ω`, `VR₂=${fmt(VR2, 2)}V`, 14)
+      resistorV(ctx, NODE_A_X, SRC_CY, r2HH, r2C, mC, `R₂ = ${fmt(R2, 0)}Ω`, `VR₂=${fmt(VR2, 2)}V`, resistorSymbol, 14)
     } else {
       wire(ctx, NODE_A_X, TOP, NODE_A_X, BOT, wC)
     }
@@ -274,7 +277,7 @@ export function DCSchematic() {
     if (flags.R4) {
       wire(ctx, NODE_B_X, TOP,            NODE_B_X, SRC_CY - r2HH, wC)
       wire(ctx, NODE_B_X, SRC_CY + r2HH, NODE_B_X, BOT,            wC)
-      resistorV(ctx, NODE_B_X, SRC_CY, r2HH, r4C, mC, `R₄ = ${fmt(R4, 0)}Ω`, `VR₄=${fmt(VR4, 2)}V`)
+      resistorV(ctx, NODE_B_X, SRC_CY, r2HH, r4C, mC, `R₄ = ${fmt(R4, 0)}Ω`, `VR₄=${fmt(VR4, 2)}V`, resistorSymbol)
     } else {
       wire(ctx, NODE_B_X, TOP, NODE_B_X, BOT, wC)
     }
@@ -309,7 +312,7 @@ export function DCSchematic() {
     currentArrowV(ctx, NODE_B_X + 28, SRC_CY + 50, IR4, iC, `IR₄=${fmt(IR4, 3)}A`)
     if (flags.mesh3) currentArrowH(ctx, R5_CX, TOP + 22, IR5, iC, `IR₅=${fmt(IR5, 3)}A`)
 
-  }, [params, flags, results])
+  }, [params, flags, results, resistorSymbol])
 
   return (
     <canvas
