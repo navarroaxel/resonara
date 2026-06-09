@@ -45,7 +45,7 @@ export function SimulatorNav() {
       <div className="lg:hidden">
         <button
           onClick={() => setOpen(v => !v)}
-          aria-haspopup="listbox"
+          aria-haspopup="menu"
           aria-expanded={open}
           className="inline-flex items-center gap-1.5 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
         >
@@ -58,15 +58,14 @@ export function SimulatorNav() {
         </button>
 
         {open && (
-          <div role="listbox" className="absolute right-0 top-full mt-1 z-50 min-w-[10rem] rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-md py-0.5">
+          <div role="menu" className="absolute right-0 top-full mt-1 z-50 min-w-[10rem] rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-md py-0.5">
             {SIMULATORS.map(({ href, labelKey }) => {
               const active = pathname === href
               return (
                 <Link
                   key={href}
                   href={href}
-                  role="option"
-                  aria-selected={active}
+                  role="menuitem"
                   aria-current={active ? 'page' : undefined}
                   onClick={() => setOpen(false)}
                   className={
