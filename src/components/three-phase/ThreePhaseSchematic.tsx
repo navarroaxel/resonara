@@ -4,6 +4,8 @@ import { useThreePhase } from '@/store/three-phase-store'
 import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
+import { drawResistorHBody } from '@/lib/schematic-draw'
+import type { ResistorSymbol } from '@/lib/types'
 
 const W = 580
 const H = 320
@@ -28,6 +30,7 @@ function loadBox(
   cx: number, cy: number, angle: number,
   hasL: boolean, hasC: boolean,
   grayC: string, nodeC: string, rC: string, lC: string, cC: string,
+  symbol: ResistorSymbol,
 ) {
   ctx.save()
   ctx.translate(cx, cy)
@@ -43,8 +46,7 @@ function loadBox(
 
   // R section
   const rW = hasL || hasC ? 24 : totalW
-  ctx.save(); ctx.strokeStyle = rC; ctx.lineWidth = 1.8
-  ctx.strokeRect(-halfW, -h / 2, rW, h); ctx.restore()
+  drawResistorHBody(ctx, -halfW, -h / 2, rW, h, rC, symbol)
   ctx.save(); ctx.fillStyle = rC; ctx.font = 'bold 11px sans-serif'
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
   ctx.fillText('R', -halfW + rW / 2, 0); ctx.restore()
@@ -103,7 +105,7 @@ function drawStar(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   hasL: boolean, hasC: boolean,
   XL: number, XC: number, Z: number, fr: number,
-
+  symbol: ResistorSymbol,
 ) {
   const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT
   const mC    = isDark ? '#9FA0A0' : '#888'
@@ -125,7 +127,7 @@ function drawStar(
     wire(ctx, cx, cy, tx, ty, phaseColors[i])
     const lx = cx + loadDist * Math.cos(angle)
     const ly = cy - loadDist * Math.sin(angle)
-    loadBox(ctx, lx, ly, -angle, hasL, hasC, grayC, nodeC, rC, lC, cC)
+    loadBox(ctx, lx, ly, -angle, hasL, hasC, grayC, nodeC, rC, lC, cC, symbol)
     dot(ctx, tx, ty, phaseColors[i])
     ctx.save()
     ctx.fillStyle = phaseColors[i]
@@ -152,7 +154,7 @@ function drawDelta(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   hasL: boolean, hasC: boolean,
   XL: number, XC: number, Z: number, fr: number,
-
+  symbol: ResistorSymbol,
 ) {
   const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT
   const mC    = isDark ? '#9FA0A0' : '#888'
@@ -186,7 +188,7 @@ function drawDelta(
     const mx = (v0.x + v1.x) / 2
     const my = (v0.y + v1.y) / 2
     const angle = Math.atan2(v0.y - v1.y, v0.x - v1.x)
-    loadBox(ctx, mx, my, angle + Math.PI, hasL, hasC, grayC, nodeC, rC, lC, cC)
+    loadBox(ctx, mx, my, angle + Math.PI, hasL, hasC, grayC, nodeC, rC, lC, cC, symbol)
   })
 
   // Vertex dots and labels
@@ -211,7 +213,7 @@ function drawDelta(
 export function ThreePhaseSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { state: { connection, results, flags } } = useThreePhase()
-  const { state: { lang } } = useUI()
+  const { state: { lang, resistorSymbol } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -225,11 +227,11 @@ export function ThreePhaseSchematic() {
     const { hasL, hasC } = flags
 
     if (connection === 'star') {
-      drawStar(ctx, isDark, hasL, hasC, XL, XC, Z, fr)
+      drawStar(ctx, isDark, hasL, hasC, XL, XC, Z, fr, resistorSymbol)
     } else {
-      drawDelta(ctx, isDark, hasL, hasC, XL, XC, Z, fr)
+      drawDelta(ctx, isDark, hasL, hasC, XL, XC, Z, fr, resistorSymbol)
     }
-  }, [connection, results, flags, lang])
+  }, [connection, results, flags, lang, resistorSymbol])
 
   return (
     <canvas

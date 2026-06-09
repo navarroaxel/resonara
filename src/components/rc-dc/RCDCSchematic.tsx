@@ -4,6 +4,8 @@ import { useRCDC } from '@/store/rc-dc-store'
 import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
+import { drawResistorHBody } from '@/lib/schematic-draw'
+import type { ResistorSymbol } from '@/lib/types'
 
 const W = 560, H = 220
 
@@ -18,11 +20,10 @@ function arrowHead(ctx: CanvasRenderingContext2D, x: number, y: number, angle: n
   ctx.closePath(); ctx.fill(); ctx.restore()
 }
 
-function resistorH(ctx: CanvasRenderingContext2D, cx: number, cy: number, hw: number, c: string, mC: string, lbl: string) {
+function resistorH(ctx: CanvasRenderingContext2D, cx: number, cy: number, hw: number, c: string, mC: string, lbl: string, symbol: ResistorSymbol) {
   const rw = hw * 0.6, rh = 18
   wire(ctx, cx - hw, cy, cx - rw, cy, c)
-  ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
-  ctx.strokeRect(cx - rw, cy - rh / 2, rw * 2, rh); ctx.restore()
+  drawResistorHBody(ctx, cx - rw, cy - rh / 2, rw * 2, rh, c, symbol)
   wire(ctx, cx + rw, cy, cx + hw, cy, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
   ctx.fillText('R', cx, cy - rh / 2 - 4)
@@ -62,7 +63,7 @@ function sourceDC(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: numb
 export function RCDCSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { state: { params, results } } = useRCDC()
-  const { state: { lang } } = useUI()
+  const { state: { lang, resistorSymbol } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -87,7 +88,7 @@ export function RCDCSchematic() {
 
     // top rail: LEFT → RIGHT
     wire(ctx, LEFT, TOP, R_CX - 55, TOP, wC)
-    resistorH(ctx, R_CX, TOP, 55, rC, mC, `${fmt(params.R, 0)} Ω`)
+    resistorH(ctx, R_CX, TOP, 55, rC, mC, `${fmt(params.R, 0)} Ω`, resistorSymbol)
     wire(ctx, R_CX + 55, TOP, RIGHT, TOP, wC)
 
     // right branch: capacitor
@@ -128,7 +129,7 @@ export function RCDCSchematic() {
     ctx.fillText(tauStr, W / 2, BOT + 8)
     ctx.restore()
 
-  }, [params, results])
+  }, [params, results, resistorSymbol])
 
   return (
     <canvas

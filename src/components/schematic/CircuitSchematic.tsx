@@ -4,6 +4,8 @@ import { useRLC } from '@/store/rlc-store'
 import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
+import { drawResistorHBody, drawResistorVBody } from '@/lib/schematic-draw'
+import type { ResistorSymbol } from '@/lib/types'
 
 const W = 640, H = 280
 
@@ -12,10 +14,9 @@ function wire(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number,
   ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore()
 }
 
-function resistor(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, c: string, lbl: string) {
+function resistor(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, c: string, lbl: string, symbol: ResistorSymbol) {
   wire(ctx, x, y + h / 2, x + 8, y + h / 2, c)
-  ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.8
-  ctx.strokeRect(x + 8, y, w - 16, h); ctx.restore()
+  drawResistorHBody(ctx, x + 8, y, w - 16, h, c, symbol)
   wire(ctx, x + w - 8, y + h / 2, x + w, y + h / 2, c)
   ctx.save(); ctx.fillStyle = c; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'
   ctx.fillText(lbl, x + w / 2, y - 5); ctx.restore()
@@ -69,6 +70,7 @@ function drawSeries(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   XL: number, XC: number, fr: number,
   hasL: boolean, hasC: boolean,
+  symbol: ResistorSymbol,
 ) {
   const grayC = isDark ? '#404040' : '#C8C8C8'
   const wC = isDark ? '#85B7EB' : '#378ADD', nC = isDark ? '#FAC775' : '#BA7517'
@@ -88,7 +90,7 @@ function drawSeries(
   wire(ctx, rStart + rw, top, lStart, top, wC)
   wire(ctx, lStart + lw, top, cStart, top, wC)
   wire(ctx, cStart + 32, top, right, top, wC)
-  resistor(ctx, rStart, top - 10, rw, 20, rC, 'R')
+  resistor(ctx, rStart, top - 10, rw, 20, rC, 'R', symbol)
   inductor(ctx, lStart, top - 10, lw, lC, 'L')
   capacitor(ctx, cStart, top - 14, 28, cC, 'C')
   dot(ctx, rStart + rw, top, nC); dot(ctx, lStart + lw, top, nC)
@@ -101,6 +103,7 @@ function drawParallel(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   XL: number, XC: number, fr: number,
   hasL: boolean, hasC: boolean,
+  symbol: ResistorSymbol,
 ) {
   const grayC = isDark ? '#404040' : '#C8C8C8'
   const wC = isDark ? '#85B7EB' : '#378ADD', nC = isDark ? '#FAC775' : '#BA7517'
@@ -121,8 +124,7 @@ function drawParallel(
     dot(ctx, bx, top, nC); dot(ctx, bx, bot, nC)
     if (type === 'R') {
       wire(ctx, bx, top + 14, bx, top + 20, wC)
-      ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 1.8
-      ctx.strokeRect(bx - 10, top + 20, 20, 56); ctx.restore()
+      drawResistorVBody(ctx, bx - 10, top + 20, 20, 56, color, symbol)
       wire(ctx, bx, top + 76, bx, bot - 14, wC)
       ctx.fillStyle = color; ctx.font = '11px sans-serif'; ctx.textAlign = 'start'
       ctx.fillText('R', bx - 20, (top + bot) / 2 + 4)
@@ -160,7 +162,7 @@ function drawParallel(
 export function CircuitSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { state: { circuitType, results, flags } } = useRLC()
-  const { state: { lang } } = useUI()
+  const { state: { lang, resistorSymbol } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -170,11 +172,11 @@ export function CircuitSchematic() {
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     ctx.clearRect(0, 0, W, H)
     if (circuitType === 'series') {
-      drawSeries(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
+      drawSeries(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC, resistorSymbol)
     } else {
-      drawParallel(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC)
+      drawParallel(ctx, isDark, results.XL, results.XC, results.fr, flags.hasL, flags.hasC, resistorSymbol)
     }
-  }, [circuitType, results, flags])
+  }, [circuitType, results, flags, resistorSymbol])
 
   return (
     <canvas

@@ -37,6 +37,9 @@ export interface ComponentFlags {
 
 export type Lang = 'es' | 'en'
 
+export type ResistorSymbol = 'eu' | 'usa'
+export type UnitNotation = 'raw' | 'si'
+
 export interface RLCParams {
   Vs: number   // Source voltage (V), range 1–500
   R:  number   // Resistance (Ω), range 1–1000

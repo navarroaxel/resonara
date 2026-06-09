@@ -294,6 +294,19 @@ const T = {
     kacSchematicAria:           'Esquemático del circuito CA de tres mallas',
     kacPhasorAria:              'Diagrama fasorial del circuito CA',
     kacPowerAria:               'Triángulo de potencias del circuito CA',
+
+    // Settings panel
+    settingsLabel:              'Ajustes',
+    settingsAriaOpen:           'Abrir ajustes',
+    settingsDisplaySection:     'Visualización',
+    settingsInterfaceSection:   'Interfaz',
+    settingsLangLabel:          'Idioma',
+    resistorSymbolLabel:        'Símbolo R',
+    resistorSymbolEU:           'EU',
+    resistorSymbolUSA:          'USA',
+    unitNotationLabel:          'Unidades',
+    unitNotationRaw:            'Exacto',
+    unitNotationSI:             'SI',
   },
   en: {
     seriesName:         'Series RLC',
@@ -588,6 +601,19 @@ const T = {
     kacSchematicAria:           'AC three-mesh circuit schematic',
     kacPhasorAria:              'AC circuit phasor diagram',
     kacPowerAria:               'AC circuit power triangle',
+
+    // Settings panel
+    settingsLabel:              'Settings',
+    settingsAriaOpen:           'Open settings',
+    settingsDisplaySection:     'Display',
+    settingsInterfaceSection:   'Interface',
+    settingsLangLabel:          'Language',
+    resistorSymbolLabel:        'Resistor symbol',
+    resistorSymbolEU:           'EU',
+    resistorSymbolUSA:          'USA',
+    unitNotationLabel:          'Units',
+    unitNotationRaw:            'Exact',
+    unitNotationSI:             'SI',
   },
 }
 

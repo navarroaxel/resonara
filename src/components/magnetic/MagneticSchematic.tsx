@@ -4,6 +4,8 @@ import { useMagnetic } from '@/store/magnetic-store'
 import { useUI } from '@/store/ui-store'
 import { fmt } from '@/lib/utils'
 import { t } from '@/lib/i18n'
+import { drawResistorHBody, drawResistorVBody } from '@/lib/schematic-draw'
+import type { ResistorSymbol } from '@/lib/types'
 
 const W    = 580
 const H    = 240
@@ -54,13 +56,14 @@ function horizResistor(
   isDark: boolean,
   rColor: string,
   labelColor: string,
+  symbol: ResistorSymbol,
 ) {
   const bw = 36, bh = 16
-  ctx.fillStyle = isDark ? '#171717' : '#ffffff'
-  ctx.fillRect(cx - bw / 2, cy - bh / 2, bw, bh)
-  ctx.strokeStyle = rColor
-  ctx.lineWidth   = 1.5
-  ctx.strokeRect(cx - bw / 2, cy - bh / 2, bw, bh)
+  if (symbol === 'eu') {
+    ctx.fillStyle = isDark ? '#171717' : '#ffffff'
+    ctx.fillRect(cx - bw / 2, cy - bh / 2, bw, bh)
+  }
+  drawResistorHBody(ctx, cx - bw / 2, cy - bh / 2, bw, bh, rColor, symbol)
   ctx.fillStyle    = labelColor
   ctx.font         = '10px monospace'
   ctx.textAlign    = 'center'
@@ -77,13 +80,14 @@ function vertResistor(
   isDark: boolean,
   rColor: string,
   labelColor: string,
+  symbol: ResistorSymbol,
 ) {
   const bw = 16, bh = 36
-  ctx.fillStyle = isDark ? '#171717' : '#ffffff'
-  ctx.fillRect(cx - bw / 2, cy - bh / 2, bw, bh)
-  ctx.strokeStyle = rColor
-  ctx.lineWidth   = 1.5
-  ctx.strokeRect(cx - bw / 2, cy - bh / 2, bw, bh)
+  if (symbol === 'eu') {
+    ctx.fillStyle = isDark ? '#171717' : '#ffffff'
+    ctx.fillRect(cx - bw / 2, cy - bh / 2, bw, bh)
+  }
+  drawResistorVBody(ctx, cx - bw / 2, cy - bh / 2, bw, bh, rColor, symbol)
   ctx.fillStyle    = labelColor
   ctx.font         = '10px monospace'
   ctx.textAlign    = 'left'
@@ -113,7 +117,7 @@ function acSource(
 export function MagneticSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { state: { results, params } } = useMagnetic()
-  const { state: { lang } } = useUI()
+  const { state: { lang, resistorSymbol } } = useUI()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -149,7 +153,7 @@ export function MagneticSchematic() {
     ctx.moveTo(xVs, topY)
     ctx.lineTo(xR1 - 18, topY)
     ctx.stroke()
-    horizResistor(ctx, xR1, topY, 'R₁', isDark, rColor, labelC)
+    horizResistor(ctx, xR1, topY, 'R₁', isDark, rColor, labelC, resistorSymbol)
     ctx.strokeStyle = wireP
     ctx.lineWidth   = 2
     ctx.beginPath()
@@ -198,7 +202,7 @@ export function MagneticSchematic() {
     ctx.beginPath()
     ctx.moveTo(xEnd, topY); ctx.lineTo(xEnd, midY - 18)
     ctx.stroke()
-    vertResistor(ctx, xEnd, midY, 'R₂', isDark, rColor, labelC)
+    vertResistor(ctx, xEnd, midY, 'R₂', isDark, rColor, labelC, resistorSymbol)
     ctx.strokeStyle = wireS
     ctx.lineWidth   = 2
     ctx.beginPath()
@@ -239,7 +243,7 @@ export function MagneticSchematic() {
     ctx.textAlign  = 'center'
     ctx.fillText(t(lang, 'magPrimaryLabel'),   (xVs + xL1) / 2, botY + 14)
     ctx.fillText(t(lang, 'magSecondaryLabel'), (xL2 + xEnd) / 2, botY + 14)
-  }, [results, params, lang])
+  }, [results, params, lang, resistorSymbol])
 
   return (
     <canvas

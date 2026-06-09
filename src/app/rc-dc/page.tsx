@@ -8,8 +8,7 @@ import { RCDCFooter }         from '@/components/rc-dc/RCDCFooter'
 import { SimulatorNav }       from '@/components/ui/SimulatorNav'
 import { SimulatorHeader }    from '@/components/ui/SimulatorHeader'
 import { GitHubLink }         from '@/components/ui/GitHubLink'
-import { LangToggle }         from '@/components/ui/LangToggle'
-import { ThemeToggle }        from '@/components/ui/ThemeToggle'
+import { SettingsPanel }      from '@/components/ui/SettingsPanel'
 
 export default function RCDCPage() {
   return (
@@ -17,8 +16,8 @@ export default function RCDCPage() {
       <SimulatorHeader subtitle={<RCDCHeaderSubtitle />}>
         <SimulatorNav />
         <GitHubLink />
-        <LangToggle />
-        <ThemeToggle />
+
+        <SettingsPanel />
       </SimulatorHeader>
 
       <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">

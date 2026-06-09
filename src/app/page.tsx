@@ -10,8 +10,7 @@ import { DCFooter }         from '@/components/dc/DCFooter'
 import { SimulatorNav }     from '@/components/ui/SimulatorNav'
 import { SimulatorHeader }  from '@/components/ui/SimulatorHeader'
 import { GitHubLink }       from '@/components/ui/GitHubLink'
-import { LangToggle }       from '@/components/ui/LangToggle'
-import { ThemeToggle }      from '@/components/ui/ThemeToggle'
+import { SettingsPanel }      from '@/components/ui/SettingsPanel'
 
 export const metadata: Metadata = {
   title: 'Resonara — Kirchhoff CC',
@@ -24,8 +23,8 @@ export default function DCPage() {
       <SimulatorHeader subtitle={<DCHeaderSubtitle />}>
         <SimulatorNav />
         <GitHubLink />
-        <LangToggle />
-        <ThemeToggle />
+
+        <SettingsPanel />
       </SimulatorHeader>
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
