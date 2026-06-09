@@ -142,7 +142,7 @@ export function ThreePhaseTimeDomain() {
       ctx.fillStyle = color
       ctx.fillText(label, lx + 22, ly + 4)
     })
-  }, [results, params])
+  }, [results, params, lang])
 
   const { V_ph, I_ph, phi } = results
   const w      = 2 * Math.PI * params.f

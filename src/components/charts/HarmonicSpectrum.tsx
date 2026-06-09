@@ -100,7 +100,7 @@ export function HarmonicSpectrum() {
       W - pad.right,
       pad.top - 8,
     )
-  }, [polyResults])
+  }, [polyResults, lang])
 
   if (!polyResults) return null
 

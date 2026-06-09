@@ -38,8 +38,6 @@ export function SimulatorNav() {
     }
   }, [open])
 
-  useEffect(() => { setOpen(false) }, [pathname])
-
   return (
     <div ref={containerRef} className="relative">
 
@@ -70,6 +68,7 @@ export function SimulatorNav() {
                   role="option"
                   aria-selected={active}
                   aria-current={active ? 'page' : undefined}
+                  onClick={() => setOpen(false)}
                   className={
                     active
                       ? 'flex items-center w-full px-3 py-1.5 text-xs font-semibold rounded-md mx-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 pointer-events-none'

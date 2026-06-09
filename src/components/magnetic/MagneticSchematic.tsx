@@ -239,7 +239,7 @@ export function MagneticSchematic() {
     ctx.textAlign  = 'center'
     ctx.fillText(t(lang, 'magPrimaryLabel'),   (xVs + xL1) / 2, botY + 14)
     ctx.fillText(t(lang, 'magSecondaryLabel'), (xL2 + xEnd) / 2, botY + 14)
-  }, [results, params])
+  }, [results, params, lang])
 
   return (
     <canvas

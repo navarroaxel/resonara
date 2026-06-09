@@ -146,7 +146,7 @@ export function PowerChart() {
     ctx.fillStyle = textColor
     ctx.font = '12px sans-serif'
     ctx.fillText(`fp = ${fmt(fp, 3)}`, ox, MT + 16)
-  }, [results])
+  }, [results, lang])
 
   return (
     <canvas

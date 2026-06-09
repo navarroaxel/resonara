@@ -103,7 +103,7 @@ function drawStar(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   hasL: boolean, hasC: boolean,
   XL: number, XC: number, Z: number, fr: number,
-  _lang: 'es' | 'en',
+
 ) {
   const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT
   const mC    = isDark ? '#9FA0A0' : '#888'
@@ -152,7 +152,7 @@ function drawDelta(
   ctx: CanvasRenderingContext2D, isDark: boolean,
   hasL: boolean, hasC: boolean,
   XL: number, XC: number, Z: number, fr: number,
-  _lang: 'es' | 'en',
+
 ) {
   const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT
   const mC    = isDark ? '#9FA0A0' : '#888'
@@ -225,11 +225,11 @@ export function ThreePhaseSchematic() {
     const { hasL, hasC } = flags
 
     if (connection === 'star') {
-      drawStar(ctx, isDark, hasL, hasC, XL, XC, Z, fr, lang)
+      drawStar(ctx, isDark, hasL, hasC, XL, XC, Z, fr)
     } else {
-      drawDelta(ctx, isDark, hasL, hasC, XL, XC, Z, fr, lang)
+      drawDelta(ctx, isDark, hasL, hasC, XL, XC, Z, fr)
     }
-  }, [connection, results, flags])
+  }, [connection, results, flags, lang])
 
   return (
     <canvas

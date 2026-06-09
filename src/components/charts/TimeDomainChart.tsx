@@ -90,7 +90,7 @@ export function TimeDomainChart() {
     ctx.beginPath(); ctx.moveTo(pad.left + 62, pad.top - 12); ctx.lineTo(pad.left + 82, pad.top - 12); ctx.stroke()
     ctx.setLineDash([])
     ctx.fillStyle = '#1D9E75'; ctx.fillText('i(t)', pad.left + 86, pad.top - 8)
-  }, [data])
+  }, [data, lang])
 
   return (
     <canvas

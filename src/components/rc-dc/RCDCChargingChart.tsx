@@ -185,7 +185,7 @@ export function RCDCChargingChart() {
       ctx.restore()
     })
 
-  }, [params, results])
+  }, [params, results, lang])
 
   return (
     <div>

@@ -86,7 +86,7 @@ export function KirchhoffACPFCCurve() {
     for (let i = 0; i < N; i++) {
       const x = tx(lms[i])
       const y = tyFp(fp0s[i])
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
     }
     ctx.stroke()
 
@@ -97,7 +97,7 @@ export function KirchhoffACPFCCurve() {
     for (let i = 0; i < N; i++) {
       const x = tx(lms[i])
       const y = tyC(cReqs[i])
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
     }
     ctx.stroke()
 

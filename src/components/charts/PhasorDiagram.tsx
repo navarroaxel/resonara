@@ -134,7 +134,7 @@ export function PhasorDiagram() {
         ctx.fillText(l, 22, 18 + i * 16)
       })
     }
-  }, [params, results, circuitType, flags, polyMode, polyResults])
+  }, [params, results, circuitType, flags, polyMode, polyResults, lang])
 
   return (
     <canvas

@@ -81,7 +81,7 @@ export function BodeChart() {
       ctx.fillStyle = '#D85A30'; ctx.fill()
       ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.stroke()
     }
-  }, [data, params.f, results.Z, polyMode, polyResults])
+  }, [data, params.f, results.Z, polyMode, polyResults, lang])
 
   return (
     <canvas
