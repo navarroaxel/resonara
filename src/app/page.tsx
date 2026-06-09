@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
-import { DCSchematic }      from '@/components/dc/DCSchematic'
+import { DCSchematic } from '@/components/dc/DCSchematic'
 import { DCParameterPanel } from '@/components/dc/DCParameterPanel'
-import { DCMetricsGrid }    from '@/components/dc/DCMetricsGrid'
+import { DCMetricsGrid } from '@/components/dc/DCMetricsGrid'
 import { MeshAnalysisCard } from '@/components/dc/MeshAnalysisCard'
-import { KVLCard }          from '@/components/dc/KVLCard'
-import { KCLCard }          from '@/components/dc/KCLCard'
+import { KVLCard } from '@/components/dc/KVLCard'
+import { KCLCard } from '@/components/dc/KCLCard'
 import { DCHeaderSubtitle } from '@/components/dc/DCHeaderSubtitle'
-import { DCFooter }         from '@/components/dc/DCFooter'
-import { SimulatorHeader }  from '@/components/ui/SimulatorHeader'
+import { DCFooter } from '@/components/dc/DCFooter'
+import { SimulatorHeader } from '@/components/ui/SimulatorHeader'
 
 export const metadata: Metadata = {
   title: 'Resonara — Kirchhoff CC',

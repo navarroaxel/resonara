@@ -1,11 +1,11 @@
-import { KirchhoffACSchematic }      from '@/components/kirchhoff-ac/KirchhoffACSchematic'
+import { KirchhoffACSchematic } from '@/components/kirchhoff-ac/KirchhoffACSchematic'
 import { KirchhoffACParameterPanel } from '@/components/kirchhoff-ac/KirchhoffACParameterPanel'
-import { KirchhoffACMetricsGrid }    from '@/components/kirchhoff-ac/KirchhoffACMetricsGrid'
-import { KirchhoffACChartTabs }      from '@/components/kirchhoff-ac/KirchhoffACChartTabs'
+import { KirchhoffACMetricsGrid } from '@/components/kirchhoff-ac/KirchhoffACMetricsGrid'
+import { KirchhoffACChartTabs } from '@/components/kirchhoff-ac/KirchhoffACChartTabs'
 import { KirchhoffACMeshAnalysisCard } from '@/components/kirchhoff-ac/KirchhoffACMeshAnalysisCard'
 import { KirchhoffACHeaderSubtitle } from '@/components/kirchhoff-ac/KirchhoffACHeaderSubtitle'
-import { KirchhoffACFooter }  from '@/components/kirchhoff-ac/KirchhoffACFooter'
-import { SimulatorHeader }   from '@/components/ui/SimulatorHeader'
+import { KirchhoffACFooter } from '@/components/kirchhoff-ac/KirchhoffACFooter'
+import { SimulatorHeader } from '@/components/ui/SimulatorHeader'
 
 export default function KirchhoffACPage() {
   return (

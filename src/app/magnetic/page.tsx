@@ -1,17 +1,16 @@
-import { MagneticSchematic }      from '@/components/magnetic/MagneticSchematic'
+import { MagneticSchematic } from '@/components/magnetic/MagneticSchematic'
 import { MagneticParameterPanel } from '@/components/magnetic/MagneticParameterPanel'
-import { MagneticMetricsGrid }    from '@/components/magnetic/MagneticMetricsGrid'
-import { MagneticChartTabs }      from '@/components/magnetic/MagneticChartTabs'
-import { MagneticEquationsCard }  from '@/components/magnetic/MagneticEquationsCard'
+import { MagneticMetricsGrid } from '@/components/magnetic/MagneticMetricsGrid'
+import { MagneticChartTabs } from '@/components/magnetic/MagneticChartTabs'
+import { MagneticEquationsCard } from '@/components/magnetic/MagneticEquationsCard'
 import { MagneticHeaderSubtitle } from '@/components/magnetic/MagneticHeaderSubtitle'
-import { MagneticFooter }  from '@/components/magnetic/MagneticFooter'
+import { MagneticFooter } from '@/components/magnetic/MagneticFooter'
 import { SimulatorHeader } from '@/components/ui/SimulatorHeader'
 
 export default function MagneticPage() {
   return (
     <main className="min-h-screen">
       <SimulatorHeader subtitle={<MagneticHeaderSubtitle />} />
-
       <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <div className="space-y-4">

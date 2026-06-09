@@ -1,11 +1,11 @@
-import { ConnectionTypeToggle }       from '@/components/three-phase/ConnectionTypeToggle'
-import { ThreePhaseSchematic }        from '@/components/three-phase/ThreePhaseSchematic'
-import { ThreePhaseParameterPanel }   from '@/components/three-phase/ThreePhaseParameterPanel'
-import { ThreePhaseMetricsGrid }      from '@/components/three-phase/ThreePhaseMetricsGrid'
-import { ThreePhaseChartTabs }        from '@/components/three-phase/ThreePhaseChartTabs'
-import { ThreePhaseHeaderSubtitle }   from '@/components/three-phase/ThreePhaseHeaderSubtitle'
-import { ThreePhaseFooter }    from '@/components/three-phase/ThreePhaseFooter'
-import { SimulatorHeader }     from '@/components/ui/SimulatorHeader'
+import { ConnectionTypeToggle } from '@/components/three-phase/ConnectionTypeToggle'
+import { ThreePhaseSchematic } from '@/components/three-phase/ThreePhaseSchematic'
+import { ThreePhaseParameterPanel } from '@/components/three-phase/ThreePhaseParameterPanel'
+import { ThreePhaseMetricsGrid } from '@/components/three-phase/ThreePhaseMetricsGrid'
+import { ThreePhaseChartTabs } from '@/components/three-phase/ThreePhaseChartTabs'
+import { ThreePhaseHeaderSubtitle } from '@/components/three-phase/ThreePhaseHeaderSubtitle'
+import { ThreePhaseFooter } from '@/components/three-phase/ThreePhaseFooter'
+import { SimulatorHeader } from '@/components/ui/SimulatorHeader'
 
 export default function ThreePhasePage() {
   return (
