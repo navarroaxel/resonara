@@ -8,13 +8,15 @@ import { KirchhoffACWaveformEquations } from './KirchhoffACWaveformEquations'
 import { KirchhoffACPowerTriangle }    from './KirchhoffACPowerTriangle'
 import { KirchhoffACPowerEquations }   from './KirchhoffACPowerEquations'
 import { KirchhoffACKVLCard }          from './KirchhoffACKVLCard'
+import { KirchhoffACPFCCurve }         from './KirchhoffACPFCCurve'
 import type { KirchhoffACActiveTab } from '@/lib/types'
 
-const TABS: { value: KirchhoffACActiveTab; labelKey: 'kacPhasorTab' | 'kacTimeDomainTab' | 'kacPowerTab' | 'kacKVLTab' }[] = [
-  { value: 'phasor', labelKey: 'kacPhasorTab'      },
-  { value: 'time',   labelKey: 'kacTimeDomainTab'  },
-  { value: 'power',  labelKey: 'kacPowerTab'       },
-  { value: 'kvl',    labelKey: 'kacKVLTab'         },
+const TABS: { value: KirchhoffACActiveTab; labelKey: 'kacPhasorTab' | 'kacTimeDomainTab' | 'kacPowerTab' | 'kacKVLTab' | 'kacPFCCurveTab' }[] = [
+  { value: 'phasor',    labelKey: 'kacPhasorTab'     },
+  { value: 'time',      labelKey: 'kacTimeDomainTab' },
+  { value: 'power',     labelKey: 'kacPowerTab'      },
+  { value: 'kvl',       labelKey: 'kacKVLTab'        },
+  { value: 'pfcCurve',  labelKey: 'kacPFCCurveTab'   },
 ]
 
 export function KirchhoffACChartTabs() {
@@ -38,10 +40,11 @@ export function KirchhoffACChartTabs() {
           </button>
         ))}
       </div>
-      {activeTab === 'phasor' && <KirchhoffACPhasorDiagram />}
-      {activeTab === 'time'   && <><KirchhoffACWaveformEquations /><KirchhoffACTimeDomain /></>}
-      {activeTab === 'power'  && <><KirchhoffACPowerEquations /><KirchhoffACPowerTriangle /></>}
-      {activeTab === 'kvl'    && <KirchhoffACKVLCard />}
+      {activeTab === 'phasor'   && <KirchhoffACPhasorDiagram />}
+      {activeTab === 'time'     && <><KirchhoffACWaveformEquations /><KirchhoffACTimeDomain /></>}
+      {activeTab === 'power'    && <><KirchhoffACPowerEquations /><KirchhoffACPowerTriangle /></>}
+      {activeTab === 'kvl'      && <KirchhoffACKVLCard />}
+      {activeTab === 'pfcCurve' && <KirchhoffACPFCCurve />}
     </div>
   )
 }

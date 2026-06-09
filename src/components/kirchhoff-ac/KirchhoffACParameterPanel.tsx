@@ -184,6 +184,9 @@ export function KirchhoffACParameterPanel() {
             </div>
             <p className="text-xs text-amber-600 dark:text-amber-500 mt-0.5">
               {t(lang, 'kacCReqNote')}
+              {Number.isFinite(results.fp_0) && (
+                <span className="ml-2 tabular-nums">· {t(lang, 'kacFp0')}: <strong>{fmt(results.fp_0, 4)}</strong></span>
+              )}
             </p>
           </div>
 

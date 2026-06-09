@@ -33,7 +33,7 @@ function nanResult(): KirchhoffACResult {
     Zm_re: NaN, Zm_im: NaN, Zm_mag: NaN,
     Zc_im: NaN, Zc_mag: NaN,
     P: NaN, Q: NaN, S: NaN, fp: NaN,
-    C_req: NaN, P_m: NaN, Q_m: NaN, S_m: NaN, eta_m: NaN, P_R: NaN, P_R1: NaN,
+    C_req: NaN, fp_0: NaN, P_m: NaN, Q_m: NaN, S_m: NaN, eta_m: NaN, P_R: NaN, P_R1: NaN,
     kvl1_re: NaN, kvl1_im: NaN,
     kvl2_re: NaN, kvl2_im: NaN,
     kvl3_re: NaN, kvl3_im: NaN,
@@ -83,6 +83,9 @@ export function calcKirchhoffAC(
   // ── Always solve 2-mesh for reference currents; C_req via 3-mesh bisection ──
   const { I1: I1_2m, I2: I2_2m } = solve2Mesh(Vs, R1, R, Zm)
   const C_req = findCReq(Vs, omega, R1, R, Zm)
+  const S0_2m  = cmul(c(Vs, 0), cconj(I1_2m))
+  const S0_mag = Math.hypot(S0_2m.re, S0_2m.im)
+  const fp_0   = S0_mag > 1e-12 ? S0_2m.re / S0_mag : 0
 
   // ── Solve 2 or 3-mesh system ───────────────────────────────────────────────
   if (!flags.mesh3) {
@@ -127,7 +130,7 @@ export function calcKirchhoffAC(
       IR: cd(IR), IZm: cd(IZm), IZc: cd(IZc),
       VR1: cd(VR1), VR: cd(VR), VZm: cd(VZm), VZc: cd(VZc),
       Zm_re, Zm_im, Zm_mag, Zc_im, Zc_mag,
-      P, Q, S, fp, C_req, P_m, Q_m, S_m, eta_m, P_R, P_R1,
+      P, Q, S, fp, C_req, fp_0, P_m, Q_m, S_m, eta_m, P_R, P_R1,
       kvl1_re: kvl1.re, kvl1_im: kvl1.im,
       kvl2_re: kvl2.re, kvl2_im: kvl2.im,
       kvl3_re: 0,        kvl3_im: 0,
@@ -199,7 +202,7 @@ export function calcKirchhoffAC(
     IR: cd(IR), IZm: cd(IZm), IZc: cd(IZc),
     VR1: cd(VR1), VR: cd(VR), VZm: cd(VZm), VZc: cd(VZc),
     Zm_re, Zm_im, Zm_mag, Zc_im, Zc_mag,
-    P, Q, S, fp, C_req, P_m, Q_m, S_m, eta_m, P_R, P_R1,
+    P, Q, S, fp, C_req, fp_0, P_m, Q_m, S_m, eta_m, P_R, P_R1,
     kvl1_re: kvl1.re, kvl1_im: kvl1.im,
     kvl2_re: kvl2.re, kvl2_im: kvl2.im,
     kvl3_re: kvl3.re, kvl3_im: kvl3.im,
