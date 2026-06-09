@@ -307,6 +307,7 @@ const T = {
     unitNotationLabel:          'Unidades',
     unitNotationRaw:            'Exacto',
     unitNotationSI:             'SI',
+    unitNotationTooltip:        'Exacto: muestra el valor tal cual (ej. 1200 Ω). SI: escala automáticamente con prefijos (ej. 1.2 kΩ, 3 mA).',
   },
   en: {
     seriesName:         'Series RLC',
@@ -614,6 +615,7 @@ const T = {
     unitNotationLabel:          'Units',
     unitNotationRaw:            'Exact',
     unitNotationSI:             'SI',
+    unitNotationTooltip:        'Exact: shows value as-is (e.g. 1200 Ω). SI: auto-scales with prefixes (e.g. 1.2 kΩ, 3 mA).',
   },
 }
 
