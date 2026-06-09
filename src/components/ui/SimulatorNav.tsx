@@ -41,7 +41,7 @@ export function SimulatorNav() {
   return (
     <div ref={containerRef} className="relative">
 
-      {/* Mobile: dropdown — visible solo bajo sm */}
+      {/* Mobile: dropdown — visible only under sm */}
       <div className="lg:hidden">
         <button
           onClick={() => setOpen(v => !v)}
@@ -83,7 +83,7 @@ export function SimulatorNav() {
         )}
       </div>
 
-      {/* Desktop: pills — hidden bajo sm */}
+      {/* Desktop: pills — hidden under lg */}
       <nav
         aria-label="Simulators"
         className="hidden lg:flex items-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/60 p-0.5 gap-0.5"
