@@ -1,143 +1,143 @@
-'use client'
-import { useRLC } from '@/store/rlc-store'
-import { useUI } from '@/store/ui-store'
-import { t } from '@/lib/i18n'
-import { fmt } from '@/lib/utils'
+"use client";
+import { useRLC } from "@/store/rlc-store";
+import { useUI } from "@/store/ui-store";
+import { t } from "@/lib/i18n";
+import { fmt } from "@/lib/utils";
 
 export function RLCEquationsCard() {
-  const { state: { params, results, circuitType, flags, polyMode } } = useRLC()
-  const { state: { lang } } = useUI()
+  const {
+    state: { params, results, circuitType, flags, polyMode },
+  } = useRLC();
+  const {
+    state: { lang },
+  } = useUI();
 
-  if (polyMode) return null
+  if (polyMode) return null;
 
-  const { Vs, R, f } = params
-  const L_H = params.L / 1000
-  const C_F = params.C / 1e6
-  const { Z, phi, I, XL, XC, fr, Q, P, Qp, S, fp } = results
+  const { Vs, R, f } = params;
+  const L_H = params.L / 1000;
+  const C_F = params.C / 1e6;
+  const { Z, phi, I, XL, XC, fr, Q, P, Qp, S, fp } = results;
 
-  const w    = 2 * Math.PI * f
-  const fmtW = fmt(w, 2)
+  const w = 2 * Math.PI * f;
+  const fmtW = fmt(w, 2);
 
-  const isSeries = circuitType === 'series'
+  const isSeries = circuitType === "series";
 
   // Parallel admittances (for substituted section)
-  const G  = 1 / R
-  const BL = flags.hasL && XL > 0 ? 1 / XL : 0
-  const BC = flags.hasC && XC > 0 ? 1 / XC : 0
+  const G = 1 / R;
+  const BL = flags.hasL && XL > 0 ? 1 / XL : 0;
+  const BC = flags.hasC && XC > 0 ? 1 / XC : 0;
 
   return (
-    <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
-      <h2 className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-3">
-        {t(lang, 'rlcEquationsTitle')}
+    <div className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+      <h2 className="mb-3 text-xs font-medium tracking-wider text-neutral-400 uppercase">
+        {t(lang, "rlcEquationsTitle")}
       </h2>
 
       {/* ── General form ── */}
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
-        {t(lang, 'rcDcGeneralForm')}
+      <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+        {t(lang, "rcDcGeneralForm")}
       </p>
-      <div className="font-mono text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300 mb-4 leading-relaxed">
+      <div className="mb-4 space-y-1.5 font-mono text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">
         {isSeries ? (
           <>
             <div>
               <span className="text-blue-600 dark:text-blue-400">XL</span>
-              {' = ω·L'}
-              {'   '}
+              {" = ω·L"}
+              {"   "}
               <span className="text-blue-600 dark:text-blue-400">XC</span>
-              {' = 1 / (ω·C)'}
+              {" = 1 / (ω·C)"}
             </div>
             <div>
-              {'|'}
+              {"|"}
               <span className="text-blue-600 dark:text-blue-400">Z</span>
-              {'| = √(R² + ('}
+              {"| = √(R² + ("}
               <span className="text-blue-600 dark:text-blue-400">XL</span>
-              {' − '}
+              {" − "}
               <span className="text-blue-600 dark:text-blue-400">XC</span>
-              {')²)'}
+              {")²)"}
             </div>
             <div>
-              {'φ = arctan(('}
+              {"φ = arctan(("}
               <span className="text-blue-600 dark:text-blue-400">XL</span>
-              {' − '}
+              {" − "}
               <span className="text-blue-600 dark:text-blue-400">XC</span>
-              {') / R)'}
+              {") / R)"}
             </div>
             <div>
               <span className="text-teal-600 dark:text-teal-400">I</span>
-              {' = Vs / |'}
+              {" = Vs / |"}
               <span className="text-blue-600 dark:text-blue-400">Z</span>
-              {'|'}
+              {"|"}
             </div>
           </>
         ) : (
           <>
             <div>
               <span className="text-blue-600 dark:text-blue-400">G</span>
-              {' = 1/R   '}
+              {" = 1/R   "}
               <span className="text-blue-600 dark:text-blue-400">BL</span>
-              {' = 1/(ω·L)   '}
+              {" = 1/(ω·L)   "}
               <span className="text-blue-600 dark:text-blue-400">BC</span>
-              {' = ω·C'}
+              {" = ω·C"}
             </div>
             <div>
-              {'|Y| = √('}
+              {"|Y| = √("}
               <span className="text-blue-600 dark:text-blue-400">G</span>
-              {'² + ('}
+              {"² + ("}
               <span className="text-blue-600 dark:text-blue-400">BC</span>
-              {' − '}
+              {" − "}
               <span className="text-blue-600 dark:text-blue-400">BL</span>
-              {')²)'}
+              {")²)"}
             </div>
             <div>
-              {'|'}
+              {"|"}
               <span className="text-blue-600 dark:text-blue-400">Z</span>
-              {'| = 1 / |Y|'}
+              {"| = 1 / |Y|"}
             </div>
             <div>
-              {'φ = −arctan(('}
+              {"φ = −arctan(("}
               <span className="text-blue-600 dark:text-blue-400">BC</span>
-              {' − '}
+              {" − "}
               <span className="text-blue-600 dark:text-blue-400">BL</span>
-              {') / '}
+              {") / "}
               <span className="text-blue-600 dark:text-blue-400">G</span>
-              {')'}
+              {")"}
             </div>
             <div>
               <span className="text-teal-600 dark:text-teal-400">I</span>
-              {' = Vs · |Y|'}
+              {" = Vs · |Y|"}
             </div>
           </>
         )}
-        <div className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5">
-          {'fr = 1 / (2π·√(L·C))'}
+        <div className="mt-1.5 border-t border-neutral-100 pt-1.5 dark:border-neutral-800">
+          {"fr = 1 / (2π·√(L·C))"}
         </div>
-        <div>
-          {isSeries
-            ? 'Q = (1/R)·√(L/C)'
-            : 'Q = R·√(C/L)'}
-        </div>
-        <div className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5">
+        <div>{isSeries ? "Q = (1/R)·√(L/C)" : "Q = R·√(C/L)"}</div>
+        <div className="mt-1.5 border-t border-neutral-100 pt-1.5 dark:border-neutral-800">
           <span className="text-green-600 dark:text-green-400">P</span>
-          {' = Vs·'}
+          {" = Vs·"}
           <span className="text-teal-600 dark:text-teal-400">I</span>
-          {'·cos(φ)'}
-          {'   '}
+          {"·cos(φ)"}
+          {"   "}
           <span className="text-orange-500 dark:text-orange-400">S</span>
-          {' = Vs·'}
+          {" = Vs·"}
           <span className="text-teal-600 dark:text-teal-400">I</span>
         </div>
       </div>
 
       {/* ── Substituted values ── */}
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
-        {t(lang, 'rcDcSubstituted')}
+      <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+        {t(lang, "rcDcSubstituted")}
       </p>
-      <div className="font-mono text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300 mb-4 leading-relaxed">
+      <div className="mb-4 space-y-1.5 font-mono text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">
         <div>
-          {'ω = 2π · '}
+          {"ω = 2π · "}
           {fmt(f)}
-          {' = '}
+          {" = "}
           <span className="font-medium">{fmtW}</span>
-          {' rad/s'}
+          {" rad/s"}
         </div>
         {flags.hasL && (
           <div>
@@ -172,14 +172,16 @@ export function RLCEquationsCard() {
           </>
         )}
         <div>
-          {'|'}
+          {"|"}
           <span className="text-blue-600 dark:text-blue-400">Z</span>
           {`| = ${fmt(Z, 2)} Ω   φ = ${fmt(phi, 1)}°`}
         </div>
         <div>
           <span className="text-teal-600 dark:text-teal-400">I</span>
           {` = ${fmt(Vs)} / ${fmt(Z, 2)} = `}
-          <span className="text-teal-600 dark:text-teal-400 font-medium">{fmt(I, 3)} A</span>
+          <span className="font-medium text-teal-600 dark:text-teal-400">
+            {fmt(I, 3)} A
+          </span>
         </div>
         <div>{`fr = ${fmt(fr, 2)} Hz   Q = ${fmt(Q, 3)}`}</div>
         <div>
@@ -193,5 +195,5 @@ export function RLCEquationsCard() {
         <div>{`fp = cos(${fmt(phi, 1)}°) = ${fmt(fp, 3)}`}</div>
       </div>
     </div>
-  )
+  );
 }
