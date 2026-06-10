@@ -1,35 +1,42 @@
-'use client'
-import { useThreePhase } from '@/store/three-phase-store'
-import { useUI } from '@/store/ui-store'
-import { t } from '@/lib/i18n'
-import { cn } from '@/lib/utils'
-import type { ConnectionType } from '@/lib/types'
+"use client";
+import { useThreePhase } from "@/store/three-phase-store";
+import { useUI } from "@/store/ui-store";
+import { t } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
+import type { ConnectionType } from "@/lib/types";
 
-const OPTIONS: { value: ConnectionType; labelKey: 'starConnection' | 'deltaConnection' }[] = [
-  { value: 'star',  labelKey: 'starConnection'  },
-  { value: 'delta', labelKey: 'deltaConnection' },
-]
+const OPTIONS: {
+  value: ConnectionType;
+  labelKey: "starConnection" | "deltaConnection";
+}[] = [
+  { value: "star", labelKey: "starConnection" },
+  { value: "delta", labelKey: "deltaConnection" },
+];
 
 export function ConnectionTypeToggle() {
-  const { state, dispatch } = useThreePhase()
-  const { state: { lang } } = useUI()
+  const { state, dispatch } = useThreePhase();
+  const {
+    state: { lang },
+  } = useUI();
 
   return (
-    <div className="flex gap-2 mb-4">
+    <div className="mb-4 flex gap-2">
       {OPTIONS.map(({ value, labelKey }) => (
         <button
           key={value}
-          onClick={() => dispatch({ type: 'SET_CONNECTION', connection: value })}
+          onClick={() =>
+            dispatch({ type: "SET_CONNECTION", connection: value })
+          }
           className={cn(
-            'flex-1 py-2 px-4 rounded-lg border text-sm font-medium transition-colors',
+            "flex-1 rounded-lg border px-4 py-2 text-sm font-medium transition-colors",
             state.connection === value
-              ? 'bg-neutral-100 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100'
-              : 'border-neutral-200 dark:border-neutral-700 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50'
+              ? "border-neutral-300 bg-neutral-100 text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
+              : "border-neutral-200 text-neutral-500 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800/50",
           )}
         >
           {t(lang, labelKey)}
         </button>
       ))}
     </div>
-  )
+  );
 }

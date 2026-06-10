@@ -1,131 +1,201 @@
-'use client'
-import { useThreePhase } from '@/store/three-phase-store'
-import { useUI } from '@/store/ui-store'
-import { t } from '@/lib/i18n'
-import { fmt } from '@/lib/utils'
+"use client";
+import { useThreePhase } from "@/store/three-phase-store";
+import { useUI } from "@/store/ui-store";
+import { t } from "@/lib/i18n";
+import { fmt } from "@/lib/utils";
 
 export function ThreePhaseEquationsCard() {
-  const { state: { params, results, connection, flags } } = useThreePhase()
-  const { state: { lang } } = useUI()
-  const L_H = params.L / 1000
-  const C_F = params.C / 1e6
-  const { V_ph, V_L, I_ph, I_L, Z, phi, XL, XC, fr, Q, P, Qr, S, fp } = results
+  const {
+    state: { params, results, connection, flags },
+  } = useThreePhase();
+  const {
+    state: { lang },
+  } = useUI();
+  const L_H = params.L / 1000;
+  const C_F = params.C / 1e6;
+  const { V_ph, V_L, I_ph, I_L, Z, phi, XL, XC, fr, Q, P, Qr, S, fp } = results;
 
-  const w      = 2 * Math.PI * params.f
-  const fmtW   = fmt(w, 2)
-  const isStar = connection === 'star'
-  const { hasL, hasC } = flags
+  const w = 2 * Math.PI * params.f;
+  const fmtW = fmt(w, 2);
+  const isStar = connection === "star";
+  const { hasL, hasC } = flags;
 
   return (
     <div>
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
-        {t(lang, 'threePhaseGeneralForm')}
+      <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+        {t(lang, "threePhaseGeneralForm")}
       </p>
-      <div className="font-mono text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300 mb-4 leading-relaxed">
-
+      <div className="mb-4 space-y-1.5 font-mono text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">
         {(hasL || hasC) && (
           <div>
             {hasL && (
-              <><span className="text-blue-600 dark:text-blue-400">XL</span>{' = ω·L'}</>
+              <>
+                <span className="text-blue-600 dark:text-blue-400">XL</span>
+                {" = ω·L"}
+              </>
             )}
-            {hasL && hasC && '   '}
+            {hasL && hasC && "   "}
             {hasC && (
-              <><span className="text-blue-600 dark:text-blue-400">XC</span>{' = 1 / (ω·C)'}</>
+              <>
+                <span className="text-blue-600 dark:text-blue-400">XC</span>
+                {" = 1 / (ω·C)"}
+              </>
             )}
           </div>
         )}
 
         <div
           role="img"
-          aria-label={t(lang, hasL && hasC ? 'ariaZFormula' : hasL ? 'ariaZFormulaL' : hasC ? 'ariaZFormulaC' : 'ariaZFormulaR')}
+          aria-label={t(
+            lang,
+            hasL && hasC
+              ? "ariaZFormula"
+              : hasL
+                ? "ariaZFormulaL"
+                : hasC
+                  ? "ariaZFormulaC"
+                  : "ariaZFormulaR",
+          )}
         >
-          {'|'}
+          {"|"}
           <span className="text-blue-600 dark:text-blue-400">Z</span>
-          {hasL && hasC  && (<>{'| = √(R² + ('}<span className="text-blue-600 dark:text-blue-400">XL</span>{' − '}<span className="text-blue-600 dark:text-blue-400">XC</span>{')²)'}</>)}
-          {hasL && !hasC && (<>{'| = √(R² + '}<span className="text-blue-600 dark:text-blue-400">XL</span>{'²)'}</>)}
-          {!hasL && hasC && (<>{'| = √(R² + '}<span className="text-blue-600 dark:text-blue-400">XC</span>{'²)'}</>)}
-          {!hasL && !hasC && '| = R'}
+          {hasL && hasC && (
+            <>
+              {"| = √(R² + ("}
+              <span className="text-blue-600 dark:text-blue-400">XL</span>
+              {" − "}
+              <span className="text-blue-600 dark:text-blue-400">XC</span>
+              {")²)"}
+            </>
+          )}
+          {hasL && !hasC && (
+            <>
+              {"| = √(R² + "}
+              <span className="text-blue-600 dark:text-blue-400">XL</span>
+              {"²)"}
+            </>
+          )}
+          {!hasL && hasC && (
+            <>
+              {"| = √(R² + "}
+              <span className="text-blue-600 dark:text-blue-400">XC</span>
+              {"²)"}
+            </>
+          )}
+          {!hasL && !hasC && "| = R"}
         </div>
 
         <div
           role="img"
-          aria-label={t(lang, hasL && hasC ? 'ariaPhiFormula' : hasL ? 'ariaPhiFormulaL' : hasC ? 'ariaPhiFormulaC' : 'ariaPhiFormulaR')}
+          aria-label={t(
+            lang,
+            hasL && hasC
+              ? "ariaPhiFormula"
+              : hasL
+                ? "ariaPhiFormulaL"
+                : hasC
+                  ? "ariaPhiFormulaC"
+                  : "ariaPhiFormulaR",
+          )}
         >
           <span className="text-violet-600 dark:text-violet-400">φ</span>
-          {hasL && hasC  && (<>{' = arctan(('}<span className="text-blue-600 dark:text-blue-400">XL</span>{' − '}<span className="text-blue-600 dark:text-blue-400">XC</span>{') / R)'}</>)}
-          {hasL && !hasC && (<>{' = arctan('}<span className="text-blue-600 dark:text-blue-400">XL</span>{' / R)'}</>)}
-          {!hasL && hasC && (<>{' = arctan(−'}<span className="text-blue-600 dark:text-blue-400">XC</span>{' / R)'}</>)}
-          {!hasL && !hasC && ' = 0'}
+          {hasL && hasC && (
+            <>
+              {" = arctan(("}
+              <span className="text-blue-600 dark:text-blue-400">XL</span>
+              {" − "}
+              <span className="text-blue-600 dark:text-blue-400">XC</span>
+              {") / R)"}
+            </>
+          )}
+          {hasL && !hasC && (
+            <>
+              {" = arctan("}
+              <span className="text-blue-600 dark:text-blue-400">XL</span>
+              {" / R)"}
+            </>
+          )}
+          {!hasL && hasC && (
+            <>
+              {" = arctan(−"}
+              <span className="text-blue-600 dark:text-blue-400">XC</span>
+              {" / R)"}
+            </>
+          )}
+          {!hasL && !hasC && " = 0"}
         </div>
 
         <div
-          className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5"
+          className="mt-1.5 border-t border-neutral-100 pt-1.5 dark:border-neutral-800"
           role="img"
-          aria-label={t(lang, isStar ? 'ariaStarVIFormula' : 'ariaDeltaVIFormula')}
+          aria-label={t(
+            lang,
+            isStar ? "ariaStarVIFormula" : "ariaDeltaVIFormula",
+          )}
         >
           {isStar ? (
             <>
-              {'V_f = V_L / √3   |   '}
+              {"V_f = V_L / √3   |   "}
               <span className="text-teal-600 dark:text-teal-400">I_f</span>
-              {' = '}
+              {" = "}
               <span className="text-teal-600 dark:text-teal-400">I_L</span>
-              {' = V_f / |Z|'}
+              {" = V_f / |Z|"}
             </>
           ) : (
             <>
-              {'V_f = V_L   |   '}
+              {"V_f = V_L   |   "}
               <span className="text-teal-600 dark:text-teal-400">I_f</span>
-              {' = V_f / |Z|   |   '}
+              {" = V_f / |Z|   |   "}
               <span className="text-teal-600 dark:text-teal-400">I_L</span>
-              {' = √3 · '}
+              {" = √3 · "}
               <span className="text-teal-600 dark:text-teal-400">I_f</span>
             </>
           )}
         </div>
 
         <div
-          className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5"
+          className="mt-1.5 border-t border-neutral-100 pt-1.5 dark:border-neutral-800"
           role="img"
-          aria-label={t(lang, 'ariaPFormula')}
+          aria-label={t(lang, "ariaPFormula")}
         >
           <span className="text-green-600 dark:text-green-400">P</span>
-          {' = √3 · V_L · '}
+          {" = √3 · V_L · "}
           <span className="text-teal-600 dark:text-teal-400">I_L</span>
-          {' · cos('}
+          {" · cos("}
           <span className="text-violet-600 dark:text-violet-400">φ</span>
-          {')'}
+          {")"}
         </div>
-        <div role="img" aria-label={t(lang, 'ariaQrFormula')}>
+        <div role="img" aria-label={t(lang, "ariaQrFormula")}>
           <span className="text-orange-500 dark:text-orange-400">Qr</span>
-          {' = √3 · V_L · '}
+          {" = √3 · V_L · "}
           <span className="text-teal-600 dark:text-teal-400">I_L</span>
-          {' · sin('}
+          {" · sin("}
           <span className="text-violet-600 dark:text-violet-400">φ</span>
-          {')'}
+          {")"}
         </div>
-        <div role="img" aria-label={t(lang, 'ariaSFormula')}>
+        <div role="img" aria-label={t(lang, "ariaSFormula")}>
           <span className="text-blue-600 dark:text-blue-400">S</span>
-          {' = √3 · V_L · '}
+          {" = √3 · V_L · "}
           <span className="text-teal-600 dark:text-teal-400">I_L</span>
         </div>
 
         {hasL && hasC && (
-          <div className="border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1.5">
-            {'fr = 1 / (2π·√(L·C))   Q = (1/R)·√(L/C)'}
+          <div className="mt-1.5 border-t border-neutral-100 pt-1.5 dark:border-neutral-800">
+            {"fr = 1 / (2π·√(L·C))   Q = (1/R)·√(L/C)"}
           </div>
         )}
       </div>
 
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
-        {t(lang, 'threePhaseSubstituted')}
+      <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+        {t(lang, "threePhaseSubstituted")}
       </p>
-      <div className="font-mono text-xs space-y-1.5 text-neutral-700 dark:text-neutral-300 leading-relaxed">
+      <div className="space-y-1.5 font-mono text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">
         <div>
-          {'ω = 2π · '}
+          {"ω = 2π · "}
           {fmt(params.f)}
-          {' = '}
+          {" = "}
           <span className="font-medium">{fmtW}</span>
-          {' rad/s'}
+          {" rad/s"}
         </div>
         {hasL && (
           <div>
@@ -140,7 +210,7 @@ export function ThreePhaseEquationsCard() {
           </div>
         )}
         <div>
-          {'|'}
+          {"|"}
           <span className="text-blue-600 dark:text-blue-400">Z</span>
           {`| = ${fmt(Z, 2)} Ω   `}
           <span className="text-violet-600 dark:text-violet-400">φ</span>
@@ -154,13 +224,17 @@ export function ThreePhaseEquationsCard() {
         <div>
           <span className="text-teal-600 dark:text-teal-400">I_f</span>
           {` = ${fmt(V_ph, 2)} / ${fmt(Z, 2)} = `}
-          <span className="text-teal-600 dark:text-teal-400 font-medium">{fmt(I_ph, 3)} A</span>
+          <span className="font-medium text-teal-600 dark:text-teal-400">
+            {fmt(I_ph, 3)} A
+          </span>
         </div>
         {!isStar && (
           <div>
             <span className="text-teal-600 dark:text-teal-400">I_L</span>
             {` = √3 · ${fmt(I_ph, 3)} = `}
-            <span className="text-teal-600 dark:text-teal-400 font-medium">{fmt(I_L, 3)} A</span>
+            <span className="font-medium text-teal-600 dark:text-teal-400">
+              {fmt(I_L, 3)} A
+            </span>
           </div>
         )}
         <div>
@@ -177,5 +251,5 @@ export function ThreePhaseEquationsCard() {
         )}
       </div>
     </div>
-  )
+  );
 }
