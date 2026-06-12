@@ -1,6 +1,12 @@
 export type CircuitType = "series" | "parallel";
 
-export type ActiveTab = "bode" | "phasor" | "time" | "power" | "spectrum";
+export type ActiveTab =
+  | "bode"
+  | "phasor"
+  | "time"
+  | "power"
+  | "spectrum"
+  | "locus";
 
 export type PolyPreset = "square" | "triangle" | "sawtooth" | "custom";
 

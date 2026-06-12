@@ -8,6 +8,7 @@ import { PhasorDiagram } from "@/components/charts/PhasorDiagram";
 import { TimeDomainChart } from "@/components/charts/TimeDomainChart";
 import { PowerChart } from "@/components/charts/PowerChart";
 import { HarmonicSpectrum } from "@/components/charts/HarmonicSpectrum";
+import { GeometricLocusChart } from "@/components/charts/GeometricLocusChart";
 import { WaveformEquations } from "@/components/simulator/WaveformEquations";
 import type { ActiveTab } from "@/lib/types";
 
@@ -18,12 +19,14 @@ const BASE_TABS: {
     | "phasorTab"
     | "timeDomainTab"
     | "powerTab"
-    | "spectrumTab";
+    | "spectrumTab"
+    | "locusTab";
 }[] = [
   { value: "phasor", labelKey: "phasorTab" },
   { value: "time", labelKey: "timeDomainTab" },
   { value: "power", labelKey: "powerTab" },
   { value: "bode", labelKey: "freqResponseTab" },
+  { value: "locus", labelKey: "locusTab" },
 ];
 
 export function ChartTabs() {
@@ -70,6 +73,7 @@ export function ChartTabs() {
       )}
       {activeTab === "power" && <PowerChart />}
       {activeTab === "spectrum" && <HarmonicSpectrum />}
+      {activeTab === "locus" && <GeometricLocusChart />}
     </div>
   );
 }
