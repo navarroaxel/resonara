@@ -184,7 +184,7 @@ export function LociDiagram({ step, showZ, showY, showP }: LociDiagramProps) {
     ctx.stroke();
 
     lbl(ctx, t(lang, "lociAxisRe"), W - 28, CY - 8, axC, F_LG);
-    lbl(ctx, t(lang, "lociAxisIm"), CX - 16, 26, axC, F_LG, "center");
+    lbl(ctx, t(lang, "lociAxisIm"), CX - 22, 26, axC, F_LG, "center");
     lbl(ctx, "0", CX - 8, CY + 18, axC, F_MD, "right");
 
 
