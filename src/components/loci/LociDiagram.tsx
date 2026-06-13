@@ -42,8 +42,14 @@ function arrow(
   const hw = 12;
   ctx.beginPath();
   ctx.moveTo(ex, ey);
-  ctx.lineTo(ex - hw * Math.cos(angle - 0.38), ey - hw * Math.sin(angle - 0.38));
-  ctx.lineTo(ex - hw * Math.cos(angle + 0.38), ey - hw * Math.sin(angle + 0.38));
+  ctx.lineTo(
+    ex - hw * Math.cos(angle - 0.38),
+    ey - hw * Math.sin(angle - 0.38),
+  );
+  ctx.lineTo(
+    ex - hw * Math.cos(angle + 0.38),
+    ey - hw * Math.sin(angle + 0.38),
+  );
   ctx.closePath();
   ctx.fill();
   ctx.restore();
@@ -187,7 +193,6 @@ export function LociDiagram({ step, showZ, showY, showP }: LociDiagramProps) {
     lbl(ctx, t(lang, "lociAxisIm"), CX - 22, 26, axC, F_LG, "center");
     lbl(ctx, "0", CX - 8, CY + 18, axC, F_MD, "right");
 
-
     // ── Pixel positions ───────────────────────────────────────────────────────
     const z1x = CX + 10 * SCALE_Z; // 210
     const z1y = CY - 20 * SCALE_Z; // 55
@@ -249,7 +254,14 @@ export function LociDiagram({ step, showZ, showY, showP }: LociDiagramProps) {
       ctx.fill();
       ctx.restore();
       // Right-side label column — clear of Z content
-      lbl(ctx, t(lang, "lociDiagGeomLocus"), cirCX + cirR + 10, CY + 4, locC, F_SM);
+      lbl(
+        ctx,
+        t(lang, "lociDiagGeomLocus"),
+        cirCX + cirR + 10,
+        CY + 4,
+        locC,
+        F_SM,
+      );
     }
 
     if (showY && step >= 3) {
@@ -284,7 +296,16 @@ export function LociDiagram({ step, showZ, showY, showP }: LociDiagramProps) {
       arrow(ctx, CX, CY, y1px, CY, ytC, 3);
       // YT/Resonancia go in the right-side label column below "Lugar geom."
       lbl(ctx, "YT", cirCX + cirR + 10, CY + 28, ytC, F_MD, "left", true);
-      lbl(ctx, t(lang, "lociDiagResonance"), cirCX + cirR + 10, CY + 50, ytC, F_SM, "left", true);
+      lbl(
+        ctx,
+        t(lang, "lociDiagResonance"),
+        cirCX + cirR + 10,
+        CY + 50,
+        ytC,
+        F_SM,
+        "left",
+        true,
+      );
     }
     // ── P layer (power plane) ─────────────────────────────────────────────────
     // S = Vs²·Y*  →  power plane is Y plane reflected about Re axis, same px scale
@@ -305,12 +326,19 @@ export function LociDiagram({ step, showZ, showY, showP }: LociDiagramProps) {
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.restore();
-      lbl(ctx, t(lang, "lociDiagGeomLocus"), cirCX + cirR + 10, CY - 28, sC, F_SM);
+      lbl(
+        ctx,
+        t(lang, "lociDiagGeomLocus"),
+        cirCX + cirR + 10,
+        CY - 28,
+        sC,
+        F_SM,
+      );
     }
 
     if (showP && step >= 9) {
       // S1 vector + power triangle components
-      dashed(ctx, CX, CY, s1ppx, CY, rC);        // P1 horizontal
+      dashed(ctx, CX, CY, s1ppx, CY, rC); // P1 horizontal
       dashed(ctx, s1ppx, CY, s1ppx, s1ppy, y2C); // Q1 vertical (upward)
       rightAngleMark(ctx, s1ppx, CY, 10, axC, false, true); // inside triangle
       arrow(ctx, CX, CY, s1ppx, s1ppy, sC);
@@ -332,7 +360,12 @@ export function LociDiagram({ step, showZ, showY, showP }: LociDiagramProps) {
     }
 
     // ── Value legend box (bottom-right) ──────────────────────────────────────
-    type LegendEntry = { label: string; sub?: string; tail?: string; color: string };
+    type LegendEntry = {
+      label: string;
+      sub?: string;
+      tail?: string;
+      color: string;
+    };
     const valEntries: LegendEntry[] = [];
     if (showZ && step >= 1) {
       valEntries.push({ label: "R = 10 Ω", color: rC });
@@ -385,7 +418,16 @@ export function LociDiagram({ step, showZ, showY, showP }: LociDiagramProps) {
       valEntries.forEach((entry, i) => {
         const ey = BOX_Y + PAD + (i + 0.78) * LH;
         if (entry.sub) {
-          lblSub(ctx, entry.label, entry.sub, entry.tail ?? "", BOX_X + PAD, ey, entry.color, F_SM);
+          lblSub(
+            ctx,
+            entry.label,
+            entry.sub,
+            entry.tail ?? "",
+            BOX_X + PAD,
+            ey,
+            entry.color,
+            F_SM,
+          );
         } else {
           lbl(ctx, entry.label, BOX_X + PAD, ey, entry.color, F_SM);
         }
