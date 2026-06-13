@@ -1,6 +1,6 @@
 import type { Lang } from "./types";
 
-const T = {
+export const T = {
   es: {
     seriesName: "RLC Serie",
     parallelName: "RLC Paralelo",
@@ -328,6 +328,65 @@ const T = {
     unitNotationSI: "SI",
     unitNotationTooltip:
       "Exacto: muestra el valor tal cual (ej. 1200 Ω). SI: escala automáticamente con prefijos (ej. 1.2 kΩ, 3 mA).",
+
+    // Geometric loci simulator
+    navLociTab: "Lugares Geom.",
+    lociMetaTitle: "Resonara — Lugares Geométricos",
+    lociMetaDesc:
+      "Método gráfico de lugares geométricos para encontrar la resonancia en un circuito paralelo RLC.",
+    lociPageSubtitle: "Lugares geométricos — Resonancia en paralelo RLC",
+    lociSchematicAriaLabel: "Circuito paralelo RLC con dos ramas",
+    lociZPlaneAriaLabel: "Diagrama del plano de impedancias Z",
+    lociYPlaneAriaLabel: "Diagrama del plano de admitancias Y",
+    lociPrev: "Anterior",
+    lociNext: "Siguiente",
+    lociStepOf: "de",
+    lociStep0Title: "Paso 0: El circuito",
+    lociStep0Desc:
+      "Circuito paralelo con dos ramas: Rama 1 con Z₁ = 10 + j20 Ω (R = 10 Ω, XL = 20 Ω fijos) y Rama 2 con Z₂ = −jXc (capacitor variable). Objetivo: encontrar Xc para lograr la resonancia.",
+    lociStep1Title: "Paso 1: Impedancia Z₁ en el plano Z",
+    lociStep1Desc:
+      "Graficamos Z₁ = 10 + j20 Ω como vector. Su módulo es |Z₁| = √(10² + 20²) = √500 ≈ 22.36 Ω y su ángulo es φ₁ = arctan(20/10) ≈ 63.43°.",
+    lociStep2Title: "Paso 2: Lugar geométrico en el plano Y",
+    lociStep2Desc:
+      "Para R = 10 Ω fija y X variable, la admitancia Y = 1/(R + jX) traza un círculo en el plano Y centrado en (G = 0.05 S, B = 0) con radio 0.05 S. Ecuación: (G − 0.05)² + B² = (0.05)².",
+    lociStep3Title: "Paso 3: Y₁ sobre el lugar geométrico",
+    lociStep3Desc:
+      "Calculamos Y₁ = 1/Z₁ = 1/(10 + j20) = 0.02 − j0.04 S. Verificamos que Y₁ pertenece al círculo: (0.02 − 0.05)² + (−0.04)² = 0.0009 + 0.0016 = 0.0025 = (0.05)² ✓",
+    lociStep4Title: "Paso 4: Componentes de Y₁",
+    lociStep4Desc:
+      "Y₁ se descompone en su parte conductiva G₁ = 0.02 S (horizontal, hacia la derecha) y su parte susceptiva B₁ = −0.04 S (vertical, hacia abajo, inductiva).",
+    lociStep5Title: "Paso 5: Y₂ necesaria para la resonancia",
+    lociStep5Desc:
+      "Para resonancia se requiere Im(Y₁ + Y₂) = 0. Como B₁ = −0.04 S, necesitamos B₂ = +0.04 S. La admitancia del capacitor es Y₂ = +j0.04 S (vector hacia arriba desde la punta de Y₁).",
+    lociStep6Title: "Paso 6: Suma vectorial — admitancia total",
+    lociStep6Desc:
+      "La admitancia total YT = Y₁ + Y₂ = (0.02 − j0.04) + j0.04 = 0.02 S (puramente real). Al ser real pura, ZT = 1/0.02 = 50 Ω es puramente resistiva: condición de resonancia alcanzada.",
+    lociStep7Title: "Paso 7: Conclusión — Xc = 25 Ω",
+    lociStep7Desc:
+      "De B₂ = 1/Xc = 0.04 S se obtiene Xc = 1/0.04 = 25 Ω. La rama 2 es Z₂ = −j25 Ω. El circuito paralelo entra en resonancia cuando el capacitor tiene una reactancia capacitiva de 25 Ω.",
+    lociStep8Title: "Paso 8: Plano de Potencia",
+    lociStep8Desc:
+      "S = |Vs|²·Y* escala el plano Y por |Vs|² = 10 000. El lugar geométrico de la potencia aparente es el mismo círculo del plano Y, proyectado en el semiplano superior (Q > 0 es inductiva).",
+    lociStep9Title: "Paso 9: Triángulo de Potencia",
+    lociStep9Desc:
+      "En el punto de operación Y₁: S₁ = P₁ + jQ₁ = 200 W + j400 VAR, con |S₁| ≈ 447 VA. La componente activa P₁ = |Vs|²·G₁ y la reactiva Q₁ = |Vs|²·|B₁|.",
+    lociStep10Title: "Paso 10: Resonancia — Q = 0",
+    lociStep10Desc:
+      "En resonancia BT = 0 → QT = 0. La potencia total es puramente activa: S_res = P = 200 W. El triángulo de potencia colapsa a una línea horizontal sobre el eje P.",
+    lociDiagZPlane: "Plano Z [Ω]",
+    lociDiagYPlane: "Plano Y [S]",
+    lociDiagPPlane: "Plano P [VA]",
+    lociDiagGeomLocus: "Lugar geom.",
+    lociDiagResonance: "Resonancia ✓",
+    lociAxisRe: "Re",
+    lociAxisIm: "jIm",
+    lociCircR: "R=10Ω",
+    lociCircXL: "XL=20Ω",
+    lociCircZ1Label: "Z₁ = 10+j20 Ω",
+    lociCircZ2Label: "Z₂ = −jXc Ω",
+    lociCircXcSolved: "Xc = 25 Ω",
+    lociCircXcUnknown: "Xc = ?",
   },
   en: {
     seriesName: "Series RLC",
@@ -652,6 +711,65 @@ const T = {
     unitNotationSI: "SI",
     unitNotationTooltip:
       "Exact: shows value as-is (e.g. 1200 Ω). SI: auto-scales with prefixes (e.g. 1.2 kΩ, 3 mA).",
+
+    // Geometric loci simulator
+    navLociTab: "Geom. Loci",
+    lociMetaTitle: "Resonara — Geometric Loci",
+    lociMetaDesc:
+      "Graphical geometric loci method to find resonance in a parallel RLC circuit.",
+    lociPageSubtitle: "Geometric loci — Parallel RLC resonance",
+    lociSchematicAriaLabel: "Two-branch parallel RLC circuit",
+    lociZPlaneAriaLabel: "Z-plane impedance diagram",
+    lociYPlaneAriaLabel: "Y-plane admittance diagram",
+    lociPrev: "Previous",
+    lociNext: "Next",
+    lociStepOf: "of",
+    lociStep0Title: "Step 0: The circuit",
+    lociStep0Desc:
+      "Parallel circuit with two branches: Branch 1 has Z₁ = 10 + j20 Ω (R = 10 Ω, XL = 20 Ω fixed) and Branch 2 has Z₂ = −jXc (variable capacitor). Goal: find Xc for resonance.",
+    lociStep1Title: "Step 1: Impedance Z₁ in the Z-plane",
+    lociStep1Desc:
+      "We plot Z₁ = 10 + j20 Ω as a vector. Its magnitude is |Z₁| = √(10² + 20²) = √500 ≈ 22.36 Ω and its angle is φ₁ = arctan(20/10) ≈ 63.43°.",
+    lociStep2Title: "Step 2: Locus circle in the Y-plane",
+    lociStep2Desc:
+      "With R = 10 Ω fixed and X varying, the admittance Y = 1/(R + jX) traces a circle in the Y-plane centered at (G = 0.05 S, B = 0) with radius 0.05 S. Equation: (G − 0.05)² + B² = (0.05)².",
+    lociStep3Title: "Step 3: Y₁ on the locus",
+    lociStep3Desc:
+      "We compute Y₁ = 1/Z₁ = 1/(10 + j20) = 0.02 − j0.04 S. We verify Y₁ lies on the circle: (0.02 − 0.05)² + (−0.04)² = 0.0009 + 0.0016 = 0.0025 = (0.05)² ✓",
+    lociStep4Title: "Step 4: Components of Y₁",
+    lociStep4Desc:
+      "Y₁ is decomposed into its conductive part G₁ = 0.02 S (horizontal, rightward) and its susceptive part B₁ = −0.04 S (vertical, downward, inductive).",
+    lociStep5Title: "Step 5: Y₂ required for resonance",
+    lociStep5Desc:
+      "For resonance we need Im(Y₁ + Y₂) = 0. Since B₁ = −0.04 S, we need B₂ = +0.04 S. The capacitor admittance is Y₂ = +j0.04 S (vector upward from the tip of Y₁).",
+    lociStep6Title: "Step 6: Vector sum — total admittance",
+    lociStep6Desc:
+      "The total admittance YT = Y₁ + Y₂ = (0.02 − j0.04) + j0.04 = 0.02 S (purely real). Being purely real, ZT = 1/0.02 = 50 Ω is purely resistive: resonance condition achieved.",
+    lociStep7Title: "Step 7: Conclusion — Xc = 25 Ω",
+    lociStep7Desc:
+      "From B₂ = 1/Xc = 0.04 S we get Xc = 1/0.04 = 25 Ω. Branch 2 is Z₂ = −j25 Ω. The parallel circuit reaches resonance when the capacitor has a reactive impedance of 25 Ω.",
+    lociStep8Title: "Step 8: Power Plane",
+    lociStep8Desc:
+      "S = |Vs|²·Y* scales the Y-plane by |Vs|² = 10 000. The apparent-power geometric locus is the same circle as in the Y-plane, projected into the upper half-plane (Q > 0 is inductive).",
+    lociStep9Title: "Step 9: Power Triangle",
+    lociStep9Desc:
+      "At operating point Y₁: S₁ = P₁ + jQ₁ = 200 W + j400 VAR, with |S₁| ≈ 447 VA. Active component P₁ = |Vs|²·G₁ and reactive Q₁ = |Vs|²·|B₁|.",
+    lociStep10Title: "Step 10: Resonance — Q = 0",
+    lociStep10Desc:
+      "At resonance BT = 0 → QT = 0. Total power is purely active: S_res = P = 200 W. The power triangle collapses to a horizontal line on the P-axis.",
+    lociDiagZPlane: "Z-plane [Ω]",
+    lociDiagYPlane: "Y-plane [S]",
+    lociDiagPPlane: "P-plane [VA]",
+    lociDiagGeomLocus: "Geom. locus",
+    lociDiagResonance: "Resonance ✓",
+    lociAxisRe: "Re",
+    lociAxisIm: "jIm",
+    lociCircR: "R=10Ω",
+    lociCircXL: "XL=20Ω",
+    lociCircZ1Label: "Z₁ = 10+j20 Ω",
+    lociCircZ2Label: "Z₂ = −jXc Ω",
+    lociCircXcSolved: "Xc = 25 Ω",
+    lociCircXcUnknown: "Xc = ?",
   },
 };
 
