@@ -160,7 +160,6 @@ export function LociDiagram({ step, showZ, showY, showP }: LociDiagramProps) {
 
     const gridC = isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)";
     const axC = isDark ? "#9FA0A0" : "#888";
-    const titC = isDark ? "#D4D4D4" : "#404040";
 
     const z1C = isDark ? "#AFA9EC" : "#7F77DD";
     const rC = isDark ? "#F0997B" : "#D85A30";
@@ -185,7 +184,7 @@ export function LociDiagram({ step, showZ, showY, showP }: LociDiagramProps) {
     ctx.stroke();
 
     lbl(ctx, t(lang, "lociAxisRe"), W - 28, CY - 8, axC, F_LG);
-    lbl(ctx, t(lang, "lociAxisIm"), CX, 26, axC, F_LG, "center");
+    lbl(ctx, t(lang, "lociAxisIm"), CX - 16, 26, axC, F_LG, "center");
     lbl(ctx, "0", CX - 8, CY + 18, axC, F_MD, "right");
 
 
