@@ -4,6 +4,17 @@ Interactive RLC circuit simulator with real-time phasor, Bode, and time-domain a
 
 Built with Next.js 16, React 19, TypeScript 5 strict, Tailwind CSS v4, and Canvas 2D — no runtime chart dependencies.
 
+## Simulators
+
+| Route          | Simulator                                          |
+| -------------- | -------------------------------------------------- |
+| `/`            | DC Kirchhoff — 3-mesh network                      |
+| `/rc-dc`       | RC DC transient                                    |
+| `/ac`          | AC RLC series/parallel — phasor, Bode, time-domain |
+| `/three-phase` | Three-phase RST                                    |
+| `/magnetic`    | Magnetic coupling (transformer)                    |
+| `/loci`        | Geometric loci — parallel RLC resonance            |
+
 ## Features
 
 - **Series and parallel RLC circuits** with live schematic rendering
@@ -14,20 +25,21 @@ Built with Next.js 16, React 19, TypeScript 5 strict, Tailwind CSS v4, and Canva
 - **Time-domain chart** — u(t) and i(t) with analytic waveform equations
 - **Phasor diagram** with voltage and current component arrows
 - **Power triangle** — visual P/Q/S triangle with power-factor readout
+- **Geometric loci** — 11-step interactive walkthrough of impedance (Z), admittance (Y), and power (P) planes for parallel RLC resonance
 - **Dark mode** (system-aware with manual toggle, no FOUC)
 - **EN / ES language toggle** — full bilingual UI including canvas axis labels and footer
 
 ## Tech stack
 
-| Layer | Choice |
-|-------|--------|
-| Framework | Next.js 16 App Router |
-| UI | React 19, `'use client'` components |
-| Styling | Tailwind CSS v4 (CSS-first config) |
-| State | React Context + `useReducer` |
-| Charts | Canvas 2D (no external library) |
-| Testing | Jest 30 + `jest-environment-jsdom` |
-| Language | TypeScript 5 strict |
+| Layer     | Choice                              |
+| --------- | ----------------------------------- |
+| Framework | Next.js 16 App Router               |
+| UI        | React 19, `'use client'` components |
+| Styling   | Tailwind CSS v4 (CSS-first config)  |
+| State     | React Context + `useReducer`        |
+| Charts    | Canvas 2D (no external library)     |
+| Testing   | Jest 30 + `jest-environment-jsdom`  |
+| Language  | TypeScript 5 strict                 |
 
 ## Getting started
 
@@ -73,9 +85,9 @@ src/
 The RLC engine (`src/lib/rlc-engine.ts`) is pure TypeScript with no React dependency — safe to test in Node.js.
 
 ```ts
-import { calc } from '@/lib/rlc-engine'
+import { calc } from "@/lib/rlc-engine";
 
-const result = calc('serie', { Vs: 10, R: 100, L: 0.01, C: 1e-6, f: 1000 })
+const result = calc("serie", { Vs: 10, R: 100, L: 0.01, C: 1e-6, f: 1000 });
 // → { Z, phi, I, XL, XC, fr, Q, P, pf }
 ```
 
