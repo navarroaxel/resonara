@@ -38,6 +38,7 @@ export default function LociPage() {
           <div className="mb-3 flex items-center justify-start gap-3">
             <button
               onClick={() => setShowZ((v) => !v)}
+              aria-pressed={showZ}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                 showZ
                   ? "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300"
@@ -48,6 +49,7 @@ export default function LociPage() {
             </button>
             <button
               onClick={() => setShowY((v) => !v)}
+              aria-pressed={showY}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                 showY
                   ? "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300"
@@ -58,6 +60,7 @@ export default function LociPage() {
             </button>
             <button
               onClick={() => setShowP((v) => !v)}
+              aria-pressed={showP}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                 showP
                   ? "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300"
