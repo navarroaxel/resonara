@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import { T } from "@/lib/i18n";
 
 export const metadata: Metadata = {
-  title: "Resonara — Lugares Geométricos",
-  description:
-    "Método gráfico de lugares geométricos para resonancia en circuito paralelo RLC.",
+  title: T.es.lociMetaTitle,
+  description: T.es.lociMetaDesc,
 };
 
 export default function LociLayout({

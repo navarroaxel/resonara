@@ -1,6 +1,6 @@
 import type { Lang } from "./types";
 
-const T = {
+export const T = {
   es: {
     seriesName: "RLC Serie",
     parallelName: "RLC Paralelo",
@@ -331,6 +331,9 @@ const T = {
 
     // Geometric loci simulator
     navLociTab: "Lugares Geom.",
+    lociMetaTitle: "Resonara — Lugares Geométricos",
+    lociMetaDesc:
+      "Método gráfico de lugares geométricos para encontrar la resonancia en un circuito paralelo RLC.",
     lociPageSubtitle: "Lugares geométricos — Resonancia en paralelo RLC",
     lociSchematicAriaLabel: "Circuito paralelo RLC con dos ramas",
     lociZPlaneAriaLabel: "Diagrama del plano de impedancias Z",
@@ -703,6 +706,9 @@ const T = {
 
     // Geometric loci simulator
     navLociTab: "Geom. Loci",
+    lociMetaTitle: "Resonara — Geometric Loci",
+    lociMetaDesc:
+      "Graphical geometric loci method to find resonance in a parallel RLC circuit.",
     lociPageSubtitle: "Geometric loci — Parallel RLC resonance",
     lociSchematicAriaLabel: "Two-branch parallel RLC circuit",
     lociZPlaneAriaLabel: "Z-plane impedance diagram",
