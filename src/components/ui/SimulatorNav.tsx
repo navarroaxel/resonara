@@ -12,6 +12,7 @@ const SIMULATORS = [
   { href: "/kirchhoff-ac", labelKey: "navKirchhoffACTab" },
   { href: "/three-phase", labelKey: "navThreePhaseTab" },
   { href: "/magnetic", labelKey: "navMagneticTab" },
+  { href: "/loci", labelKey: "navLociTab" },
 ] as const;
 
 export function SimulatorNav() {
