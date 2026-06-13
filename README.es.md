@@ -6,6 +6,17 @@ Desarrollado con Next.js 16, React 19, TypeScript 5 estricto, Tailwind CSS v4 y 
 
 Desarrollado como apoyo didáctico para la cátedra de **Electrotécnica I** de la UTN – FRBA.
 
+## Simuladores
+
+| Ruta           | Simulador                                               |
+| -------------- | ------------------------------------------------------- |
+| `/`            | CC Kirchhoff — red de 3 mallas                          |
+| `/rc-dc`       | Transitorio RC en CC                                    |
+| `/ac`          | RLC CA serie/paralelo — fasores, Bode, dominio temporal |
+| `/three-phase` | Trifásico RST                                           |
+| `/magnetic`    | Acoplamiento magnético (transformador)                  |
+| `/loci`        | Lugares geométricos — resonancia paralelo RLC           |
+
 ## Funcionalidades
 
 - **Circuitos RLC serie y paralelo** con representación esquemática en tiempo real
@@ -16,20 +27,21 @@ Desarrollado como apoyo didáctico para la cátedra de **Electrotécnica I** de 
 - **Dominio temporal** — u(t) e i(t) con ecuaciones de onda analíticas
 - **Diagrama fasorial** con flechas de tensión y corriente
 - **Triángulo de potencias** — representación visual de P/Q/S con lectura del factor de potencia
+- **Lugares geométricos** — recorrido interactivo de 11 pasos por los planos de impedancia (Z), admitancia (Y) y potencia (P) para la resonancia en paralelo RLC
 - **Modo oscuro** (detecta preferencia del sistema, con alternancia manual y sin FOUC)
 - **Selector de idioma ES / EN** — interfaz completamente bilingüe, incluidos ejes de canvas y pie de página
 
 ## Stack tecnológico
 
-| Capa | Tecnología |
-|------|------------|
-| Framework | Next.js 16 App Router |
-| UI | React 19, componentes `'use client'` |
-| Estilos | Tailwind CSS v4 (configuración CSS-first) |
-| Estado | React Context + `useReducer` |
-| Gráficos | Canvas 2D (sin librería externa) |
-| Testing | Jest 30 + `jest-environment-jsdom` |
-| Lenguaje | TypeScript 5 estricto |
+| Capa      | Tecnología                                |
+| --------- | ----------------------------------------- |
+| Framework | Next.js 16 App Router                     |
+| UI        | React 19, componentes `'use client'`      |
+| Estilos   | Tailwind CSS v4 (configuración CSS-first) |
+| Estado    | React Context + `useReducer`              |
+| Gráficos  | Canvas 2D (sin librería externa)          |
+| Testing   | Jest 30 + `jest-environment-jsdom`        |
+| Lenguaje  | TypeScript 5 estricto                     |
 
 ## Primeros pasos
 
@@ -75,9 +87,9 @@ src/
 El motor RLC (`src/lib/rlc-engine.ts`) es TypeScript puro sin dependencia de React — se puede testear directamente en Node.js.
 
 ```ts
-import { calc } from '@/lib/rlc-engine'
+import { calc } from "@/lib/rlc-engine";
 
-const resultado = calc('serie', { Vs: 10, R: 100, L: 0.01, C: 1e-6, f: 1000 })
+const resultado = calc("serie", { Vs: 10, R: 100, L: 0.01, C: 1e-6, f: 1000 });
 // → { Z, phi, I, XL, XC, fr, Q, P, pf }
 ```
 

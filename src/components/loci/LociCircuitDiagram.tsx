@@ -82,8 +82,22 @@ export function LociCircuitDiagram({ step }: { step: number }) {
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(SRC_CX - 8, MID_Y);
-    ctx.bezierCurveTo(SRC_CX - 5, MID_Y - 6, SRC_CX - 3, MID_Y - 6, SRC_CX, MID_Y);
-    ctx.bezierCurveTo(SRC_CX + 3, MID_Y + 6, SRC_CX + 5, MID_Y + 6, SRC_CX + 8, MID_Y);
+    ctx.bezierCurveTo(
+      SRC_CX - 5,
+      MID_Y - 6,
+      SRC_CX - 3,
+      MID_Y - 6,
+      SRC_CX,
+      MID_Y,
+    );
+    ctx.bezierCurveTo(
+      SRC_CX + 3,
+      MID_Y + 6,
+      SRC_CX + 5,
+      MID_Y + 6,
+      SRC_CX + 8,
+      MID_Y,
+    );
     ctx.stroke();
     ctx.fillStyle = vsC;
     ctx.font = "bold 11px sans-serif";
@@ -105,7 +119,15 @@ export function LociCircuitDiagram({ step }: { step: number }) {
     const IND_END = IND_START + BUMPS * bumpR * 2; // 164
 
     wire(ctx, Z1_CX, TOP, Z1_CX, R_START, z1C);
-    drawResistorVBody(ctx, Z1_CX - rW / 2, R_START, rW, rH, z1C, resistorSymbol);
+    drawResistorVBody(
+      ctx,
+      Z1_CX - rW / 2,
+      R_START,
+      rW,
+      rH,
+      z1C,
+      resistorSymbol,
+    );
     wire(ctx, Z1_CX, R_END, Z1_CX, IND_START, z1C);
 
     ctx.save();
