@@ -128,10 +128,10 @@ export function LociCircuitDiagram({ step }: { step: number }) {
     ctx.fillStyle = z1C;
     ctx.font = "bold 11px sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText("R=10Ω", Z1_CX + rW / 2 + 6, rCenterY + 4);
-    ctx.fillText("XL=20Ω", Z1_CX + bumpR + 6, indCenterY + 4);
+    ctx.fillText(t(lang, "lociCircR"), Z1_CX + rW / 2 + 6, rCenterY + 4);
+    ctx.fillText(t(lang, "lociCircXL"), Z1_CX + bumpR + 6, indCenterY + 4);
     ctx.font = "bold 11px sans-serif";
-    ctx.fillText("Z₁ = 10+j20 Ω", Z1_CX + 14, TOP + 16);
+    ctx.fillText(t(lang, "lociCircZ1Label"), Z1_CX + 14, TOP + 16);
     ctx.restore();
 
     // Node dots for Z1 branch
@@ -162,16 +162,16 @@ export function LociCircuitDiagram({ step }: { step: number }) {
     ctx.fillStyle = z2C;
     ctx.font = "bold 11px sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText("Z₂ = −jXc Ω", Z2_CX + 20, TOP + 16);
+    ctx.fillText(t(lang, "lociCircZ2Label"), Z2_CX + 20, TOP + 16);
     // Reveal answer at step 7
     if (step >= 7) {
       ctx.fillStyle = amberC;
       ctx.font = "bold 11px sans-serif";
-      ctx.fillText("Xc = 25 Ω", Z2_CX + 20, MID_Y + 8);
+      ctx.fillText(t(lang, "lociCircXcSolved"), Z2_CX + 20, MID_Y + 8);
     } else {
       ctx.fillStyle = mC;
       ctx.font = "11px sans-serif";
-      ctx.fillText("Xc = ?", Z2_CX + 20, MID_Y + 8);
+      ctx.fillText(t(lang, "lociCircXcUnknown"), Z2_CX + 20, MID_Y + 8);
     }
     ctx.restore();
 

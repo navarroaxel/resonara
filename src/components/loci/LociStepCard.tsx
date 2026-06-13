@@ -55,7 +55,7 @@ export function LociStepCard({
           disabled={step === 0}
           className="rounded-lg border border-neutral-300 px-4 py-1.5 text-base font-medium text-neutral-700 transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
         >
-          {t(lang, "lociPrev")}
+          ← <span className="hidden sm:inline">{t(lang, "lociPrev")}</span>
         </button>
 
         <h2 className="text-center text-base font-semibold text-neutral-800 dark:text-neutral-200">
@@ -67,7 +67,7 @@ export function LociStepCard({
           disabled={step === totalSteps - 1}
           className="rounded-lg bg-neutral-900 px-4 py-1.5 text-base font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
         >
-          {t(lang, "lociNext")}
+          <span className="hidden sm:inline">{t(lang, "lociNext")}</span> →
         </button>
       </div>
 
