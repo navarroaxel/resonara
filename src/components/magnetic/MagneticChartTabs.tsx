@@ -12,10 +12,7 @@ import type { MagneticActiveTab } from "@/lib/types";
 const TABS: {
   value: MagneticActiveTab;
   labelKey:
-    | "magPhasorTab"
-    | "magTimeDomainTab"
-    | "magFreqResponseTab"
-    | "magPowerTab";
+    "magPhasorTab" | "magTimeDomainTab" | "magFreqResponseTab" | "magPowerTab";
 }[] = [
   { value: "phasor", labelKey: "magPhasorTab" },
   { value: "time", labelKey: "magTimeDomainTab" },
