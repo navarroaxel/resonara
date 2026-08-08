@@ -209,11 +209,7 @@ export interface MagneticResult {
 // ── AC Kirchhoff mesh simulator ──────────────────────────────────────────────
 
 export type KirchhoffACActiveTab =
-  | "phasor"
-  | "time"
-  | "power"
-  | "kvl"
-  | "pfcCurve";
+  "phasor" | "time" | "power" | "kvl" | "pfcCurve";
 
 export interface KirchhoffACParams {
   Vs: number; // Source RMS voltage (V), 1–500

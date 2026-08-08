@@ -12,10 +12,7 @@ import type { ThreePhaseActiveTab } from "@/lib/types";
 const TABS: {
   value: ThreePhaseActiveTab;
   labelKey:
-    | "phasorTab"
-    | "timeDomainTab"
-    | "powerTab"
-    | "threePhaseEquationsTab";
+    "phasorTab" | "timeDomainTab" | "powerTab" | "threePhaseEquationsTab";
 }[] = [
   { value: "phasor", labelKey: "phasorTab" },
   { value: "time", labelKey: "timeDomainTab" },
