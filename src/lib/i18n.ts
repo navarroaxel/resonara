@@ -78,6 +78,38 @@ export const T = {
     iRms: "I eficaz",
     pTotal: "Potencia total",
 
+    // Geometric locus tab
+    locusTab: "Locus",
+    locusVarR: "Variable R",
+    locusVarC: "Variable C",
+    locusPrev: "← Anterior",
+    locusNext: "Siguiente →",
+    locusStage0:
+      "El fasor de corriente I corresponde a los parámetros actuales del circuito.",
+    locusStage1_R:
+      "Extremos del lugar: I cuando R→0 (punto extremo) e I cuando R→∞ (origen).",
+    locusStage1_C:
+      "Extremos del lugar: I en resonancia (eje real) e I cuando C→0 (origen).",
+    locusStage1_Rpar:
+      "La componente reactiva Im(I) = Vs·(BC−BL) es constante mientras varía R.",
+    locusStage1_Cpar:
+      "La componente activa Re(I) = Vs/R es constante mientras varía C.",
+    locusStage2:
+      "Al variar el parámetro, el extremo del fasor traza este lugar geométrico.",
+    locusStage3_R:
+      "Máx. potencia activa cuando R = |X| — punto más alejado del eje imaginario.",
+    locusStage3_C:
+      "Resonancia: XC = XL → cos φ = 1, corriente máxima sobre el eje real.",
+    locusStage3_Rpar: "Resonancia: BC = BL → Im(I) = 0, corriente mínima.",
+    locusStage3_Cpar: "Resonancia: BC = BL → Im(I) = 0, corriente en fase con V.",
+    locusMaxP: "P máx",
+    locusResonance: "Resonancia",
+    locusOrigin: "R→∞",
+    locusCurrentOp: "Punto actual",
+    locusNoC: "Habilitar C para ver el locus de variable C.",
+    locusNoL:
+      "Con L deshabilitada no hay resonancia; el locus de variable C no tiene punto de resonancia.",
+
     // DC Kirchhoff simulator
     dcPageTitle: "Kirchhoff CC",
     dcPageSubtitle: "Simulador CC — KVL, KCL y Análisis de Mallas",
@@ -463,6 +495,38 @@ export const T = {
     spectrumCurrent: "Current (A)",
     iRms: "I rms",
     pTotal: "Total power",
+
+    // Geometric locus tab
+    locusTab: "Locus",
+    locusVarR: "Variable R",
+    locusVarC: "Variable C",
+    locusPrev: "← Back",
+    locusNext: "Next →",
+    locusStage0:
+      "The current phasor I corresponds to the circuit's current parameters.",
+    locusStage1_R:
+      "Locus endpoints: I when R→0 (far point) and I when R→∞ (origin).",
+    locusStage1_C:
+      "Locus endpoints: I at resonance (real axis) and I when C→0 (origin).",
+    locusStage1_Rpar:
+      "The reactive component Im(I) = Vs·(BC−BL) is constant as R varies.",
+    locusStage1_Cpar:
+      "The active component Re(I) = Vs/R is constant as C varies.",
+    locusStage2:
+      "As the parameter varies, the tip of the phasor traces this geometric locus.",
+    locusStage3_R:
+      "Max. active power when R = |X| — the point farthest from the imaginary axis.",
+    locusStage3_C:
+      "Resonance: XC = XL → cos φ = 1, maximum current on the real axis.",
+    locusStage3_Rpar: "Resonance: BC = BL → Im(I) = 0, minimum current.",
+    locusStage3_Cpar: "Resonance: BC = BL → Im(I) = 0, current in phase with V.",
+    locusMaxP: "Max P",
+    locusResonance: "Resonance",
+    locusOrigin: "R→∞",
+    locusCurrentOp: "Current op.",
+    locusNoC: "Enable C to see the variable-C locus.",
+    locusNoL:
+      "With L disabled there is no resonance; the variable-C locus has no resonance point.",
 
     // DC Kirchhoff simulator
     dcPageTitle: "Kirchhoff DC",
