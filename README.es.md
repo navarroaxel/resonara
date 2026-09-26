@@ -40,7 +40,7 @@ Desarrollado como apoyo didáctico para la cátedra de **Electrotécnica I** de 
 | Estilos   | Tailwind CSS v4 (configuración CSS-first) |
 | Estado    | React Context + `useReducer`              |
 | Gráficos  | Canvas 2D (sin librería externa)          |
-| Testing   | Jest 30 + `jest-environment-jsdom`        |
+| Testing   | Vitest + jsdom                            |
 | Lenguaje  | TypeScript 5 estricto                     |
 
 ## Primeros pasos
