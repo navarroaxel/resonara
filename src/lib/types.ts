@@ -119,7 +119,7 @@ export interface ThreePhaseParams {
   f: number; // Frequency (Hz), 1–500
   P1_kW: number; // Motor bank active power (kW), delta connection, 1–500
   cosPhi1: number; // Motor bank power factor, inductive, 0.5–1
-  numLamps: number; // Lighting lamp count, star connection, split evenly across R/S/T, 1–300
+  numLamps: number; // Lamps per phase, star connection (total lamps = 3x this), 1–100
   wattPerLamp: number; // Active power per lamp (W), 1–1000
   cosPhi2: number; // Lighting bank power factor, inductive, 0.5–1
   targetFp: number; // Target power factor after capacitor compensation, inductive, 0.5–1

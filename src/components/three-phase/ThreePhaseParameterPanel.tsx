@@ -45,7 +45,7 @@ const PARAMS: ParamConfig[] = [
     labelKey: "tpLabelNumLamps",
     unit: "",
     min: 1,
-    max: 300,
+    max: 100,
     step: 1,
   },
   {
@@ -188,7 +188,10 @@ export function ThreePhaseParameterPanel() {
           className={`h-4 w-8 flex-shrink-0 rounded-full transition-colors ${
             capacitorsOn ? "bg-blue-500" : "bg-neutral-300 dark:bg-neutral-600"
           }`}
-          aria-label={capacitorsOn ? "Disable" : "Enable"}
+          aria-label={t(
+            lang as "es" | "en",
+            capacitorsOn ? "toggleDisable" : "toggleEnable",
+          )}
         >
           <span
             className={`mx-0.5 block h-3 w-3 rounded-full bg-white shadow transition-transform ${

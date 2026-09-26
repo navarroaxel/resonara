@@ -160,7 +160,7 @@ export const T = {
     toggleEnable: "Activar",
     toggleDisable: "Desactivar",
 
-    // Three-phase RST simulator — industria con motores (Δ) + iluminación (Y), vatímetros Aron
+    // Three-phase RST simulator — industrial site with motors (Δ) + lighting (Y), Aron wattmeters
     navThreePhaseLink: "Trifásico RST",
     threePhasePageTitle: "Trifásico RST",
     threePhasePageSubtitle:
@@ -179,7 +179,7 @@ export const T = {
     tpZCap: "Z de 1 capacitor",
     tpLabelP1: "Potencia motores P₁ (Δ)",
     tpLabelCosPhi1: "cos φ₁ motores",
-    tpLabelNumLamps: "Cantidad de lámparas",
+    tpLabelNumLamps: "Lámparas por fase",
     tpLabelWattPerLamp: "Potencia por lámpara",
     tpLabelCosPhi2: "cos φ₂ iluminación",
     tpLabelTargetFp: "cos φ objetivo",
@@ -227,7 +227,7 @@ export const T = {
     ariaQcFormula:
       "Potencia reactiva capacitiva Qc igual a P por la diferencia entre tangente de phi original y tangente de phi objetivo",
     ariaCFormula:
-      "Capacitancia por fase C igual a Qc sobre 3 por omega por tensión de fase al cuadrado",
+      "Capacitancia por rama C igual a Qc sobre 3 por omega por tensión de línea al cuadrado, ya que cada rama del banco en triángulo ve la tensión de línea completa",
     ariaVRFormula: "Tensión de fase R: V pico por seno de omega t",
     ariaVSFormula:
       "Tensión de fase S: V pico por seno de omega t menos 2 pi sobre 3",
@@ -590,7 +590,7 @@ export const T = {
     tpZCap: "Z of 1 capacitor",
     tpLabelP1: "Motor power P₁ (Δ)",
     tpLabelCosPhi1: "Motor cos φ₁",
-    tpLabelNumLamps: "Number of lamps",
+    tpLabelNumLamps: "Lamps per phase",
     tpLabelWattPerLamp: "Power per lamp",
     tpLabelCosPhi2: "Lighting cos φ₂",
     tpLabelTargetFp: "Target cos φ",
@@ -638,7 +638,7 @@ export const T = {
     ariaQcFormula:
       "Capacitive reactive power Qc equals P times the difference between tangent of the original phi and tangent of the target phi",
     ariaCFormula:
-      "Capacitance per phase C equals Qc over 3 times omega times phase voltage squared",
+      "Capacitance per delta branch C equals Qc over 3 times omega times line voltage squared, since each branch of the delta-connected bank sees the full line voltage",
     ariaVRFormula: "Phase R voltage: V-peak times sine of omega t",
     ariaVSFormula:
       "Phase S voltage: V-peak times sine of omega t minus 2 pi over 3",

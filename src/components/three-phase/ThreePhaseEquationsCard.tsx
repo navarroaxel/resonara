@@ -238,7 +238,7 @@ export function ThreePhaseEquationsCard() {
           {" = "}
           <Sub base="Q" sub="C" />
           {" / (3 · ω · "}
-          <Sub base="V" sub="fase" />
+          <Sub base="V" sub="L" />
           {"²)"}
         </div>
       </div>
@@ -255,7 +255,7 @@ export function ThreePhaseEquationsCard() {
           {` = ${fmt(S1, 0)} VA`}
         </div>
         <div>
-          {`P₂ = ${params.numLamps} × ${fmt(params.wattPerLamp, 0)} W = ${fmt(P2, 0)} W   cos φ₂ = ${fmt(params.cosPhi2, 2)}   `}
+          {`P₂ = 3 × ${params.numLamps} × ${fmt(params.wattPerLamp, 0)} W = ${fmt(P2, 0)} W   cos φ₂ = ${fmt(params.cosPhi2, 2)}   `}
           <span className="text-orange-500 dark:text-orange-400">Q₂</span>
           {` = ${fmt(Q2, 0)} VAr`}
         </div>
@@ -319,7 +319,7 @@ export function ThreePhaseEquationsCard() {
         </div>
         <div>
           <span className="text-cyan-600 dark:text-cyan-400">C</span>
-          {` = ${fmt(Qc, 0)} / (3 · 2π·${fmt(params.f, 0)} · (${fmt(params.VL, 0)}/√3)²) = `}
+          {` = ${fmt(Qc, 0)} / (3 · 2π·${fmt(params.f, 0)} · ${fmt(params.VL, 0)}²) = `}
           <span className="font-medium text-cyan-600 dark:text-cyan-400">
             {fmt(C_uF, 1)} µF
           </span>

@@ -1,15 +1,15 @@
 import { calcThreePhase } from "../three-phase-engine";
 import type { ThreePhaseParams } from "../types";
 
-// rst.txt: motores en triángulo 56 kW / cos φ1 0.7, iluminación en estrella
-// 60x150W / cos φ2 0.6, VL=380V, targetFp=0.85. Valores de referencia
-// calculados a mano.
+// rst.txt: delta-connected motors 56 kW / cos φ1 0.7, star-connected
+// lighting 60x150W (20 per phase) / cos φ2 0.6, VL=380V, targetFp=0.85.
+// Reference values computed by hand.
 const base: ThreePhaseParams = {
   VL: 380,
   f: 50,
   P1_kW: 56,
   cosPhi1: 0.7,
-  numLamps: 60,
+  numLamps: 20, // per phase; total lamps = 3 × 20 = 60
   wattPerLamp: 150,
   cosPhi2: 0.6,
   targetFp: 0.85,

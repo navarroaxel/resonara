@@ -13,7 +13,7 @@ const DEFAULT_PARAMS: ThreePhaseParams = {
   f: 50,
   P1_kW: 56,
   cosPhi1: 0.7,
-  numLamps: 60,
+  numLamps: 20,
   wattPerLamp: 150,
   cosPhi2: 0.6,
   targetFp: 0.85,

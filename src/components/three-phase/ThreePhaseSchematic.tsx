@@ -528,7 +528,7 @@ export function ThreePhaseSchematic() {
     // Balanced load: one lamp symbol per phase stands in for the N/3 lamps
     // wired to that phase (all three spokes still land on the neutral N).
     const starN = { x: 500, y: yS };
-    const lampsPerPhase = params.numLamps / 3;
+    const lampsPerPhase = params.numLamps;
     const starSubs = ["RL", "SL", "TL"];
     [phaseColors[0], phaseColors[1], phaseColors[2]].forEach((color, i) => {
       const from = [

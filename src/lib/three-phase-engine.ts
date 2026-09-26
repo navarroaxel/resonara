@@ -18,7 +18,8 @@ export function calcThreePhase(
   const { VL, f, cosPhi1, cosPhi2, numLamps, wattPerLamp, targetFp } = params;
 
   const motor = loadFromCosPhi(params.P1_kW * 1000, cosPhi1);
-  const lighting = loadFromCosPhi(numLamps * wattPerLamp, cosPhi2);
+  // numLamps is per phase (balanced), so the total lamp count is 3x that
+  const lighting = loadFromCosPhi(numLamps * 3 * wattPerLamp, cosPhi2);
 
   const P_total = motor.P + lighting.P;
   const Q_uncompensated = motor.Q + lighting.Q;
