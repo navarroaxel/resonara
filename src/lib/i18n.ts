@@ -219,8 +219,7 @@ export const T = {
     ariaStotalFormula:
       "Potencia aparente total S igual a raíz de P al cuadrado más Q al cuadrado",
     ariaFpTotalFormula: "Factor de potencia total igual a P sobre S",
-    ariaILFormula:
-      "Corriente de línea I_L igual a S sobre raíz de 3 por V_L",
+    ariaILFormula: "Corriente de línea I_L igual a S sobre raíz de 3 por V_L",
     ariaWRSFormula:
       "Lectura del vatímetro W_RS igual a V_L por I_L por coseno de phi menos 30 grados",
     ariaWSTFormula:

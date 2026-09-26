@@ -164,7 +164,18 @@ export function ThreePhasePhasorDiagram() {
     LINE_PAIRS.forEach(([fromIdx, toIdx, sub, color, labelDx]) => {
       const from = phaseTips[fromIdx];
       const to = phaseTips[toIdx];
-      drawArrow(ctx, from.x, from.y, to.x, to.y, color, "U", sub, false, labelDx);
+      drawArrow(
+        ctx,
+        from.x,
+        from.y,
+        to.x,
+        to.y,
+        color,
+        "U",
+        sub,
+        false,
+        labelDx,
+      );
     });
 
     // Capacitor bank line currents I_RC, I_SC, I_TC — fixed 90° ahead of

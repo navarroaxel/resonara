@@ -50,12 +50,7 @@ export function ThreePhasePowerChart() {
   } = useUI();
 
   useEffect(() => {
-    const {
-      P_total: P,
-      Q_total: Qr,
-      S_total: S,
-      fp_total: fp,
-    } = results;
+    const { P_total: P, Q_total: Qr, S_total: S, fp_total: fp } = results;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");

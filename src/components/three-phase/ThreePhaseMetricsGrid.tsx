@@ -58,7 +58,7 @@ function MetricCard({
 }
 
 function phaseLabel(mag: number, angDeg: number): string {
-  const wrapped = ((angDeg + 180) % 360 + 360) % 360 - 180;
+  const wrapped = ((((angDeg + 180) % 360) + 360) % 360) - 180;
   return `${fmt(mag, 2)} ∠${fmt(wrapped, 1)}°`;
 }
 
@@ -186,11 +186,7 @@ export function ThreePhaseMetricsGrid() {
       <GroupTitle>{t(lang, "tpWattmetersGroup")}</GroupTitle>
       <MetricCard
         label={
-          <SubLabel
-            prefix={t(lang, "tpWattmeterLabel")}
-            base="W"
-            sub="RS"
-          />
+          <SubLabel prefix={t(lang, "tpWattmeterLabel")} base="W" sub="RS" />
         }
         value={fmt(W_RS)}
         unit="W"
@@ -198,11 +194,7 @@ export function ThreePhaseMetricsGrid() {
       />
       <MetricCard
         label={
-          <SubLabel
-            prefix={t(lang, "tpWattmeterLabel")}
-            base="W"
-            sub="ST"
-          />
+          <SubLabel prefix={t(lang, "tpWattmeterLabel")} base="W" sub="ST" />
         }
         value={fmt(W_ST)}
         unit="W"
@@ -263,7 +255,11 @@ export function ThreePhaseMetricsGrid() {
       />
       <MetricCard
         label={
-          <SubLabel prefix={t(lang, "tpCurrentLabel")} base="I" sub={`${branch}L`} />
+          <SubLabel
+            prefix={t(lang, "tpCurrentLabel")}
+            base="I"
+            sub={`${branch}L`}
+          />
         }
         value={phaseLabel(I_RL, 90 - phi2Deg + offset)}
         unit="A"
@@ -271,7 +267,11 @@ export function ThreePhaseMetricsGrid() {
       />
       <MetricCard
         label={
-          <SubLabel prefix={t(lang, "tpCurrentLabel")} base="I" sub={`${branch}M`} />
+          <SubLabel
+            prefix={t(lang, "tpCurrentLabel")}
+            base="I"
+            sub={`${branch}M`}
+          />
         }
         value={phaseLabel(I_RM, 90 - phi1Deg + offset)}
         unit="A"
@@ -291,7 +291,11 @@ export function ThreePhaseMetricsGrid() {
       />
       <MetricCard
         label={
-          <SubLabel prefix={t(lang, "tpCurrentLabel")} base="I" sub={`${branch}C`} />
+          <SubLabel
+            prefix={t(lang, "tpCurrentLabel")}
+            base="I"
+            sub={`${branch}C`}
+          />
         }
         value={phaseLabel(I_RC, 180 + offset)}
         unit="A"
@@ -325,10 +329,7 @@ export function ThreePhaseMetricsGrid() {
       <GroupTitle>{t(lang, "tpImpedancesGroup")}</GroupTitle>
       <MetricCard
         label={t(lang, "tpZMotor")}
-        value={phaseLabel(
-          Z_motor,
-          (Math.acos(params.cosPhi1) * 180) / Math.PI,
-        )}
+        value={phaseLabel(Z_motor, (Math.acos(params.cosPhi1) * 180) / Math.PI)}
         unit="Ω"
         color="text-indigo-600 dark:text-indigo-400"
       />

@@ -186,9 +186,7 @@ export function ThreePhaseParameterPanel() {
             })
           }
           className={`h-4 w-8 flex-shrink-0 rounded-full transition-colors ${
-            capacitorsOn
-              ? "bg-blue-500"
-              : "bg-neutral-300 dark:bg-neutral-600"
+            capacitorsOn ? "bg-blue-500" : "bg-neutral-300 dark:bg-neutral-600"
           }`}
           aria-label={capacitorsOn ? "Disable" : "Enable"}
         >

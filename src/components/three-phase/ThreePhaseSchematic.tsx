@@ -370,9 +370,33 @@ export function ThreePhaseSchematic() {
     );
 
     // Triangle sides — one capacitor each: U–P, P–Q, Q–U
-    capacitorOnLine(ctx, nodeU.x, nodeU.y, nodeP.x, nodeP.y, capColor(0), capDashed);
-    capacitorOnLine(ctx, nodeP.x, nodeP.y, nodeQ.x, nodeQ.y, capColor(1), capDashed);
-    capacitorOnLine(ctx, nodeQ.x, nodeQ.y, nodeU.x, nodeU.y, capColor(2), capDashed);
+    capacitorOnLine(
+      ctx,
+      nodeU.x,
+      nodeU.y,
+      nodeP.x,
+      nodeP.y,
+      capColor(0),
+      capDashed,
+    );
+    capacitorOnLine(
+      ctx,
+      nodeP.x,
+      nodeP.y,
+      nodeQ.x,
+      nodeQ.y,
+      capColor(1),
+      capDashed,
+    );
+    capacitorOnLine(
+      ctx,
+      nodeQ.x,
+      nodeQ.y,
+      nodeU.x,
+      nodeU.y,
+      capColor(2),
+      capDashed,
+    );
 
     // Capacitor branch currents (Δ side currents)
     currentLabel(
@@ -479,7 +503,11 @@ export function ThreePhaseSchematic() {
     ctx.textAlign = "center";
     ctx.fillText(t(lang, "tpMotorsGroup"), motorM.x, motorM.y + 32);
     ctx.font = "11px sans-serif";
-    ctx.fillText(`P₁ = ${fmt(results.P1 / 1000, 0)} kW`, motorM.x, motorM.y + 48);
+    ctx.fillText(
+      `P₁ = ${fmt(results.P1 / 1000, 0)} kW`,
+      motorM.x,
+      motorM.y + 48,
+    );
     ctx.restore();
 
     // Rows continue straight across, past the capacitor and motor taps,
@@ -510,7 +538,16 @@ export function ThreePhaseSchematic() {
       ][i];
       const mid = splitWire(ctx, from.x, from.y, starN.x, starN.y, color, 12);
       lampSymbol(ctx, mid.x, mid.y, color);
-      currentLabelOnSegment(ctx, from.x, from.y, mid.x, mid.y, 12, starSubs[i], color);
+      currentLabelOnSegment(
+        ctx,
+        from.x,
+        from.y,
+        mid.x,
+        mid.y,
+        12,
+        starSubs[i],
+        color,
+      );
     });
     ctx.save();
     ctx.fillStyle = mC;
@@ -532,7 +569,11 @@ export function ThreePhaseSchematic() {
     ctx.textAlign = "center";
     ctx.fillText(t(lang, "tpLightingGroup"), (busX2 + starN.x) / 2, yT + 42);
     ctx.font = "11px sans-serif";
-    ctx.fillText(`P₂ = ${fmt(results.P2 / 1000, 2)} kW`, (busX2 + starN.x) / 2, yT + 58);
+    ctx.fillText(
+      `P₂ = ${fmt(results.P2 / 1000, 2)} kW`,
+      (busX2 + starN.x) / 2,
+      yT + 58,
+    );
     ctx.restore();
 
     // Footer — I_L, W_RS, W_ST with real subscripts, centered as a group
