@@ -38,7 +38,7 @@ Built with Next.js 16, React 19, TypeScript 5 strict, Tailwind CSS v4, and Canva
 | Styling   | Tailwind CSS v4 (CSS-first config)  |
 | State     | React Context + `useReducer`        |
 | Charts    | Canvas 2D (no external library)     |
-| Testing   | Jest 30 + `jest-environment-jsdom`  |
+| Testing   | Vitest + jsdom                      |
 | Language  | TypeScript 5 strict                 |
 
 ## Getting started
