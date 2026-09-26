@@ -35,7 +35,7 @@ function renderWithSub(text: string): React.ReactNode[] {
 
 export function ThreePhaseEquationsCard() {
   const {
-    state: { params, results },
+    state: { params, results, flags },
   } = useThreePhase();
   const {
     state: { lang },
@@ -163,7 +163,14 @@ export function ThreePhaseEquationsCard() {
         </div>
         <div role="img" aria-label={t(lang, "ariaQtotalFormula")}>
           <span className="text-orange-500 dark:text-orange-400">Q</span>
-          {" = Q₁ + Q₂"}
+          {flags.capacitorsOn ? (
+            <>
+              {" = Q₁ + Q₂ − "}
+              <Sub base="Q" sub="C" />
+            </>
+          ) : (
+            " = Q₁ + Q₂"
+          )}
         </div>
         <div role="img" aria-label={t(lang, "ariaStotalFormula")}>
           <span className="text-blue-600 dark:text-blue-400">S</span>
@@ -256,7 +263,17 @@ export function ThreePhaseEquationsCard() {
           <span className="text-green-600 dark:text-green-400">P</span>
           {` = ${fmt(P_total, 0)} W   `}
           <span className="text-orange-500 dark:text-orange-400">Q</span>
-          {` = ${fmt(Q_total, 0)} VAr   `}
+          {flags.capacitorsOn ? (
+            <>
+              {` = ${fmt(Q_uncompensated, 0)} − ${fmt(Qc, 0)} = `}
+              <span className="font-medium text-orange-500 dark:text-orange-400">
+                {fmt(Q_total, 0)} VAr
+              </span>
+            </>
+          ) : (
+            ` = ${fmt(Q_total, 0)} VAr`
+          )}
+          {"   "}
           <span className="text-blue-600 dark:text-blue-400">S</span>
           {` = ${fmt(S_total, 0)} VA`}
         </div>
