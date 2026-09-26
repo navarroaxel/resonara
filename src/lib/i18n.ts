@@ -160,40 +160,74 @@ export const T = {
     toggleEnable: "Activar",
     toggleDisable: "Desactivar",
 
-    // Three-phase RST simulator
+    // Three-phase RST simulator — industrial site with motors (Δ) + lighting (Y), Aron wattmeters
     navThreePhaseLink: "Trifásico RST",
     threePhasePageTitle: "Trifásico RST",
-    threePhasePageSubtitle: "Simulador CA trifásico — Estrella y Triángulo",
-    starConnection: "Estrella (Y)",
-    deltaConnection: "Triángulo (Δ)",
+    threePhasePageSubtitle:
+      "Motores en triángulo + iluminación en estrella, medidos con vatímetros Aron",
     threePhaseParamsTitle: "Parámetros",
-    labelVL: "Tensión de línea V_L",
-    phaseVoltage: "Tensión de fase V_f",
+    lineVoltageLabel: "Tensión de línea",
     lineVoltage: "Tensión de línea V_L",
-    phaseCurrent: "Corriente de fase I_f",
     lineCurrent: "Corriente de línea I_L",
+    tpCurrentLabel: "Corriente",
+    tpVoltageLabel: "Tensión",
+    tpPowerLabel: "Potencia",
+    tpBranchCurrentsGroup: "Análisis por fase",
+    tpImpedancesGroup: "Impedancias equivalentes",
+    tpZMotor: "Z motor (por bobinado)",
+    tpZLamp: "Z de 1 lámpara",
+    tpZCap: "Z de 1 capacitor",
+    tpLabelP1: "Potencia motores P₁ (Δ)",
+    tpLabelCosPhi1: "cos φ₁ motores",
+    tpLabelNumLamps: "Lámparas por fase",
+    tpLabelWattPerLamp: "Potencia por lámpara",
+    tpLabelCosPhi2: "cos φ₂ iluminación",
+    tpLabelTargetFp: "cos φ objetivo",
+    tpCapacitorsToggle: "Banco de Capacitores (Δ)",
+    tpCapacitorsGroup: "Banco de Capacitores (Δ)",
+    tpQcSuffix: "necesaria",
+    tpSummaryTitle: "Resumen",
+    tpSummaryA: "Vatímetros y corriente, antes de compensar",
+    tpSummaryB: "Banco de capacitores (Δ) para cos φ = ",
+    tpSummaryC: "Vatímetros, luego de conectar los capacitores",
+    tpSummaryD: "Nueva corriente de línea",
+    tpAronTitle: "Método de Aron (dos vatímetros)",
+    tpAronExplain:
+      "Con tres hilos y sin neutro, la potencia activa total de un sistema trifásico se puede medir con solo dos vatímetros, sin importar si la carga está equilibrada o no. Se conectan las bobinas de corriente en dos líneas cualesquiera (acá R y T) y las bobinas de tensión de cada uno hacia la línea restante (S, el punto común). Cada vatímetro mide entonces V_línea × I_línea × cos(φ ∓ 30°): la suma de ambas lecturas da la potencia activa total (W_RS + W_ST = P), y √3 veces su diferencia da la potencia reactiva total (√3·(W_RS − W_ST) = Q). Si una lectura da negativa, ese vatímetro debe invertirse para leerla (se resta en vez de sumarse).",
+    tpCuF: "C por fase",
+    tpMotorsGroup: "Motor (Δ)",
+    tpLightingGroup: "Iluminación (Y)",
+    tpTotalGroup: "Total",
+    tpWattmetersGroup: "Vatímetros (Aron)",
+    tpWattmeterLabel: "Vatímetro",
     phaseR: "Fase R",
     phaseS: "Fase S",
     phaseT: "Fase T",
     schematicTab: "Esquemático",
-    threePhaseSchematicAriaLabel: "Esquemático del circuito trifásico",
+    threePhaseSchematicAriaLabel:
+      "Esquemático del circuito trifásico con motores en triángulo, iluminación en estrella y vatímetros Aron",
     threePhasePhasorAriaLabel: "Diagrama fasorial trifásico",
     threePhaseEquationsTab: "Ecuaciones",
     threePhaseGeneralForm: "Forma general",
     threePhaseSubstituted: "Con los valores actuales",
-    ariaZFormula:
-      "Módulo de impedancia Z igual a raíz cuadrada de R al cuadrado más XL menos XC, todo al cuadrado",
-    ariaPhiFormula:
-      "Ángulo de fase phi igual a arcotangente de XL menos XC sobre R",
-    ariaStarVIFormula:
-      "Estrella: tensión de fase igual a tensión de línea sobre raíz de 3; corriente de fase igual a corriente de línea",
-    ariaDeltaVIFormula:
-      "Triángulo: tensión de fase igual a tensión de línea; corriente de línea igual a raíz de 3 por corriente de fase",
-    ariaPFormula:
-      "Potencia activa P igual a raíz de 3 por VL por IL por coseno de phi",
-    ariaQrFormula:
-      "Potencia reactiva Qr igual a raíz de 3 por VL por IL por seno de phi",
-    ariaSFormula: "Potencia aparente S igual a raíz de 3 por VL por IL",
+    ariaQ1Formula:
+      "Potencia reactiva de los motores Q1 igual a P1 por tangente de arcocoseno de cos phi 1",
+    ariaQ2Formula:
+      "Potencia reactiva de la iluminación Q2 igual a P2 por tangente de arcocoseno de cos phi 2",
+    ariaPtotalFormula: "Potencia activa total P igual a P1 más P2",
+    ariaQtotalFormula: "Potencia reactiva total Q igual a Q1 más Q2",
+    ariaStotalFormula:
+      "Potencia aparente total S igual a raíz de P al cuadrado más Q al cuadrado",
+    ariaFpTotalFormula: "Factor de potencia total igual a P sobre S",
+    ariaILFormula: "Corriente de línea I_L igual a S sobre raíz de 3 por V_L",
+    ariaWRSFormula:
+      "Lectura del vatímetro W_RS igual a V_L por I_L por coseno de phi menos 30 grados",
+    ariaWSTFormula:
+      "Lectura del vatímetro W_ST igual a V_L por I_L por coseno de phi más 30 grados",
+    ariaQcFormula:
+      "Potencia reactiva capacitiva Qc igual a P por la diferencia entre tangente de phi original y tangente de phi objetivo",
+    ariaCFormula:
+      "Capacitancia por rama C igual a Qc sobre 3 por omega por tensión de línea al cuadrado, ya que cada rama del banco en triángulo ve la tensión de línea completa",
     ariaVRFormula: "Tensión de fase R: V pico por seno de omega t",
     ariaVSFormula:
       "Tensión de fase S: V pico por seno de omega t menos 2 pi sobre 3",
@@ -204,15 +238,6 @@ export const T = {
       "Corriente de fase S: I pico por seno de omega t menos phi menos 2 pi sobre 3",
     ariaITFormula:
       "Corriente de fase T: I pico por seno de omega t menos phi más 2 pi sobre 3",
-    ariaZFormulaL:
-      "Módulo Z igual a raíz de R al cuadrado más XL al cuadrado (sin C)",
-    ariaZFormulaC:
-      "Módulo Z igual a raíz de R al cuadrado más XC al cuadrado (sin L)",
-    ariaZFormulaR: "Módulo Z igual a R (circuito puramente resistivo)",
-    ariaPhiFormulaL: "Ángulo phi igual a arcotangente de XL sobre R (sin C)",
-    ariaPhiFormulaC:
-      "Ángulo phi igual a arcotangente de menos XC sobre R (sin L)",
-    ariaPhiFormulaR: "Ángulo phi igual a cero (circuito puramente resistivo)",
 
     // Magnetic coupling simulator
     navMagneticTab: "Acoplamiento M.",
@@ -546,39 +571,74 @@ export const T = {
     toggleEnable: "Enable",
     toggleDisable: "Disable",
 
-    // Three-phase RST simulator
+    // Three-phase RST simulator — industrial site: motors (delta) + lighting (star), Aron wattmeters
     navThreePhaseLink: "Three-Phase RST",
     threePhasePageTitle: "Three-Phase RST",
-    threePhasePageSubtitle: "AC Three-Phase Simulator — Star and Delta",
-    starConnection: "Star (Y)",
-    deltaConnection: "Delta (Δ)",
+    threePhasePageSubtitle:
+      "Delta-connected motors + star-connected lighting, metered with Aron wattmeters",
     threePhaseParamsTitle: "Parameters",
-    labelVL: "Line voltage V_L",
-    phaseVoltage: "Phase voltage V_f",
+    lineVoltageLabel: "Line voltage",
     lineVoltage: "Line voltage V_L",
-    phaseCurrent: "Phase current I_f",
     lineCurrent: "Line current I_L",
+    tpCurrentLabel: "Current",
+    tpVoltageLabel: "Voltage",
+    tpPowerLabel: "Power",
+    tpBranchCurrentsGroup: "Per-phase analysis",
+    tpImpedancesGroup: "Equivalent impedances",
+    tpZMotor: "Z motor (per winding)",
+    tpZLamp: "Z of 1 lamp",
+    tpZCap: "Z of 1 capacitor",
+    tpLabelP1: "Motor power P₁ (Δ)",
+    tpLabelCosPhi1: "Motor cos φ₁",
+    tpLabelNumLamps: "Lamps per phase",
+    tpLabelWattPerLamp: "Power per lamp",
+    tpLabelCosPhi2: "Lighting cos φ₂",
+    tpLabelTargetFp: "Target cos φ",
+    tpCapacitorsToggle: "Capacitor bank (Δ)",
+    tpCapacitorsGroup: "Capacitors (Δ)",
+    tpQcSuffix: "needed",
+    tpSummaryTitle: "Summary",
+    tpSummaryA: "Wattmeters and current, before compensation",
+    tpSummaryB: "Capacitor bank (Δ) for cos φ = ",
+    tpSummaryC: "Wattmeters, after connecting the capacitors",
+    tpSummaryD: "New line current",
+    tpAronTitle: "Aron method (two wattmeters)",
+    tpAronExplain:
+      "With three wires and no neutral, the total active power of a three-phase system can be measured with only two wattmeters, whether the load is balanced or not. The current coils go in any two lines (here R and T), and each voltage coil is referenced to the remaining line (S, the common point). Each wattmeter then reads V_line × I_line × cos(φ ∓ 30°): the sum of both readings gives the total active power (W_RS + W_ST = P), and √3 times their difference gives the total reactive power (√3·(W_RS − W_ST) = Q). If a reading comes out negative, that wattmeter must be reversed to read it (it is then subtracted instead of added).",
+    tpCuF: "C per phase",
+    tpMotorsGroup: "Motor (Δ)",
+    tpLightingGroup: "Lighting (Y)",
+    tpTotalGroup: "Total",
+    tpWattmetersGroup: "Wattmeters (Aron)",
+    tpWattmeterLabel: "Wattmeter",
     phaseR: "Phase R",
     phaseS: "Phase S",
     phaseT: "Phase T",
     schematicTab: "Schematic",
-    threePhaseSchematicAriaLabel: "Three-phase circuit schematic",
+    threePhaseSchematicAriaLabel:
+      "Three-phase circuit schematic with delta motors, star lighting, and Aron wattmeters",
     threePhasePhasorAriaLabel: "Three-phase phasor diagram",
     threePhaseEquationsTab: "Equations",
     threePhaseGeneralForm: "General form",
     threePhaseSubstituted: "With current values",
-    ariaZFormula:
-      "Impedance magnitude Z equals square root of R squared plus XL minus XC, all squared",
-    ariaPhiFormula: "Phase angle phi equals arctangent of XL minus XC over R",
-    ariaStarVIFormula:
-      "Star: phase voltage equals line voltage over root 3; phase current equals line current",
-    ariaDeltaVIFormula:
-      "Delta: phase voltage equals line voltage; line current equals root 3 times phase current",
-    ariaPFormula:
-      "Active power P equals root 3 times VL times IL times cosine phi",
-    ariaQrFormula:
-      "Reactive power Qr equals root 3 times VL times IL times sine phi",
-    ariaSFormula: "Apparent power S equals root 3 times VL times IL",
+    ariaQ1Formula:
+      "Motor reactive power Q1 equals P1 times tangent of arccosine of cos phi 1",
+    ariaQ2Formula:
+      "Lighting reactive power Q2 equals P2 times tangent of arccosine of cos phi 2",
+    ariaPtotalFormula: "Total active power P equals P1 plus P2",
+    ariaQtotalFormula: "Total reactive power Q equals Q1 plus Q2",
+    ariaStotalFormula:
+      "Total apparent power S equals square root of P squared plus Q squared",
+    ariaFpTotalFormula: "Total power factor equals P over S",
+    ariaILFormula: "Line current I_L equals S over root 3 times V_L",
+    ariaWRSFormula:
+      "Wattmeter W_RS reading equals V_L times I_L times cosine of phi minus 30 degrees",
+    ariaWSTFormula:
+      "Wattmeter W_ST reading equals V_L times I_L times cosine of phi plus 30 degrees",
+    ariaQcFormula:
+      "Capacitive reactive power Qc equals P times the difference between tangent of the original phi and tangent of the target phi",
+    ariaCFormula:
+      "Capacitance per delta branch C equals Qc over 3 times omega times line voltage squared, since each branch of the delta-connected bank sees the full line voltage",
     ariaVRFormula: "Phase R voltage: V-peak times sine of omega t",
     ariaVSFormula:
       "Phase S voltage: V-peak times sine of omega t minus 2 pi over 3",
@@ -589,15 +649,6 @@ export const T = {
       "Phase S current: I-peak times sine of omega t minus phi minus 2 pi over 3",
     ariaITFormula:
       "Phase T current: I-peak times sine of omega t minus phi plus 2 pi over 3",
-    ariaZFormulaL:
-      "Impedance Z equals root of R squared plus XL squared (no C)",
-    ariaZFormulaC:
-      "Impedance Z equals root of R squared plus XC squared (no L)",
-    ariaZFormulaR: "Impedance Z equals R (purely resistive circuit)",
-    ariaPhiFormulaL: "Phase angle phi equals arctangent of XL over R (no C)",
-    ariaPhiFormulaC:
-      "Phase angle phi equals arctangent of minus XC over R (no L)",
-    ariaPhiFormulaR: "Phase angle phi equals zero (purely resistive circuit)",
 
     // Magnetic coupling simulator
     navMagneticTab: "Mag. Coupling",

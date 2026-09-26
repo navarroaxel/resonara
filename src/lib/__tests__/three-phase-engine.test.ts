@@ -1,73 +1,140 @@
 import { calcThreePhase } from "../three-phase-engine";
 import type { ThreePhaseParams } from "../types";
 
-const SQRT3 = Math.sqrt(3);
-const base: ThreePhaseParams = { VL: 380, R: 100, L: 50, C: 100, f: 50 };
+// rst.txt: delta-connected motors 56 kW / cos φ1 0.7, star-connected
+// lighting 60x150W (20 per phase) / cos φ2 0.6, VL=380V, targetFp=0.85.
+// Reference values computed by hand.
+const base: ThreePhaseParams = {
+  VL: 380,
+  f: 50,
+  P1_kW: 56,
+  cosPhi1: 0.7,
+  numLamps: 20, // per phase; total lamps = 3 × 20 = 60
+  wattPerLamp: 150,
+  cosPhi2: 0.6,
+  targetFp: 0.85,
+};
 
-describe("calcThreePhase — star", () => {
-  it("V_ph = VL / √3", () => {
-    const r = calcThreePhase("star", base);
-    expect(r.V_ph).toBeCloseTo(base.VL / SQRT3, 6);
+describe("calcThreePhase — rst.txt part a)", () => {
+  it("motor load: P1 = 56000 W, Q1 ≈ 57131 VAr", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.P1).toBeCloseTo(56000, 0);
+    expect(r.Q1).toBeCloseTo(57131, -1);
   });
 
-  it("I_L = I_ph (line current equals phase current in star)", () => {
-    const r = calcThreePhase("star", base);
-    expect(r.I_L).toBeCloseTo(r.I_ph, 6);
+  it("lighting load: P2 = 9000 W, Q2 = 12000 VAr", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.P2).toBeCloseTo(9000, 0);
+    expect(r.Q2).toBeCloseTo(12000, 0);
   });
 
-  it("P = 3 * V_ph * I_ph * cos(phi)", () => {
-    const r = calcThreePhase("star", base);
-    const expected = 3 * r.V_ph * r.I_ph * Math.cos((r.phi * Math.PI) / 180);
-    expect(r.P).toBeCloseTo(expected, 6);
+  it("totals: P_total = 65000 W, Q_total ≈ 69131 VAr, S_total ≈ 94890 VA", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.P_total).toBeCloseTo(65000, 0);
+    expect(r.Q_total).toBeCloseTo(69131, -1);
+    expect(r.S_total).toBeCloseTo(94890, -1);
+  });
+
+  it("fp_total ≈ 0.685, phi_total ≈ 46.79°", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.fp_total).toBeCloseTo(0.685, 2);
+    expect(r.phi_total).toBeCloseTo(46.79, 1);
+  });
+
+  it("I_L ≈ 144.16 A", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.I_L).toBeCloseTo(144.16, 1);
+  });
+
+  it("Aron wattmeters: W_RS ≈ 52.43 kW, W_ST ≈ 12.53 kW", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.W_RS).toBeCloseTo(52430, -2);
+    expect(r.W_ST).toBeCloseTo(12530, -2);
+  });
+
+  it("W_RS + W_ST = P_total (Aron consistency check)", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.W_RS + r.W_ST).toBeCloseTo(r.P_total, 0);
+  });
+
+  it("√3·(W_RS − W_ST) = Q_total (Aron consistency check)", () => {
+    const r = calcThreePhase(base, false);
+    expect(Math.sqrt(3) * (r.W_RS - r.W_ST)).toBeCloseTo(r.Q_total, 0);
   });
 });
 
-describe("calcThreePhase — delta", () => {
-  it("V_ph = VL (phase voltage equals line voltage in delta)", () => {
-    const r = calcThreePhase("delta", base);
-    expect(r.V_ph).toBeCloseTo(base.VL, 6);
+describe("calcThreePhase — rst.txt part b) capacitor bank", () => {
+  it("Qc ≈ 28848 VAr needed to bring cos φ from 0.685 to 0.85", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.Qc).toBeCloseTo(28848, -2);
   });
 
-  it("I_L = √3 * I_ph (line current is √3 times phase current in delta)", () => {
-    const r = calcThreePhase("delta", base);
-    expect(r.I_L).toBeCloseTo(SQRT3 * r.I_ph, 6);
+  it("C ≈ 212 µF per phase (delta-connected bank, sees VL not V_ph)", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.C_uF).toBeCloseTo(212, 0);
+  });
+
+  it("Qc and C_uF don't depend on whether the bank is currently connected", () => {
+    const off = calcThreePhase(base, false);
+    const on = calcThreePhase(base, true);
+    expect(on.Qc).toBeCloseTo(off.Qc, 6);
+    expect(on.C_uF).toBeCloseTo(off.C_uF, 6);
+  });
+
+  it("connecting the bank raises cos φ to targetFp (0.85)", () => {
+    const r = calcThreePhase(base, true);
+    expect(r.fp_total).toBeCloseTo(0.85, 2);
+  });
+
+  it("connecting the bank leaves P_total unchanged (capacitors draw no active power)", () => {
+    const off = calcThreePhase(base, false);
+    const on = calcThreePhase(base, true);
+    expect(on.P_total).toBeCloseTo(off.P_total, 0);
   });
 });
 
-describe("calcThreePhase — reactive power sign", () => {
-  it("capacitive (XC > XL with defaults): Qr < 0", () => {
-    // base: XL=15.71Ω, XC=31.83Ω → capacitive → phi < 0 → sin(phi) < 0
-    const r = calcThreePhase("star", base);
-    expect(r.Qr).toBeLessThan(0);
+describe("calcThreePhase — branch currents", () => {
+  it("I_RM ≈ 121.56 A (motor bank line current, S1/(√3·VL))", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.I_RM).toBeCloseTo(121.56, 1);
   });
 
-  it("inductive (XL > XC): Qr > 0", () => {
-    const r = calcThreePhase("star", { ...base, L: 300 });
-    expect(r.Qr).toBeGreaterThan(0);
+  it("I_RL ≈ 22.79 A (lighting bank line current, S2/(√3·VL))", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.I_RL).toBeCloseTo(22.79, 1);
   });
 
-  it("Qr = 3 * V_ph * I_ph * sin(phi)", () => {
-    const r = calcThreePhase("star", base);
-    const expected = 3 * r.V_ph * r.I_ph * Math.sin((r.phi * Math.PI) / 180);
-    expect(r.Qr).toBeCloseTo(expected, 6);
+  it("I_RS is 0 when the capacitor bank is disconnected", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.I_RS).toBe(0);
+  });
+
+  it("I_RS ≈ 25.31 A (V_L·ω·C) once the bank is connected", () => {
+    const r = calcThreePhase(base, true);
+    expect(r.I_RS).toBeCloseTo(25.31, 1);
+  });
+
+  it("I_RC = √3 · I_RS (delta line current from branch current)", () => {
+    const r = calcThreePhase(base, true);
+    expect(r.I_RC).toBeCloseTo(Math.sqrt(3) * r.I_RS, 6);
   });
 });
 
-describe("calcThreePhase — component flags", () => {
-  it("pure resistive (no L, no C): Z = R, phi = 0, fp = 1", () => {
-    const r = calcThreePhase("star", base, { hasL: false, hasC: false });
-    expect(r.Z).toBeCloseTo(base.R, 6);
-    expect(r.phi).toBeCloseTo(0, 6);
-    expect(r.fp).toBeCloseTo(1, 6);
+describe("calcThreePhase — equivalent impedances", () => {
+  it("Z_motor ≈ 5.42 Ω (3·VL²/S1, delta winding sees full VL)", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.Z_motor).toBeCloseTo(5.42, 2);
   });
 
-  it("hasL = false: XL = 0", () => {
-    const r = calcThreePhase("star", base, { hasL: false, hasC: true });
-    expect(r.XL).toBe(0);
+  it("Z_lamp ≈ 192.5 Ω (V_ph²·cosφ2/wattPerLamp, star lamp sees V_ph)", () => {
+    const r = calcThreePhase(base, false);
+    expect(r.Z_lamp).toBeCloseTo(192.5, 1);
   });
 
-  it("hasC = false: XC = 0", () => {
-    const r = calcThreePhase("star", base, { hasL: true, hasC: false });
-    expect(r.XC).toBe(0);
+  it("Z_cap ≈ 15.0 Ω (1/(ω·C)), defined even when the bank is off", () => {
+    const off = calcThreePhase(base, false);
+    const on = calcThreePhase(base, true);
+    expect(off.Z_cap).toBeCloseTo(15.0, 1);
+    expect(on.Z_cap).toBeCloseTo(off.Z_cap, 6);
   });
 });

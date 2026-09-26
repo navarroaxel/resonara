@@ -112,33 +112,47 @@ export interface DCResult {
   D: number; // Determinant (0 = degenerate circuit)
 }
 
-export type ConnectionType = "star" | "delta";
-
 export type ThreePhaseActiveTab = "phasor" | "time" | "power" | "equations";
 
 export interface ThreePhaseParams {
   VL: number; // Line-to-line voltage (V), 100–1000
-  R: number; // Resistance (Ω), 1–1000
-  L: number; // Inductance (mH), 1–500
-  C: number; // Capacitance (µF), 1–1000
   f: number; // Frequency (Hz), 1–500
+  P1_kW: number; // Motor bank active power (kW), delta connection, 1–500
+  cosPhi1: number; // Motor bank power factor, inductive, 0.5–1
+  numLamps: number; // Lamps per phase, star connection (total lamps = 3x this), 1–100
+  wattPerLamp: number; // Active power per lamp (W), 1–1000
+  cosPhi2: number; // Lighting bank power factor, inductive, 0.5–1
+  targetFp: number; // Target power factor after capacitor compensation, inductive, 0.5–1
+}
+
+export interface ThreePhaseFlags {
+  capacitorsOn: boolean; // Delta capacitor bank connected (part b/c/d), correcting cos φ toward targetFp
 }
 
 export interface ThreePhaseResult {
-  V_ph: number; // Phase voltage (V)
-  V_L: number; // Line voltage (V)
-  I_ph: number; // Phase current (A)
-  I_L: number; // Line current (A)
-  Z: number; // Impedance magnitude (Ω)
-  phi: number; // Phase angle (degrees)
-  XL: number; // Inductive reactance (Ω)
-  XC: number; // Capacitive reactance (Ω)
-  fr: number; // Resonant frequency (Hz), NaN if flag disabled
-  Q: number; // Quality factor, NaN if flag disabled
-  P: number; // Total 3-phase active power (W)
-  Qr: number; // Total 3-phase reactive power (VAR)
-  S: number; // Total 3-phase apparent power (VA)
-  fp: number; // Power factor cos(φ)
+  P1: number; // Motor bank active power (W)
+  Q1: number; // Motor bank reactive power (VAr)
+  S1: number; // Motor bank apparent power (VA)
+  P2: number; // Lighting bank active power (W)
+  Q2: number; // Lighting bank reactive power (VAr)
+  S2: number; // Lighting bank apparent power (VA)
+  P_total: number; // Total active power (W)
+  Q_total: number; // Total reactive power (VAr), net of the capacitor bank when connected
+  S_total: number; // Total apparent power (VA)
+  fp_total: number; // Total power factor cos(φ)
+  phi_total: number; // Total phase angle (degrees)
+  I_L: number; // Balanced line current (A)
+  W_RS: number; // Aron wattmeter reading, current coil in R, voltage coil R–S (W)
+  W_ST: number; // Aron wattmeter reading, current coil in T, voltage coil T–S (W)
+  Qc: number; // Capacitor bank reactive power needed to reach targetFp (VAr)
+  C_uF: number; // Capacitance per phase for the delta-connected bank (µF)
+  I_RM: number; // Line current feeding the motor bank (A)
+  I_RL: number; // Line current feeding the lighting bank (A)
+  I_RS: number; // Delta capacitor branch current, R–S side (A); 0 when disconnected
+  I_RC: number; // Delta line current feeding the capacitor bank (A); 0 when disconnected
+  Z_motor: number; // Equivalent impedance per motor (delta) winding (Ω)
+  Z_lamp: number; // Equivalent impedance of a single lamp (Ω)
+  Z_cap: number; // Capacitive reactance per delta branch (Ω); defined regardless of toggle
 }
 
 export interface BodePoint {

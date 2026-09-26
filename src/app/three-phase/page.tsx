@@ -1,4 +1,3 @@
-import { ConnectionTypeToggle } from "@/components/three-phase/ConnectionTypeToggle";
 import { ThreePhaseSchematic } from "@/components/three-phase/ThreePhaseSchematic";
 import { ThreePhaseParameterPanel } from "@/components/three-phase/ThreePhaseParameterPanel";
 import { ThreePhaseMetricsGrid } from "@/components/three-phase/ThreePhaseMetricsGrid";
@@ -16,7 +15,6 @@ export default function ThreePhasePage() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-6 md:grid-cols-2">
         <div className="space-y-4">
           <div className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
-            <ConnectionTypeToggle />
             <ThreePhaseSchematic />
           </div>
           <div className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">

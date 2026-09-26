@@ -4,53 +4,44 @@ import { calcThreePhase } from "@/lib/three-phase-engine";
 import type {
   ThreePhaseParams,
   ThreePhaseResult,
-  ConnectionType,
   ThreePhaseActiveTab,
-  ComponentFlags,
+  ThreePhaseFlags,
 } from "@/lib/types";
 
 const DEFAULT_PARAMS: ThreePhaseParams = {
   VL: 380,
-  R: 100,
-  L: 50,
-  C: 100,
   f: 50,
+  P1_kW: 56,
+  cosPhi1: 0.7,
+  numLamps: 20,
+  wattPerLamp: 150,
+  cosPhi2: 0.6,
+  targetFp: 0.85,
 };
-const DEFAULT_FLAGS: ComponentFlags = { hasL: true, hasC: true };
-const DEFAULT_CONNECTION: ConnectionType = "star";
+const DEFAULT_FLAGS: ThreePhaseFlags = { capacitorsOn: false };
 
 interface State {
   params: ThreePhaseParams;
-  connection: ConnectionType;
-  flags: ComponentFlags;
+  flags: ThreePhaseFlags;
   activeTab: ThreePhaseActiveTab;
   results: ThreePhaseResult;
 }
 
 type Action =
   | { type: "SET_PARAM"; key: keyof ThreePhaseParams; value: number }
-  | { type: "SET_CONNECTION"; connection: ConnectionType }
-  | { type: "SET_FLAGS"; flags: Partial<ComponentFlags> }
+  | { type: "SET_FLAGS"; flags: Partial<ThreePhaseFlags> }
   | { type: "SET_TAB"; activeTab: ThreePhaseActiveTab };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "SET_PARAM": {
       const params = { ...state.params, [action.key]: action.value };
-      const results = calcThreePhase(state.connection, params, state.flags);
+      const results = calcThreePhase(params, state.flags.capacitorsOn);
       return { ...state, params, results };
-    }
-    case "SET_CONNECTION": {
-      const results = calcThreePhase(
-        action.connection,
-        state.params,
-        state.flags,
-      );
-      return { ...state, connection: action.connection, results };
     }
     case "SET_FLAGS": {
       const flags = { ...state.flags, ...action.flags };
-      const results = calcThreePhase(state.connection, state.params, flags);
+      const results = calcThreePhase(state.params, flags.capacitorsOn);
       return { ...state, flags, results };
     }
     case "SET_TAB":
@@ -70,10 +61,9 @@ export function ThreePhaseProvider({
 }) {
   const [state, dispatch] = useReducer(reducer, {
     params: DEFAULT_PARAMS,
-    connection: DEFAULT_CONNECTION,
     flags: DEFAULT_FLAGS,
     activeTab: "phasor",
-    results: calcThreePhase(DEFAULT_CONNECTION, DEFAULT_PARAMS, DEFAULT_FLAGS),
+    results: calcThreePhase(DEFAULT_PARAMS, DEFAULT_FLAGS.capacitorsOn),
   });
 
   const value = useMemo(() => ({ state, dispatch }), [state]);
