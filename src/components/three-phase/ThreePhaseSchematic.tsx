@@ -4,11 +4,10 @@ import { useThreePhase } from "@/store/three-phase-store";
 import { useUI } from "@/store/ui-store";
 import { fmt } from "@/lib/utils";
 import { t } from "@/lib/i18n";
-import { drawResistorHBody } from "@/lib/schematic-draw";
-import type { ResistorSymbol } from "@/lib/types";
 
-const W = 580;
-const H = 320;
+const W = 620;
+const H = 500;
+const Y_SHIFT = 30; // shifts the whole diagram up, tightening the top margin
 const TWO_PI = 2 * Math.PI;
 
 const PHASE_COLORS_LIGHT = ["#C53030", "#B7791F", "#2B6CB0"] as const;
@@ -22,11 +21,13 @@ function wire(
   x2: number,
   y2: number,
   c: string,
+  dashed = false,
 ) {
   ctx.save();
   ctx.strokeStyle = c;
   ctx.lineWidth = 2;
   ctx.lineCap = "round";
+  if (dashed) ctx.setLineDash([4, 3]);
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);
@@ -43,289 +44,230 @@ function dot(ctx: CanvasRenderingContext2D, x: number, y: number, c: string) {
   ctx.restore();
 }
 
-function loadBox(
+function splitWire(
   ctx: CanvasRenderingContext2D,
-  cx: number,
-  cy: number,
-  angle: number,
-  hasL: boolean,
-  hasC: boolean,
-  grayC: string,
-  nodeC: string,
-  rC: string,
-  lC: string,
-  cC: string,
-  symbol: ResistorSymbol,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  c: string,
+  gap: number,
+) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  const ux = dx / len;
+  const uy = dy / len;
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  wire(ctx, x1, y1, mx - ux * gap, my - uy * gap, c);
+  wire(ctx, mx + ux * gap, my + uy * gap, x2, y2, c);
+  return { x: mx, y: my };
+}
+
+function drawCurrentText(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  sub: string,
+  color: string,
 ) {
   ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(angle);
+  ctx.fillStyle = color;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  ctx.font = "italic bold 11px sans-serif";
+  ctx.fillText("I", x, y);
+  const w = ctx.measureText("I").width;
+  ctx.font = "italic bold 8px sans-serif";
+  ctx.fillText(sub, x + w, y + 2);
+  ctx.restore();
+}
 
-  const totalW = 80;
-  const halfW = totalW / 2;
-  const h = 20;
+function currentLabel(
+  ctx: CanvasRenderingContext2D,
+  midx: number,
+  midy: number,
+  centroidX: number,
+  centroidY: number,
+  dist: number,
+  sub: string,
+  color: string,
+) {
+  let dx = midx - centroidX;
+  let dy = midy - centroidY;
+  const len = Math.hypot(dx, dy) || 1;
+  dx /= len;
+  dy /= len;
+  drawCurrentText(ctx, midx + dx * dist, midy + dy * dist, sub, color);
+}
 
-  // entry/exit wires
-  wire(ctx, -halfW - 12, 0, -halfW, 0, nodeC);
-  wire(ctx, halfW, 0, halfW + 12, 0, nodeC);
+// For radial spokes where the far endpoint is colinear with the segment
+// (so a centroid-relative offset would just slide along the wire): offset
+// perpendicular to the segment instead.
+function currentLabelOnSegment(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  offset: number,
+  sub: string,
+  color: string,
+) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len;
+  const uy = dy / len;
+  const nx = -uy;
+  const ny = ux;
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  drawCurrentText(ctx, mx + nx * offset, my + ny * offset, sub, color);
+}
 
-  // R section
-  const rW = hasL || hasC ? 24 : totalW;
-  drawResistorHBody(ctx, -halfW, -h / 2, rW, h, rC, symbol);
+function capacitorOnLine(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  color: string,
+  dashed: boolean,
+) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  const ux = dx / len;
+  const uy = dy / len;
+  const nx = -uy;
+  const ny = ux;
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  const gap = 7;
+  wire(ctx, x1, y1, mx - ux * gap, my - uy * gap, color, dashed);
+  wire(ctx, mx + ux * gap, my + uy * gap, x2, y2, color, dashed);
+  const barHalf = 8;
+  const barGap = 3;
   ctx.save();
-  ctx.fillStyle = rC;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(mx - ux * barGap - nx * barHalf, my - uy * barGap - ny * barHalf);
+  ctx.lineTo(mx - ux * barGap + nx * barHalf, my - uy * barGap + ny * barHalf);
+  ctx.moveTo(mx + ux * barGap - nx * barHalf, my + uy * barGap - ny * barHalf);
+  ctx.lineTo(mx + ux * barGap + nx * barHalf, my + uy * barGap + ny * barHalf);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function shortenTo(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  dist: number,
+) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  return { x: x2 - (dx / len) * dist, y: y2 - (dy / len) * dist };
+}
+
+function lampSymbol(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  color: string,
+) {
+  const r = 9;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, TWO_PI);
+  ctx.stroke();
+  const d = r * 0.6;
+  ctx.beginPath();
+  ctx.moveTo(x - d, y - d);
+  ctx.lineTo(x + d, y + d);
+  ctx.moveTo(x + d, y - d);
+  ctx.lineTo(x - d, y + d);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function labeledCircle(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  letter: string,
+  color: string,
+  isDark: boolean,
+) {
+  const r = 11;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, TWO_PI);
+  ctx.stroke();
+  ctx.fillStyle = isDark ? "#E5E5E5" : "#1A1A1A";
   ctx.font = "bold 11px sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText("R", -halfW + rW / 2, 0);
-  ctx.restore();
-
-  let x = -halfW + rW;
-
-  // L section
-  if (hasL) {
-    const lW = hasC ? 28 : totalW - rW;
-    const bumps = 3;
-    const bw = lW / bumps;
-    wire(ctx, x, 0, x + 2, 0, lC);
-    ctx.save();
-    ctx.strokeStyle = lC;
-    ctx.lineWidth = 1.8;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.beginPath();
-    ctx.moveTo(x + 2, 0);
-    for (let i = 0; i < bumps; i++) {
-      const bx = x + 2 + i * bw;
-      ctx.quadraticCurveTo(bx + bw * 0.25, -10, bx + bw * 0.5, 0);
-      ctx.quadraticCurveTo(bx + bw * 0.75, 3, bx + bw, 0);
-    }
-    ctx.stroke();
-    ctx.restore();
-    x += lW;
-  } else if (hasC) {
-    // show disabled L box
-    ctx.save();
-    ctx.strokeStyle = grayC;
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([3, 2]);
-    ctx.strokeRect(x, -h / 2, 28, h);
-    ctx.restore();
-    ctx.save();
-    ctx.fillStyle = grayC;
-    ctx.font = "11px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("L", x + 14, 0);
-    ctx.restore();
-    x += 28;
-  }
-
-  // C section
-  if (hasC) {
-    const cW = halfW - (x - -halfW); // remaining width
-    const midX = x + cW / 2;
-    wire(ctx, x, 0, midX - 8, 0, cC);
-    ctx.save();
-    ctx.strokeStyle = cC;
-    ctx.lineWidth = 2.2;
-    ctx.lineCap = "round";
-    ctx.beginPath();
-    ctx.moveTo(midX - 8, -h / 2);
-    ctx.lineTo(midX - 8, h / 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(midX, -h / 2);
-    ctx.lineTo(midX, h / 2);
-    ctx.stroke();
-    ctx.restore();
-    wire(ctx, midX, 0, halfW, 0, cC);
-  } else if (hasL) {
-    // show disabled C box
-    const cW = halfW - (x - -halfW);
-    ctx.save();
-    ctx.strokeStyle = grayC;
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([3, 2]);
-    ctx.strokeRect(x, -h / 2, cW, h);
-    ctx.restore();
-    ctx.save();
-    ctx.fillStyle = grayC;
-    ctx.font = "11px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("C", x + cW / 2, 0);
-    ctx.restore();
-  }
-
+  ctx.fillText(letter, x, y);
   ctx.restore();
 }
 
-function drawStar(
+function wattmeter(
   ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  sub: string,
+  color: string,
   isDark: boolean,
-  hasL: boolean,
-  hasC: boolean,
-  XL: number,
-  XC: number,
-  Z: number,
-  fr: number,
-  symbol: ResistorSymbol,
 ) {
-  const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT;
-  const mC = isDark ? "#9FA0A0" : "#888";
-  const grayC = isDark ? "#404040" : "#C8C8C8";
-  const rC = isDark ? "#F0997B" : "#D85A30";
-  const lC = hasL ? (isDark ? "#AFA9EC" : "#7F77DD") : grayC;
-  const cC = hasC ? (isDark ? "#5DCAA5" : "#1D9E75") : grayC;
-  const nodeC = isDark ? "#FAC775" : "#BA7517";
-
-  const cx = W / 2,
-    cy = H / 2 - 20;
-  const spokeLen = 110;
-  const loadDist = spokeLen * 0.5;
-  const spokeAngles = [0, -TWO_PI / 3, TWO_PI / 3];
-
-  // Draw spokes and loads
-  spokeAngles.forEach((angle, i) => {
-    const tx = cx + spokeLen * Math.cos(angle);
-    const ty = cy - spokeLen * Math.sin(angle);
-    wire(ctx, cx, cy, tx, ty, phaseColors[i]);
-    const lx = cx + loadDist * Math.cos(angle);
-    const ly = cy - loadDist * Math.sin(angle);
-    loadBox(ctx, lx, ly, -angle, hasL, hasC, grayC, nodeC, rC, lC, cC, symbol);
-    dot(ctx, tx, ty, phaseColors[i]);
-    ctx.save();
-    ctx.fillStyle = phaseColors[i];
-    ctx.font = "bold 13px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    const labelDist = spokeLen + 14;
-    ctx.fillText(
-      PHASE_LABELS[i],
-      cx + labelDist * Math.cos(angle),
-      cy - labelDist * Math.sin(angle),
-    );
-    ctx.restore();
-  });
-
-  // Neutral node N
-  dot(ctx, cx, cy, nodeC);
+  const r = 16;
   ctx.save();
-  ctx.fillStyle = nodeC;
-  ctx.font = "bold 11px sans-serif";
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, TWO_PI);
+  ctx.stroke();
+  ctx.fillStyle = isDark ? "#E5E5E5" : "#1A1A1A";
+  ctx.font = "bold 12px sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("N", cx, cy + 14);
+  ctx.textBaseline = "middle";
+  ctx.fillText("W", x, y);
   ctx.restore();
 
-  // Footer annotation
-  const frStr = Number.isFinite(fr) ? `fr = ${fmt(fr, 1)} Hz` : "fr = —";
-  ctx.fillStyle = mC;
-  ctx.font = "11px sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText(
-    `Z = ${fmt(Z, 1)} Ω   XL = ${fmt(XL, 1)} Ω   XC = ${fmt(XC, 1)} Ω   ${frStr}`,
-    W / 2,
-    H - 12,
-  );
-}
-
-function drawDelta(
-  ctx: CanvasRenderingContext2D,
-  isDark: boolean,
-  hasL: boolean,
-  hasC: boolean,
-  XL: number,
-  XC: number,
-  Z: number,
-  fr: number,
-  symbol: ResistorSymbol,
-) {
-  const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT;
-  const mC = isDark ? "#9FA0A0" : "#888";
-  const grayC = isDark ? "#404040" : "#C8C8C8";
-  const rC = isDark ? "#F0997B" : "#D85A30";
-  const lC = hasL ? (isDark ? "#AFA9EC" : "#7F77DD") : grayC;
-  const cC = hasC ? (isDark ? "#5DCAA5" : "#1D9E75") : grayC;
-  const nodeC = isDark ? "#FAC775" : "#BA7517";
-
-  // Equilateral triangle vertices: R top-center, S bottom-right, T bottom-left
-  const triR = 110;
-  const cx = W / 2,
-    cy = H / 2 - 10;
-  const verts = [
-    { x: cx, y: cy - triR, label: "R", colorIdx: 0 }, // R top
-    { x: cx + triR * 0.866, y: cy + triR * 0.5, label: "S", colorIdx: 1 }, // S bottom-right
-    { x: cx - triR * 0.866, y: cy + triR * 0.5, label: "T", colorIdx: 2 }, // T bottom-left
-  ];
-
-  // Draw triangle sides with loads (each side: Z_RS, Z_ST, Z_TR)
-  // Side indices: 0→1 (R→S), 1→2 (S→T), 2→0 (T→R)
-  const sides = [
-    { from: 0, to: 1, colorIdx: 0 },
-    { from: 1, to: 2, colorIdx: 1 },
-    { from: 2, to: 0, colorIdx: 2 },
-  ];
-
-  sides.forEach(({ from, to, colorIdx }) => {
-    const v0 = verts[from],
-      v1 = verts[to];
-    const color = phaseColors[colorIdx];
-    wire(ctx, v0.x, v0.y, v1.x, v1.y, color);
-    const mx = (v0.x + v1.x) / 2;
-    const my = (v0.y + v1.y) / 2;
-    const angle = Math.atan2(v0.y - v1.y, v0.x - v1.x);
-    loadBox(
-      ctx,
-      mx,
-      my,
-      angle + Math.PI,
-      hasL,
-      hasC,
-      grayC,
-      nodeC,
-      rC,
-      lC,
-      cC,
-      symbol,
-    );
-  });
-
-  // Vertex dots and labels
-  verts.forEach(({ x, y, label, colorIdx }) => {
-    dot(ctx, x, y, phaseColors[colorIdx]);
-    const dx = x - cx,
-      dy = y - cy;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const lx = x + (dx / dist) * 16;
-    const ly = y + (dy / dist) * 16;
-    ctx.save();
-    ctx.fillStyle = phaseColors[colorIdx];
-    ctx.font = "bold 13px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(label, lx, ly);
-    ctx.restore();
-  });
-
-  const frStr = Number.isFinite(fr) ? `fr = ${fmt(fr, 1)} Hz` : "fr = —";
-  ctx.fillStyle = mC;
-  ctx.font = "11px sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText(
-    `Z = ${fmt(Z, 1)} Ω   XL = ${fmt(XL, 1)} Ω   XC = ${fmt(XC, 1)} Ω   ${frStr}`,
-    W / 2,
-    H - 12,
-  );
+  ctx.save();
+  ctx.fillStyle = color;
+  const labelY = y + r + 14;
+  ctx.font = "bold 11px sans-serif";
+  const wWidth = ctx.measureText("W").width;
+  ctx.font = "bold 8px sans-serif";
+  const subWidth = ctx.measureText(sub).width;
+  let px = x - (wWidth + subWidth) / 2;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  ctx.font = "bold 11px sans-serif";
+  ctx.fillText("W", px, labelY);
+  px += wWidth;
+  ctx.font = "bold 8px sans-serif";
+  ctx.fillText(sub, px, labelY + 3);
+  ctx.restore();
 }
 
 export function ThreePhaseSchematic() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const {
-    state: { connection, results, flags },
+    state: { params, flags, results },
   } = useThreePhase();
   const {
-    state: { lang, resistorSymbol },
+    state: { lang },
   } = useUI();
 
   useEffect(() => {
@@ -333,18 +275,298 @@ export function ThreePhaseSchematic() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDark = document.documentElement.classList.contains("dark");
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, W, H);
+    ctx.translate(0, -Y_SHIFT);
 
-    const { XL, XC, Z, fr } = results;
-    const { hasL, hasC } = flags;
+    const phaseColors = isDark ? PHASE_COLORS_DARK : PHASE_COLORS_LIGHT;
+    const mC = isDark ? "#9FA0A0" : "#888";
+    const nodeC = isDark ? "#D4D4D4" : "#525252";
 
-    if (connection === "star") {
-      drawStar(ctx, isDark, hasL, hasC, XL, XC, Z, fr, resistorSymbol);
-    } else {
-      drawDelta(ctx, isDark, hasL, hasC, XL, XC, Z, fr, resistorSymbol);
+    const xStart = 42; // terminals are born on the left edge
+    const yR = 120;
+    const yS = 230;
+    const yT = 340;
+    const busYs = [yR, yS, yT];
+
+    // Source dots + labels (R/S/T) on the left, each phase kept in its own
+    // horizontal row for the whole diagram so no wire ever has to jog past
+    // another phase's row.
+    busYs.forEach((y, i) => {
+      dot(ctx, xStart, y, phaseColors[i]);
+      ctx.save();
+      ctx.fillStyle = phaseColors[i];
+      ctx.font = "bold 13px sans-serif";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      ctx.fillText(PHASE_LABELS[i], xStart - 12, y);
+      ctx.restore();
+    });
+
+    const wmX = 112; // wattmeter center x
+
+    // R and T rows: run through the wattmeter current coils
+    wire(ctx, xStart, yR, wmX - 16, yR, phaseColors[0]);
+    wattmeter(ctx, wmX, yR, "RS", phaseColors[0], isDark);
+    wire(ctx, xStart, yT, wmX - 16, yT, phaseColors[2]);
+    wattmeter(ctx, wmX, yT, "ST", phaseColors[2], isDark);
+    dot(ctx, wmX, yS, phaseColors[1]);
+
+    // Wattmeter voltage coils reference the S row (dashed)
+    wire(ctx, wmX, yR + 16, wmX, yS, mC, true);
+    wire(ctx, wmX, yT - 16, wmX, yS, mC, true);
+
+    // Capacitor bank (Δ) — part b), sits to the left of the motor. Each
+    // phase drops in to its own vertex (U on R, P on S, Q on T); the three
+    // vertices are wired directly to each other, forming the actual delta
+    // triangle — one capacitor per side. Shown dashed/muted while the
+    // toggle has it disconnected.
+    const capColor = (i: number) => (flags.capacitorsOn ? phaseColors[i] : mC);
+    const capDashed = !flags.capacitorsOn;
+    const capTapR = { x: 210, y: yR };
+    const capTapS = { x: 280, y: yS };
+    const capTapT = { x: 140, y: yT };
+    const shelfY = 360; // R's vertex height — taller triangle
+    const baseY = 420; // S/T's vertex height — the triangle's base
+
+    const nodeU = { x: capTapR.x, y: shelfY };
+    const nodeP = { x: capTapS.x, y: baseY };
+    const nodeQ = { x: capTapT.x, y: baseY };
+
+    wire(ctx, capTapR.x, capTapR.y, nodeU.x, nodeU.y, capColor(0), capDashed);
+    wire(ctx, capTapS.x, capTapS.y, nodeP.x, nodeP.y, capColor(1), capDashed);
+    wire(ctx, capTapT.x, capTapT.y, nodeQ.x, nodeQ.y, capColor(2), capDashed);
+
+    const capCentroid = {
+      x: (nodeU.x + nodeP.x + nodeQ.x) / 3,
+      y: (nodeU.y + nodeP.y + nodeQ.y) / 3,
+    };
+
+    // Line currents feeding the bank from each phase
+    drawCurrentText(
+      ctx,
+      (capTapR.x + nodeU.x) / 2 + 14,
+      (capTapR.y + nodeU.y) / 2 - 24,
+      "RC",
+      capColor(0),
+    );
+    currentLabel(
+      ctx,
+      (capTapS.x + nodeP.x) / 2,
+      (capTapS.y + nodeP.y) / 2,
+      capCentroid.x,
+      capCentroid.y,
+      14,
+      "SC",
+      capColor(1),
+    );
+    drawCurrentText(
+      ctx,
+      (capTapT.x + nodeQ.x) / 2 - 24,
+      (capTapT.y + nodeQ.y) / 2 + 14,
+      "TC",
+      capColor(2),
+    );
+
+    // Triangle sides — one capacitor each: U–P, P–Q, Q–U
+    capacitorOnLine(ctx, nodeU.x, nodeU.y, nodeP.x, nodeP.y, capColor(0), capDashed);
+    capacitorOnLine(ctx, nodeP.x, nodeP.y, nodeQ.x, nodeQ.y, capColor(1), capDashed);
+    capacitorOnLine(ctx, nodeQ.x, nodeQ.y, nodeU.x, nodeU.y, capColor(2), capDashed);
+
+    // Capacitor branch currents (Δ side currents)
+    currentLabel(
+      ctx,
+      (nodeU.x + nodeP.x) / 2,
+      (nodeU.y + nodeP.y) / 2,
+      capCentroid.x,
+      capCentroid.y,
+      14,
+      "RS",
+      capColor(0),
+    );
+    currentLabel(
+      ctx,
+      (nodeP.x + nodeQ.x) / 2,
+      (nodeP.y + nodeQ.y) / 2,
+      capCentroid.x,
+      capCentroid.y,
+      14,
+      "ST",
+      capColor(1),
+    );
+    drawCurrentText(
+      ctx,
+      (nodeQ.x + nodeU.x) / 2 - 6,
+      (nodeQ.y + nodeU.y) / 2 - 20,
+      "TR",
+      capColor(2),
+    );
+
+    dot(ctx, nodeU.x, nodeU.y, capColor(0));
+    dot(ctx, nodeP.x, nodeP.y, capColor(1));
+    dot(ctx, nodeQ.x, nodeQ.y, capColor(2));
+
+    ctx.save();
+    ctx.fillStyle = mC;
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(t(lang, "tpCapacitorsGroup"), capCentroid.x, baseY + 32);
+    ctx.font = "11px sans-serif";
+    ctx.fillText(`C = ${fmt(results.C_uF, 0)} µF`, capCentroid.x, baseY + 48);
+    ctx.restore();
+
+    // Motor bank (Δ) — one single 3-phase motor, fed by all three lines,
+    // to the right of the capacitor bank. M sits directly below the T row:
+    // all three phases drop in parallel (90°) down to a shared shelf
+    // height, then bend to reach M — T is already aligned with M so its
+    // drop is the straight R–T–M line.
+    const motorTapR = { x: 320, y: yR };
+    const motorTapS = { x: 380, y: yS };
+    const motorTapT = { x: 350, y: yT };
+    const motorM = { x: 350, y: 420 };
+    const motorShelfY = (motorTapT.y + motorM.y) / 2;
+    {
+      const tap = motorTapR;
+      const color = phaseColors[0];
+      dot(ctx, tap.x, tap.y, color);
+      const bend = { x: tap.x, y: motorShelfY };
+      wire(ctx, tap.x, tap.y, bend.x, bend.y, color); // parallel vertical drop
+      const end = shortenTo(bend.x, bend.y, motorM.x, motorM.y, 14);
+      wire(ctx, bend.x, bend.y, end.x, end.y, color); // diagonal into M
+      drawCurrentText(
+        ctx,
+        (bend.x + end.x) / 2 - 34,
+        (bend.y + end.y) / 2,
+        "RM",
+        color,
+      );
     }
-  }, [connection, results, flags, lang, resistorSymbol]);
+    {
+      const tap = motorTapS;
+      const color = phaseColors[1];
+      dot(ctx, tap.x, tap.y, color);
+      const bend = { x: tap.x, y: motorShelfY };
+      wire(ctx, tap.x, tap.y, bend.x, bend.y, color); // parallel vertical drop
+      const end = shortenTo(bend.x, bend.y, motorM.x, motorM.y, 14);
+      wire(ctx, bend.x, bend.y, end.x, end.y, color); // diagonal into M
+      drawCurrentText(
+        ctx,
+        (bend.x + end.x) / 2 - 10,
+        (bend.y + end.y) / 2 - 22,
+        "SM",
+        color,
+      );
+    }
+    dot(ctx, motorTapT.x, motorTapT.y, phaseColors[2]);
+    const tEnd = shortenTo(motorTapT.x, motorTapT.y, motorM.x, motorM.y, 14);
+    wire(ctx, motorTapT.x, motorTapT.y, tEnd.x, tEnd.y, phaseColors[2]);
+    currentLabelOnSegment(
+      ctx,
+      motorTapT.x,
+      motorTapT.y,
+      tEnd.x,
+      tEnd.y,
+      22,
+      "TM",
+      phaseColors[2],
+    );
+    labeledCircle(ctx, motorM.x, motorM.y, "M", mC, isDark);
+
+    ctx.save();
+    ctx.fillStyle = mC;
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(t(lang, "tpMotorsGroup"), motorM.x, motorM.y + 32);
+    ctx.font = "11px sans-serif";
+    ctx.fillText(`P₁ = ${fmt(results.P1 / 1000, 0)} kW`, motorM.x, motorM.y + 48);
+    ctx.restore();
+
+    // Rows continue straight across, past the capacitor and motor taps,
+    // toward the star load
+    const busX2 = 420;
+    wire(ctx, wmX + 16, yR, capTapR.x, yR, phaseColors[0]);
+    wire(ctx, capTapR.x, yR, motorTapR.x, yR, phaseColors[0]);
+    wire(ctx, motorTapR.x, yR, busX2, yR, phaseColors[0]);
+    wire(ctx, wmX + 16, yT, capTapT.x, yT, phaseColors[2]);
+    wire(ctx, capTapT.x, yT, motorTapT.x, yT, phaseColors[2]);
+    wire(ctx, motorTapT.x, yT, busX2, yT, phaseColors[2]);
+    wire(ctx, xStart, yS, capTapS.x, yS, phaseColors[1]);
+    wire(ctx, capTapS.x, yS, motorTapS.x, yS, phaseColors[1]);
+    wire(ctx, motorTapS.x, yS, busX2, yS, phaseColors[1]);
+    busYs.forEach((y, i) => dot(ctx, busX2, y, phaseColors[i]));
+
+    // Star load — lighting (Y), neutral point centered on the S row.
+    // Balanced load: one lamp symbol per phase stands in for the N/3 lamps
+    // wired to that phase (all three spokes still land on the neutral N).
+    const starN = { x: 500, y: yS };
+    const lampsPerPhase = params.numLamps / 3;
+    const starSubs = ["RL", "SL", "TL"];
+    [phaseColors[0], phaseColors[1], phaseColors[2]].forEach((color, i) => {
+      const from = [
+        { x: busX2, y: yR },
+        { x: busX2, y: yS },
+        { x: busX2, y: yT },
+      ][i];
+      const mid = splitWire(ctx, from.x, from.y, starN.x, starN.y, color, 12);
+      lampSymbol(ctx, mid.x, mid.y, color);
+      currentLabelOnSegment(ctx, from.x, from.y, mid.x, mid.y, 12, starSubs[i], color);
+    });
+    ctx.save();
+    ctx.fillStyle = mC;
+    ctx.font = "10px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(`×${fmt(lampsPerPhase, 0)}`, (busX2 + starN.x) / 2, yS - 16);
+    ctx.restore();
+    dot(ctx, starN.x, starN.y, nodeC);
+    ctx.save();
+    ctx.fillStyle = nodeC;
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText("N", starN.x + 12, starN.y);
+    ctx.restore();
+    ctx.save();
+    ctx.fillStyle = mC;
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(t(lang, "tpLightingGroup"), (busX2 + starN.x) / 2, yT + 42);
+    ctx.font = "11px sans-serif";
+    ctx.fillText(`P₂ = ${fmt(results.P2 / 1000, 2)} kW`, (busX2 + starN.x) / 2, yT + 58);
+    ctx.restore();
+
+    // Footer — I_L, W_RS, W_ST with real subscripts, centered as a group
+    {
+      const footerY = H - 14;
+      const bigFont = "11px sans-serif";
+      const subFont = "8px sans-serif";
+      const pieces: { text: string; font: string; dy: number }[] = [
+        { text: "I", font: bigFont, dy: 0 },
+        { text: "L", font: subFont, dy: 2 },
+        { text: `  = ${fmt(results.I_L, 2)} A    `, font: bigFont, dy: 0 },
+        { text: "W", font: bigFont, dy: 0 },
+        { text: "RS", font: subFont, dy: 2 },
+        { text: `  = ${fmt(results.W_RS, 0)} W    `, font: bigFont, dy: 0 },
+        { text: "W", font: bigFont, dy: 0 },
+        { text: "ST", font: subFont, dy: 2 },
+        { text: `  = ${fmt(results.W_ST, 0)} W`, font: bigFont, dy: 0 },
+      ];
+      ctx.fillStyle = mC;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
+      let totalWidth = 0;
+      pieces.forEach((p) => {
+        ctx.font = p.font;
+        totalWidth += ctx.measureText(p.text).width;
+      });
+      let px = W / 2 - totalWidth / 2;
+      pieces.forEach((p) => {
+        ctx.font = p.font;
+        ctx.fillText(p.text, px, footerY + p.dy);
+        px += ctx.measureText(p.text).width;
+      });
+    }
+  }, [results, lang, params.numLamps, flags.capacitorsOn]);
 
   return (
     <canvas

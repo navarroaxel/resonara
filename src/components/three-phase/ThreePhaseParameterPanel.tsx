@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useThreePhase } from "@/store/three-phase-store";
 import { useUI } from "@/store/ui-store";
 import { t, type TKey } from "@/lib/i18n";
-import type { ThreePhaseParams, ComponentFlags } from "@/lib/types";
+import type { ThreePhaseParams } from "@/lib/types";
 
 interface ParamConfig {
   key: keyof ThreePhaseParams;
@@ -15,38 +15,78 @@ interface ParamConfig {
 }
 
 const PARAMS: ParamConfig[] = [
-  { key: "VL", labelKey: "labelVL", unit: "V", min: 100, max: 1000, step: 1 },
-  { key: "R", labelKey: "labelR", unit: "Ω", min: 1, max: 1000, step: 1 },
-  { key: "L", labelKey: "labelL", unit: "mH", min: 1, max: 500, step: 1 },
-  { key: "C", labelKey: "labelC", unit: "µF", min: 1, max: 1000, step: 1 },
+  {
+    key: "VL",
+    labelKey: "lineVoltageLabel",
+    unit: "V",
+    min: 100,
+    max: 1000,
+    step: 1,
+  },
   { key: "f", labelKey: "labelF", unit: "Hz", min: 1, max: 500, step: 1 },
+  {
+    key: "P1_kW",
+    labelKey: "tpLabelP1",
+    unit: "kW",
+    min: 1,
+    max: 500,
+    step: 1,
+  },
+  {
+    key: "cosPhi1",
+    labelKey: "tpLabelCosPhi1",
+    unit: "",
+    min: 0.5,
+    max: 1,
+    step: 0.01,
+  },
+  {
+    key: "numLamps",
+    labelKey: "tpLabelNumLamps",
+    unit: "",
+    min: 1,
+    max: 300,
+    step: 1,
+  },
+  {
+    key: "wattPerLamp",
+    labelKey: "tpLabelWattPerLamp",
+    unit: "W",
+    min: 1,
+    max: 1000,
+    step: 1,
+  },
+  {
+    key: "cosPhi2",
+    labelKey: "tpLabelCosPhi2",
+    unit: "",
+    min: 0.5,
+    max: 1,
+    step: 0.01,
+  },
+  {
+    key: "targetFp",
+    labelKey: "tpLabelTargetFp",
+    unit: "",
+    min: 0.5,
+    max: 1,
+    step: 0.01,
+  },
 ];
 
 interface ParamRowProps {
   config: ParamConfig;
   value: number;
-  enabled: boolean;
   lang: string;
-  dispatch: (
-    action:
-      | { type: "SET_PARAM"; key: keyof ThreePhaseParams; value: number }
-      | { type: "SET_FLAGS"; flags: Partial<ComponentFlags> },
-  ) => void;
-  isL: boolean;
-  isC: boolean;
+  dispatch: (action: {
+    type: "SET_PARAM";
+    key: keyof ThreePhaseParams;
+    value: number;
+  }) => void;
 }
 
-function ParamRow({
-  config,
-  value,
-  lang,
-  enabled,
-  dispatch,
-  isL,
-  isC,
-}: ParamRowProps) {
+function ParamRow({ config, value, lang, dispatch }: ParamRowProps) {
   const { key, labelKey, unit, min, max, step } = config;
-  const hasToggle = isL || isC;
 
   const [inputText, setInputText] = useState(String(value));
   const [focused, setFocused] = useState(false);
@@ -59,33 +99,17 @@ function ParamRow({
   }
 
   return (
-    <div className={!enabled ? "opacity-50" : ""}>
+    <div>
       <div className="mb-1.5 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {hasToggle && (
-            <button
-              onClick={() =>
-                dispatch({
-                  type: "SET_FLAGS",
-                  flags: isL ? { hasL: !enabled } : { hasC: !enabled },
-                })
-              }
-              className={`h-4 w-8 flex-shrink-0 rounded-full transition-colors ${
-                enabled ? "bg-blue-500" : "bg-neutral-300 dark:bg-neutral-600"
-              }`}
-              aria-label={enabled ? "Disable" : "Enable"}
-            >
-              <span
-                className={`mx-0.5 block h-3 w-3 rounded-full bg-white shadow transition-transform ${
-                  enabled ? "translate-x-4" : "translate-x-0"
-                }`}
-              />
-            </button>
+        <span className="text-sm text-neutral-500 dark:text-neutral-400">
+          {key === "VL" ? (
+            <>
+              {t(lang as "es" | "en", "lineVoltageLabel")} U<sub>L</sub>
+            </>
+          ) : (
+            t(lang as "es" | "en", labelKey)
           )}
-          <span className="text-sm text-neutral-500 dark:text-neutral-400">
-            {t(lang as "es" | "en", labelKey)}
-          </span>
-        </div>
+        </span>
 
         <div className="flex items-center gap-1">
           <input
@@ -94,7 +118,6 @@ function ParamRow({
             max={max}
             step={step}
             value={focused ? inputText : String(value)}
-            disabled={!enabled}
             onFocus={() => {
               setFocused(true);
               setInputText(String(value));
@@ -113,11 +136,13 @@ function ParamRow({
                 dispatch({ type: "SET_PARAM", key, value: v });
               }
             }}
-            className="w-16 [appearance:textfield] rounded border border-neutral-300 bg-transparent px-1.5 py-0.5 text-right text-sm font-medium text-neutral-900 tabular-nums focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed dark:border-neutral-600 dark:text-neutral-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="w-16 [appearance:textfield] rounded border border-neutral-300 bg-transparent px-1.5 py-0.5 text-right text-sm font-medium text-neutral-900 tabular-nums focus:border-blue-500 focus:outline-none dark:border-neutral-600 dark:text-neutral-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           />
-          <span className="w-6 text-xs text-neutral-400 dark:text-neutral-500">
-            {unit}
-          </span>
+          {unit && (
+            <span className="w-6 text-xs text-neutral-400 dark:text-neutral-500">
+              {unit}
+            </span>
+          )}
         </div>
       </div>
 
@@ -127,11 +152,10 @@ function ParamRow({
         max={max}
         step={step}
         value={value}
-        disabled={!enabled}
         onChange={(e) =>
           dispatch({ type: "SET_PARAM", key, value: Number(e.target.value) })
         }
-        className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-neutral-200 accent-blue-500 disabled:cursor-not-allowed dark:bg-neutral-700"
+        className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-neutral-200 accent-blue-500 dark:bg-neutral-700"
       />
     </div>
   );
@@ -142,33 +166,50 @@ export function ThreePhaseParameterPanel() {
   const {
     state: { lang },
   } = useUI();
-  const { flags } = state;
+  const { capacitorsOn } = state.flags;
 
   return (
     <div>
       <h2 className="mb-4 text-xs font-medium tracking-wider text-neutral-400 uppercase">
         {t(lang, "threePhaseParamsTitle")}
       </h2>
-      <div className="space-y-5">
-        {PARAMS.map((config) => {
-          const { key } = config;
-          const isL = key === "L";
-          const isC = key === "C";
-          const enabled = isL ? flags.hasL : isC ? flags.hasC : true;
 
-          return (
-            <ParamRow
-              key={key}
-              config={config}
-              value={state.params[key]}
-              enabled={enabled}
-              lang={lang}
-              dispatch={dispatch as ParamRowProps["dispatch"]}
-              isL={isL}
-              isC={isC}
-            />
-          );
-        })}
+      <div className="mb-5 flex items-center justify-between">
+        <span className="text-sm text-neutral-500 dark:text-neutral-400">
+          {t(lang, "tpCapacitorsToggle")}
+        </span>
+        <button
+          onClick={() =>
+            dispatch({
+              type: "SET_FLAGS",
+              flags: { capacitorsOn: !capacitorsOn },
+            })
+          }
+          className={`h-4 w-8 flex-shrink-0 rounded-full transition-colors ${
+            capacitorsOn
+              ? "bg-blue-500"
+              : "bg-neutral-300 dark:bg-neutral-600"
+          }`}
+          aria-label={capacitorsOn ? "Disable" : "Enable"}
+        >
+          <span
+            className={`mx-0.5 block h-3 w-3 rounded-full bg-white shadow transition-transform ${
+              capacitorsOn ? "translate-x-4" : "translate-x-0"
+            }`}
+          />
+        </button>
+      </div>
+
+      <div className="space-y-5">
+        {PARAMS.map((config) => (
+          <ParamRow
+            key={config.key}
+            config={config}
+            value={state.params[config.key]}
+            lang={lang}
+            dispatch={dispatch as ParamRowProps["dispatch"]}
+          />
+        ))}
       </div>
     </div>
   );

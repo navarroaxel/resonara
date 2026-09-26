@@ -42,17 +42,18 @@ export function ThreePhaseTimeDomain() {
 
     ctx.clearRect(0, 0, W, H);
 
-    const { V_ph, I_ph, phi } = results;
+    const { I_L, phi_total } = results;
     const { f } = params;
+    const V_ph = params.VL / Math.sqrt(3);
     const pad = { top: 28, right: 52, bottom: 36, left: 52 };
     const plotW = W - pad.left - pad.right;
     const plotH = H - pad.top - pad.bottom;
 
     const w = TWO_PI * f;
     const T = 1 / f;
-    const phiRad = (phi * Math.PI) / 180;
+    const phiRad = (phi_total * Math.PI) / 180;
     const V_peak = V_ph * Math.SQRT2;
-    const I_peak = I_ph * Math.SQRT2;
+    const I_peak = I_L * Math.SQRT2;
     const vMax = V_peak || 1;
     const iMax = I_peak || 1;
 
@@ -176,12 +177,13 @@ export function ThreePhaseTimeDomain() {
     });
   }, [results, params, lang]);
 
-  const { V_ph, I_ph, phi } = results;
+  const { I_L, phi_total } = results;
+  const V_ph = params.VL / Math.sqrt(3);
   const w = 2 * Math.PI * params.f;
   const fmtW = fmt(w, 2);
-  const phiRad = (phi * Math.PI) / 180;
+  const phiRad = (phi_total * Math.PI) / 180;
   const V_peak = V_ph * Math.SQRT2;
-  const I_peak = I_ph * Math.SQRT2;
+  const I_peak = I_L * Math.SQRT2;
 
   return (
     <div>
